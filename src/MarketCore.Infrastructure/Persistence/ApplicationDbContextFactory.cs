@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 
 namespace MarketCore.Infrastructure.Persistence;
 
@@ -15,7 +16,9 @@ public sealed class ApplicationDbContextFactory : IDesignTimeDbContextFactory<Ap
             .Build();
 
         var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
-        optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+        optionsBuilder.UseMySql(
+            configuration.GetConnectionString("DefaultConnection"),
+            new MySqlServerVersion(new Version(8, 0, 36)));
 
         return new ApplicationDbContext(optionsBuilder.Options);
     }

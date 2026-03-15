@@ -29,12 +29,15 @@ public static class InfrastructureServiceCollectionExtensions
 
         services.AddDbContext<ApplicationDbContext>((serviceProvider, options) =>
         {
-            options.UseSqlServer(
-                configuration.GetConnectionString("DefaultConnection"),
-                sqlOptions =>
-                {
+            var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL")
+                ?? configuration.GetConnectionString("DefaultConnection");
 
-                    sqlOptions.CommandTimeout(30);
+            options.UseMySql(
+                connectionString,
+                new MySqlServerVersion(new Version(8, 0, 36)),
+                mySqlOptions =>
+                {
+                    mySqlOptions.CommandTimeout(30);
                 });
 
             var auditInterceptor = serviceProvider.GetRequiredService<AuditInterceptor>();

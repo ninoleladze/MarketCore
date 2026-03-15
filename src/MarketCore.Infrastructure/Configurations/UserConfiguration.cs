@@ -30,7 +30,7 @@ public sealed class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.Property(u => u.PasswordHash)
             .HasColumnName("PasswordHash")
-            .HasColumnType("nvarchar(max)")
+            .HasColumnType("text")
             .IsRequired();
 
         builder.Property(u => u.FirstName)
@@ -80,7 +80,7 @@ public sealed class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.HasIndex(u => u.EmailVerificationToken)
             .IsUnique()
-            .HasFilter("[EmailVerificationToken] IS NOT NULL")
+            .HasFilter("`EmailVerificationToken` IS NOT NULL")
             .HasDatabaseName("IX_Users_EmailVerificationToken");
 
         builder.Property(u => u.CreatedAt).IsRequired();
