@@ -1,0 +1,43 @@
+<nav class="navbar" [class.scrolled]="scrolled()">
+  <div class="navbar-container">
+
+    <a class="navbar-brand" routerLink="/" (click)="closeMenu()">
+      <span class="brand-mark">M</span>
+      <span class="brand-text">Market<span class="brand-accent">Core</span></span>
+    </a>
+
+    <button class="hamburger" (click)="toggleMenu()" [class.open]="mobileMenuOpen()" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+
+    <div class="nav-links" [class.open]="mobileMenuOpen()">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" (click)="closeMenu()">Home</a>
+      <a routerLink="/products" routerLinkActive="active" (click)="closeMenu()">Products</a>
+
+      @if (auth.isLoggedIn()) {
+        <a routerLink="/cart" routerLinkActive="active" class="cart-link" (click)="closeMenu()">
+          Cart
+          @if (cartService.itemCount() > 0) {
+            <span class="cart-badge">{{ cartService.itemCount() }}</span>
+          }
+        </a>
+        <a routerLink="/orders" routerLinkActive="active" (click)="closeMenu()">Orders</a>
+        @if (auth.isSeller()) {
+          <a routerLink="/products/create" routerLinkActive="active" (click)="closeMenu()">Sell</a>
+        }
+        @if (auth.isAdmin()) {
+          <a routerLink="/categories" routerLinkActive="active" (click)="closeMenu()">Categories</a>
+          <a routerLink="/admin" routerLinkActive="active" class="admin-link" (click)="closeMenu()">Admin Panel</a>
+        }
+        <div class="user-menu">
+          <span class="user-name">{{ auth.fullName() }}</span>
+          <button class="btn-logout" (click)="logout()">Logout</button>
+        </div>
+      } @else {
+        <a routerLink="/auth/login" routerLinkActive="active" (click)="closeMenu()">Login</a>
+        <a routerLink="/auth/register" class="btn-register" (click)="closeMenu()">Register</a>
+      }
+    </div>
+
+  </div>
+</nav>

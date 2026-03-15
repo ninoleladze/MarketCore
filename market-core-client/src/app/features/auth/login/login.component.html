@@ -1,0 +1,52 @@
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="auth-header">
+      <div class="auth-logo">M</div>
+      <h1>Welcome Back</h1>
+      <p>Sign in to your MarketCore account</p>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="auth-form">
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          placeholder="you@example.com"
+          [class.error]="email?.invalid && email?.touched"
+          autocomplete="email"
+        />
+        @if (email?.invalid && email?.touched) {
+          <span class="field-error">
+            @if (email?.errors?.['required']) { Email is required. }
+            @else { Please enter a valid email. }
+          </span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          id="password"
+          type="password"
+          formControlName="password"
+          placeholder="Your password"
+          [class.error]="password?.invalid && password?.touched"
+          autocomplete="current-password"
+        />
+        @if (password?.invalid && password?.touched) {
+          <span class="field-error">Password must be at least 6 characters.</span>
+        }
+      </div>
+
+      <button type="submit" class="btn-primary btn-block" [disabled]="loading">
+        @if (loading) { Signing in... } @else { Sign In }
+      </button>
+    </form>
+
+    <p class="auth-switch">
+      Don't have an account? <a routerLink="/auth/register">Create one</a>
+    </p>
+  </div>
+</div>

@@ -1,0 +1,99 @@
+<div class="page-container">
+  <div class="page-header">
+    <h1>Products</h1>
+    @if (auth.isSeller()) {
+      <a routerLink="/products/create" class="btn-primary">+ Add Product</a>
+    }
+  </div>
+
+  <!-- Filters -->
+  <div class="filters-bar">
+    <div class="search-wrap">
+      <input
+        type="search"
+        [(ngModel)]="searchTerm"
+        placeholder="Search products..."
+        class="search-input"
+        (keyup.enter)="search()"
+      />
+      <button class="btn-primary btn-sm" (click)="search()">Search</button>
+    </div>
+
+    <select [(ngModel)]="selectedCategoryId" (change)="filterByCategory()" class="select-input">
+      <option value="">All Categories</option>
+      @for (cat of categories; track cat.id) {
+        <option [value]="cat.id">{{ cat.name }}</option>
+      }
+    </select>
+  </div>
+
+  @if (loading) {
+    <app-loading-spinner />
+  } @else if (products.length === 0) {
+    <div class="empty-state">
+      <div class="empty-icon">&#128722;</div>
+      <h3>No products found</h3>
+      <p>Try adjusting your search or filter criteria.</p>
+      @if (auth.isSeller()) {
+        <a routerLink="/products/create" class="btn-primary">Add the first product</a>
+      }
+    </div>
+  } @else {
+    <div class="results-info">
+      Showing {{ products.length }} of {{ totalCount }} products
+    </div>
+
+    <div class="products-grid">
+      @for (product of products; track product.id) {
+        <div class="product-card">
+          <div class="product-image">
+            @if (product.imageUrl) {
+              <img [src]="product.imageUrl" [alt]="product.name" class="product-img" loading="lazy">
+            } @else {
+              <div class="image-placeholder">
+                <span>{{ product.name[0] }}</span>
+              </div>
+            }
+            @if (!product.isActive || product.stockQuantity === 0) {
+              <div class="out-of-stock-overlay">Out of Stock</div>
+            }
+          </div>
+          <div class="product-body">
+            <p class="product-category">{{ product.categoryName }}</p>
+            <h3 class="product-name">{{ product.name }}</h3>
+            <p class="product-desc">{{ product.description }}</p>
+            <div class="product-footer">
+              <span class="product-price">{{ product.price | number:'1.2-2' }} {{ product.currency }}</span>
+              <span class="stock-badge" [class.low]="product.stockQuantity < 5">
+                {{ product.stockQuantity > 0 ? 'In Stock (' + product.stockQuantity + ')' : 'Out of Stock' }}
+              </span>
+            </div>
+            <div class="product-actions">
+              <a [routerLink]="['/products', product.id]" class="btn-secondary btn-sm">View Details</a>
+              <button
+                class="btn-primary btn-sm"
+                (click)="addToCart(product)"
+                [disabled]="product.stockQuantity === 0 || !product.isActive"
+              >Add to Cart</button>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Pagination -->
+    @if (totalPages > 1) {
+      <div class="pagination">
+        <button class="page-btn" [disabled]="page === 1" (click)="goToPage(page - 1)">
+          &lsaquo; Prev
+        </button>
+        @for (p of pageNumbers; track p) {
+          <button class="page-btn" [class.active]="p === page" (click)="goToPage(p)">{{ p }}</button>
+        }
+        <button class="page-btn" [disabled]="page === totalPages" (click)="goToPage(page + 1)">
+          Next &rsaquo;
+        </button>
+      </div>
+    }
+  }
+</div>

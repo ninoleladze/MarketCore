@@ -1,0 +1,144 @@
+<div class="page-container">
+  <a routerLink="/products" class="back-link">&larr; Back to Products</a>
+
+  @if (loading) {
+    <app-loading-spinner />
+  } @else if (!product) {
+    <div class="not-found">
+      <h2>Product not found</h2>
+      <a routerLink="/products" class="btn-primary">Browse Products</a>
+    </div>
+  } @else {
+    <div class="product-layout">
+      <!-- Image Column -->
+      <div class="product-image-col">
+        <div class="product-image-box">
+          @if (product.imageUrl) {
+            <img [src]="product.imageUrl" [alt]="product.name" class="product-img-full">
+          } @else {
+            <div class="image-placeholder-lg">
+              <span>{{ product.name[0] }}</span>
+            </div>
+          }
+          @if (!product.isActive || product.stockQuantity === 0) {
+            <div class="out-of-stock-overlay">Out of Stock</div>
+          }
+        </div>
+      </div>
+
+      <!-- Info Column -->
+      <div class="product-info-col">
+        <p class="product-category-tag">{{ product.categoryName }}</p>
+        <h1 class="product-title">{{ product.name }}</h1>
+        <p class="product-description">{{ product.description }}</p>
+
+        <div class="price-row">
+          <span class="product-price">{{ product.price | number:'1.2-2' }} {{ product.currency }}</span>
+          @if (product.stockQuantity > 0) {
+            <span class="stock-badge in-stock">In Stock ({{ product.stockQuantity }})</span>
+          } @else {
+            <span class="stock-badge out-stock">Out of Stock</span>
+          }
+        </div>
+
+        @if (reviews.length > 0) {
+          <div class="rating-row">
+            <div class="stars">
+              @for (star of stars; track star) {
+                <span class="star" [class.filled]="star <= averageRating()">&#9733;</span>
+              }
+            </div>
+            <span class="rating-text">{{ averageRating() }} / 5 ({{ reviews.length }} reviews)</span>
+          </div>
+        }
+
+        @if (product.isActive && product.stockQuantity > 0) {
+          <div class="quantity-row">
+            <label for="quantity">Quantity:</label>
+            <div class="quantity-control">
+              <button (click)="quantity = quantity > 1 ? quantity - 1 : 1">-</button>
+              <input id="quantity" type="number" [(ngModel)]="quantity" min="1" [max]="product.stockQuantity" />
+              <button (click)="quantity = quantity < product.stockQuantity ? quantity + 1 : quantity">+</button>
+            </div>
+          </div>
+
+          <button
+            class="btn-primary btn-add-cart"
+            (click)="addToCart()"
+            [disabled]="addingToCart"
+          >
+            {{ addingToCart ? 'Adding...' : 'Add to Cart' }}
+          </button>
+        }
+      </div>
+    </div>
+
+    <!-- Reviews Section -->
+    <div class="reviews-section">
+      <h2 class="section-heading">Customer Reviews</h2>
+
+      @if (auth.isLoggedIn()) {
+        <div class="review-form-card">
+          <h3>Write a Review</h3>
+          <form [formGroup]="reviewForm" (ngSubmit)="submitReview()">
+            <div class="form-group">
+              <label>Rating</label>
+              <div class="star-picker">
+                @for (s of stars; track s) {
+                  <button
+                    type="button"
+                    class="star-pick"
+                    [class.selected]="s <= (reviewForm.get('rating')?.value ?? 0)"
+                    (click)="reviewForm.patchValue({ rating: s })"
+                  >&#9733;</button>
+                }
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="comment">Comment</label>
+              <textarea
+                id="comment"
+                formControlName="comment"
+                rows="4"
+                placeholder="Share your experience with this product..."
+                [class.error]="reviewForm.get('comment')?.invalid && reviewForm.get('comment')?.touched"
+              ></textarea>
+              @if (reviewForm.get('comment')?.invalid && reviewForm.get('comment')?.touched) {
+                <span class="field-error">Comment must be at least 10 characters.</span>
+              }
+            </div>
+
+            <button type="submit" class="btn-primary" [disabled]="submittingReview">
+              {{ submittingReview ? 'Submitting...' : 'Submit Review' }}
+            </button>
+          </form>
+        </div>
+      }
+
+      @if (reviews.length === 0) {
+        <p class="no-reviews">No reviews yet. Be the first to review this product!</p>
+      } @else {
+        <div class="reviews-list">
+          @for (review of reviews; track review.id) {
+            <div class="review-card">
+              <div class="review-header">
+                <div class="reviewer-avatar">{{ (review.reviewerName || 'U')[0] }}</div>
+                <div>
+                  <strong>{{ review.reviewerName || 'Anonymous' }}</strong>
+                  <div class="stars-small">
+                    @for (star of stars; track star) {
+                      <span class="star-s" [class.filled]="star <= review.rating">&#9733;</span>
+                    }
+                  </div>
+                </div>
+                <span class="review-date">{{ review.createdAt | date:'mediumDate' }}</span>
+              </div>
+              <p class="review-comment">{{ review.comment }}</p>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+</div>

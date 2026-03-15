@@ -1,0 +1,216 @@
+<!-- HERO — split layout -->
+<section class="hero">
+  <canvas class="particle-canvas" #particleCanvas></canvas>
+  <div class="hero-shapes">
+    <div class="hero-blob hero-blob-1"></div>
+    <div class="hero-blob hero-blob-2"></div>
+    <div class="hero-blob hero-blob-3"></div>
+    <div class="geo-ring geo-ring-1"></div>
+    <div class="geo-ring geo-ring-2"></div>
+  </div>
+
+  <div class="hero-inner">
+    <!-- LEFT text column -->
+    <div class="hero-text">
+      <div class="hero-eyebrow">
+        <span class="eyebrow-dot"></span>
+        Premium Marketplace
+      </div>
+      <h1 class="hero-title">
+        Discover the<br>
+        <em>Extraordinary</em>
+      </h1>
+      <p class="hero-sub">
+        Curated products from trusted sellers.<br>
+        Secure checkout, fast delivery.
+      </p>
+      <div class="hero-actions">
+        <a routerLink="/products" class="btn-hero-primary">
+          Shop Now
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        @if (!auth.isLoggedIn()) {
+          <a routerLink="/auth/register" class="btn-hero-ghost">Join Free</a>
+        } @else {
+          <a routerLink="/orders" class="btn-hero-ghost">My Orders</a>
+        }
+      </div>
+      <div class="hero-trust">
+        <div class="trust-item"><span class="trust-num">10K+</span><span class="trust-label">Products</span></div>
+        <div class="trust-divider"></div>
+        <div class="trust-item"><span class="trust-num">5K+</span><span class="trust-label">Sellers</span></div>
+        <div class="trust-divider"></div>
+        <div class="trust-item"><span class="trust-num">98%</span><span class="trust-label">Satisfaction</span></div>
+      </div>
+    </div>
+
+    <!-- RIGHT showcase column -->
+    <div class="hero-showcase">
+      @if (!loading && products.length > 0) {
+        <div class="showcase-card showcase-card-main">
+          <div class="showcase-img">
+            @if (products[0].imageUrl) {
+              <img [src]="products[0].imageUrl" [alt]="products[0].name" loading="eager">
+            }
+          </div>
+          <div class="showcase-info">
+            <span class="showcase-cat">{{ products[0].categoryName }}</span>
+            <span class="showcase-name">{{ products[0].name }}</span>
+            <span class="showcase-price">${{ products[0].price | number:'1.2-2' }}</span>
+          </div>
+        </div>
+        @if (products.length > 1) {
+          <div class="showcase-card showcase-card-back">
+            <div class="showcase-img">
+              @if (products[1].imageUrl) {
+                <img [src]="products[1].imageUrl" [alt]="products[1].name" loading="eager">
+              }
+            </div>
+          </div>
+        }
+      } @else {
+        <div class="showcase-placeholder">
+          <div class="placeholder-ring"></div>
+          <div class="placeholder-ring placeholder-ring-2"></div>
+        </div>
+      }
+      <div class="showcase-glow"></div>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <div class="scroll-line"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap" aria-hidden="true">
+  <div class="marquee-track">
+    @for (item of ['Free Shipping', 'Secure Checkout', 'Trusted Sellers', 'Easy Returns', 'Quality Guaranteed', '24/7 Support', 'Free Shipping', 'Secure Checkout', 'Trusted Sellers', 'Easy Returns', 'Quality Guaranteed', '24/7 Support']; track item + $index) {
+      <div class="marquee-item"><span class="marquee-diamond"></span>{{ item }}</div>
+    }
+  </div>
+</div>
+
+<!-- CATEGORIES -->
+@if (categories.length > 0) {
+  <section class="categories-section">
+    <div class="section-inner">
+      <div class="section-header reveal">
+        <p class="section-eyebrow">Browse by category</p>
+        <h2 class="section-title">Shop by <em>Category</em></h2>
+      </div>
+      <div class="category-grid reveal reveal-delay-1">
+        @for (cat of categories; track cat.id) {
+          <a [routerLink]="['/products']" [queryParams]="{ categoryId: cat.id }" class="cat-card" [attr.data-index]="$index">
+            <div class="cat-card-bg"></div>
+            <div class="cat-card-content">
+              <span class="cat-card-icon">{{ getCatIcon($index) }}</span>
+              <span class="cat-card-name">{{ cat.name }}</span>
+              <span class="cat-card-arrow">→</span>
+            </div>
+          </a>
+        }
+        <a routerLink="/products" class="cat-card cat-card-all">
+          <div class="cat-card-bg"></div>
+          <div class="cat-card-content">
+            <span class="cat-card-icon">✦</span>
+            <span class="cat-card-name">All Products</span>
+            <span class="cat-card-arrow">→</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+}
+
+<!-- FEATURED PRODUCTS -->
+<section class="products-section">
+  <div class="section-inner">
+    <div class="products-header reveal">
+      <div>
+        <p class="section-eyebrow">Hand-picked for you</p>
+        <h2 class="section-title">Featured <em>Products</em></h2>
+      </div>
+      <a routerLink="/products" class="view-all-link">
+        View all
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+
+    @if (loading) {
+      <div class="products-skeleton">
+        @for (n of [1,2,3,4,5,6,7,8]; track n) {
+          <div class="skeleton-card">
+            <div class="skeleton-img shimmer"></div>
+            <div class="skeleton-body">
+              <div class="skeleton-line shimmer" style="width:40%"></div>
+              <div class="skeleton-line shimmer" style="width:75%"></div>
+              <div class="skeleton-line shimmer" style="width:55%"></div>
+            </div>
+          </div>
+        }
+      </div>
+    } @else if (products.length === 0) {
+      <div class="empty-state reveal">
+        <div class="empty-icon">◎</div>
+        <p>No products yet. Be the first seller!</p>
+        <a routerLink="/products/create" class="btn-primary">Start Selling</a>
+      </div>
+    } @else {
+      <div class="products-grid">
+        @for (product of products; track product.id; let i = $index) {
+          <article class="product-card reveal" [class]="'reveal-delay-' + ((i % 4) + 1)">
+            <a [routerLink]="['/products', product.id]" class="product-media">
+              @if (product.imageUrl) {
+                <img [src]="product.imageUrl" [alt]="product.name" class="product-img" loading="lazy">
+              } @else {
+                <div class="product-initial">{{ product.name[0] }}</div>
+              }
+              <div class="product-overlay">
+                <button class="overlay-btn overlay-btn-add"
+                  (click)="$event.preventDefault(); addToCart(product)"
+                  [disabled]="product.stockQuantity === 0 || !product.isActive">
+                  Quick Add
+                </button>
+                <span class="overlay-btn overlay-btn-view">View Details</span>
+              </div>
+              @if (!product.isActive || product.stockQuantity === 0) {
+                <div class="oos-badge">Sold Out</div>
+              }
+            </a>
+            <div class="product-info">
+              <span class="product-cat-label">{{ product.categoryName }}</span>
+              <h3 class="product-name">{{ product.name }}</h3>
+              <div class="product-pricing">
+                <span class="product-price">${{ product.price | number:'1.2-2' }}</span>
+                <span class="product-currency">{{ product.currency }}</span>
+              </div>
+            </div>
+          </article>
+        }
+      </div>
+    }
+  </div>
+</section>
+
+<!-- CTA -->
+@if (!auth.isLoggedIn()) {
+  <section class="cta-section">
+    <div class="cta-noise"></div>
+    <div class="cta-glow"></div>
+    <div class="cta-inner">
+      <p class="section-eyebrow reveal" style="justify-content:center">Join MarketCore</p>
+      <h2 class="cta-title reveal">
+        Start selling or shopping<br>
+        <em>today — it's free</em>
+      </h2>
+      <p class="cta-sub reveal reveal-delay-1">Thousands of buyers waiting. No listing fees to start.</p>
+      <div class="cta-actions reveal reveal-delay-2">
+        <a routerLink="/auth/register" class="btn-hero-primary">Create Account</a>
+        <a routerLink="/products" class="btn-hero-ghost">Browse Products</a>
+      </div>
+    </div>
+  </section>
+}

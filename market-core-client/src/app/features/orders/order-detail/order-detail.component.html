@@ -1,0 +1,94 @@
+<div class="page-container">
+  <a routerLink="/orders" class="back-link">&larr; Back to Orders</a>
+
+  @if (loading) {
+    <app-loading-spinner />
+  } @else if (!order) {
+    <div class="not-found">
+      <h2>Order not found</h2>
+      <a routerLink="/orders" class="btn-primary">View All Orders</a>
+    </div>
+  } @else {
+    <div class="order-header">
+      <div>
+        <h1 class="page-title">Order #{{ order.id.slice(0,8).toUpperCase() }}</h1>
+        <p class="order-meta">Placed on {{ order.placedAt | date:'longDate' }}</p>
+      </div>
+      <div class="header-right">
+        <span class="status-badge {{ statusClass(order.status) }}">{{ order.status }}</span>
+        @if (hubConnected()) {
+          <span class="live-badge">
+            <span class="live-dot"></span>
+            LIVE
+          </span>
+        }
+        @if (order.status === 'Pending') {
+          <button class="btn-danger btn-sm" (click)="cancelOrder()" [disabled]="cancelling">
+            {{ cancelling ? 'Cancelling...' : 'Cancel Order' }}
+          </button>
+        }
+      </div>
+    </div>
+
+    <div class="order-layout">
+      <!-- Items Table -->
+      <div class="order-items-section">
+        <h2 class="section-title">Order Items</h2>
+        <div class="items-table">
+          <div class="items-header">
+            <span>Product</span>
+            <span>Unit Price</span>
+            <span>Qty</span>
+            <span>Total</span>
+          </div>
+          @for (item of order.items; track item.productId) {
+            <div class="item-row">
+              <div class="item-name">
+                <div class="item-avatar">{{ item.productName[0] }}</div>
+                {{ item.productName }}
+              </div>
+              <div class="item-price">{{ item.unitPrice | number:'1.2-2' }}</div>
+              <div class="item-qty">{{ item.quantity }}</div>
+              <div class="item-total">{{ item.lineTotal | number:'1.2-2' }}</div>
+            </div>
+          }
+          <div class="items-total-row">
+            <span>Order Total</span>
+            <span>{{ order.totalAmount | number:'1.2-2' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Shipping Info -->
+      <div class="order-sidebar">
+        <div class="shipping-card">
+          <h3 class="card-title">Shipping Address</h3>
+          @if (order.shippingAddress) {
+            <address class="shipping-address">
+              <p>{{ order.shippingAddress.street }}</p>
+              <p>{{ order.shippingAddress.city }}, {{ order.shippingAddress.state }} {{ order.shippingAddress.zipCode }}</p>
+              <p>{{ order.shippingAddress.country }}</p>
+            </address>
+          } @else {
+            <p class="text-muted">No shipping address on record.</p>
+          }
+        </div>
+
+        <div class="status-card">
+          <h3 class="card-title">Order Status</h3>
+          <div class="status-timeline">
+            @for (step of ['Pending', 'Confirmed', 'Shipped', 'Delivered']; track step) {
+              <div class="timeline-step" [class.active]="isActiveStep(order.status, step)" [class.cancelled]="order.status === 'Cancelled'">
+                <div class="step-dot"></div>
+                <span>{{ step }}</span>
+              </div>
+            }
+          </div>
+          @if (order.status === 'Cancelled') {
+            <div class="cancelled-note">This order was cancelled.</div>
+          }
+        </div>
+      </div>
+    </div>
+  }
+</div>

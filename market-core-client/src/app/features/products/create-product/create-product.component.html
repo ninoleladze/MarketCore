@@ -1,0 +1,130 @@
+<div class="page-container">
+  <div class="page-header">
+    <a routerLink="/products" class="back-link">&larr; Back to Products</a>
+    <h1>Add New Product</h1>
+  </div>
+
+  <div class="form-card">
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="form-section">
+        <h2 class="form-section-title">Product Information</h2>
+
+        <div class="form-group">
+          <label for="name">Product Name *</label>
+          <input
+            id="name"
+            type="text"
+            formControlName="name"
+            placeholder="e.g. Wireless Headphones"
+            [class.error]="f['name'].invalid && f['name'].touched"
+          />
+          @if (f['name'].invalid && f['name'].touched) {
+            <span class="field-error">Name is required (min 3 characters).</span>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="description">Description *</label>
+          <textarea
+            id="description"
+            formControlName="description"
+            rows="4"
+            placeholder="Describe your product..."
+            [class.error]="f['description'].invalid && f['description'].touched"
+          ></textarea>
+          @if (f['description'].invalid && f['description'].touched) {
+            <span class="field-error">Description is required (min 10 characters).</span>
+          }
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="price">Price *</label>
+            <input
+              id="price"
+              type="number"
+              formControlName="price"
+              placeholder="0.00"
+              step="0.01"
+              min="0.01"
+              [class.error]="f['price'].invalid && f['price'].touched"
+            />
+            @if (f['price'].invalid && f['price'].touched) {
+              <span class="field-error">Price must be greater than 0.</span>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="currency">Currency *</label>
+            <select id="currency" formControlName="currency">
+              <option value="USD">USD</option>
+              <option value="EUR">EUR</option>
+              <option value="GBP">GBP</option>
+              <option value="GEL">GEL</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="stockQuantity">Stock Quantity *</label>
+            <input
+              id="stockQuantity"
+              type="number"
+              formControlName="stockQuantity"
+              placeholder="0"
+              min="0"
+              [class.error]="f['stockQuantity'].invalid && f['stockQuantity'].touched"
+            />
+            @if (f['stockQuantity'].invalid && f['stockQuantity'].touched) {
+              <span class="field-error">Stock quantity is required.</span>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="categoryId">Category *</label>
+            <select
+              id="categoryId"
+              formControlName="categoryId"
+              [class.error]="f['categoryId'].invalid && f['categoryId'].touched"
+            >
+              <option value="">Select a category</option>
+              @for (cat of categories; track cat.id) {
+                <option [value]="cat.id">{{ cat.name }}</option>
+              }
+            </select>
+            @if (f['categoryId'].invalid && f['categoryId'].touched) {
+              <span class="field-error">Please select a category.</span>
+            }
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="imageUrl">Image URL <span class="field-hint">(optional — paste a public image link)</span></label>
+          <input
+            id="imageUrl"
+            type="url"
+            formControlName="imageUrl"
+            placeholder="https://example.com/product-image.jpg"
+            [class.error]="f['imageUrl'].invalid && f['imageUrl'].touched"
+          />
+          @if (f['imageUrl'].invalid && f['imageUrl'].touched) {
+            <span class="field-error">Must be a valid URL starting with http:// or https://</span>
+          }
+          @if (f['imageUrl'].value) {
+            <div class="image-preview">
+              <img [src]="f['imageUrl'].value" alt="Preview" loading="lazy">
+            </div>
+          }
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <a routerLink="/products" class="btn-secondary">Cancel</a>
+        <button type="submit" class="btn-primary" [disabled]="loading">
+          {{ loading ? 'Creating...' : 'Create Product' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

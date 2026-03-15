@@ -1,0 +1,123 @@
+.page-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 7rem 2rem 5rem;
+}
+
+.page-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  font-weight: 400;
+  color: var(--neutral-50);
+  margin: 0 0 2.5rem;
+}
+
+.categories-layout {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+/* ── Form card ─────────────────────────────────────────────── */
+.form-card {
+  background: var(--dark-800);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  position: sticky;
+  top: 84px;
+}
+
+.form-title {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--neutral-600);
+  margin: 0 0 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+/* ── List ──────────────────────────────────────────────────── */
+.list-title {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--neutral-600);
+  margin: 0 0 1rem;
+}
+
+.categories-list {
+  display: flex;
+  flex-direction: column;
+  background: var(--dark-800);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.category-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--color-border);
+  transition: background 0.2s;
+}
+.category-row:last-child { border-bottom: none; }
+.category-row:hover { background: var(--dark-700); }
+.category-row.editing {
+  background: rgba(224,0,71,0.06);
+  border-left: 2px solid var(--red-600);
+}
+
+.cat-info { flex: 1; overflow: hidden; }
+
+.cat-name {
+  display: block;
+  color: var(--neutral-100);
+  font-size: 0.92rem;
+  font-weight: 500;
+}
+
+.cat-desc {
+  margin: 0.2rem 0 0;
+  font-size: 0.8rem;
+  color: var(--neutral-600);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cat-actions {
+  display: flex;
+  gap: 0.4rem;
+  flex-shrink: 0;
+}
+
+.empty-state {
+  padding: 2rem;
+  text-align: center;
+  color: var(--neutral-600);
+  background: var(--dark-800);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+  .categories-layout { grid-template-columns: 1fr; }
+  .form-card { position: static; }
+  .page-container { padding: 6rem 1.2rem 4rem; }
+}

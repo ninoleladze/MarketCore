@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Allow Infrastructure to call internal audit-stamping methods on BaseEntity
+         without making those methods public. Tests also need access for domain-level assertions. -->
+    <InternalsVisibleTo Include="MarketCore.Infrastructure" />
+    <InternalsVisibleTo Include="MarketCore.Tests" />
+  </ItemGroup>
+
+</Project>

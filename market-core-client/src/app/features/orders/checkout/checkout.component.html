@@ -1,0 +1,116 @@
+<div class="page-container">
+  <a routerLink="/cart" class="back-link">&larr; Back to Cart</a>
+  <h1 class="page-title">Checkout</h1>
+
+  @if (loading) {
+    <app-loading-spinner />
+  } @else {
+    <div class="checkout-layout">
+      <!-- Shipping Form -->
+      <div class="shipping-section">
+        <h2 class="section-title">Shipping Address</h2>
+        <form [formGroup]="form" (ngSubmit)="placeOrder()" class="shipping-form">
+          <div class="form-group">
+            <label for="street">Street Address *</label>
+            <input
+              id="street"
+              type="text"
+              formControlName="shippingStreet"
+              placeholder="123 Main Street"
+              [class.error]="f['shippingStreet'].invalid && f['shippingStreet'].touched"
+            />
+            @if (f['shippingStreet'].invalid && f['shippingStreet'].touched) {
+              <span class="field-error">Street address is required.</span>
+            }
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="city">City *</label>
+              <input
+                id="city"
+                type="text"
+                formControlName="shippingCity"
+                placeholder="New York"
+                [class.error]="f['shippingCity'].invalid && f['shippingCity'].touched"
+              />
+              @if (f['shippingCity'].invalid && f['shippingCity'].touched) {
+                <span class="field-error">City is required.</span>
+              }
+            </div>
+
+            <div class="form-group">
+              <label for="state">State / Province *</label>
+              <input
+                id="state"
+                type="text"
+                formControlName="shippingState"
+                placeholder="NY"
+                [class.error]="f['shippingState'].invalid && f['shippingState'].touched"
+              />
+              @if (f['shippingState'].invalid && f['shippingState'].touched) {
+                <span class="field-error">State is required.</span>
+              }
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="zip">ZIP / Postal Code *</label>
+              <input
+                id="zip"
+                type="text"
+                formControlName="shippingZipCode"
+                placeholder="10001"
+                [class.error]="f['shippingZipCode'].invalid && f['shippingZipCode'].touched"
+              />
+              @if (f['shippingZipCode'].invalid && f['shippingZipCode'].touched) {
+                <span class="field-error">ZIP code is required.</span>
+              }
+            </div>
+
+            <div class="form-group">
+              <label for="country">Country *</label>
+              <input
+                id="country"
+                type="text"
+                formControlName="shippingCountry"
+                placeholder="United States"
+                [class.error]="f['shippingCountry'].invalid && f['shippingCountry'].touched"
+              />
+              @if (f['shippingCountry'].invalid && f['shippingCountry'].touched) {
+                <span class="field-error">Country is required.</span>
+              }
+            </div>
+          </div>
+
+          <button type="submit" class="btn-primary btn-place" [disabled]="placing">
+            {{ placing ? 'Placing Order...' : 'Place Order' }}
+          </button>
+        </form>
+      </div>
+
+      <!-- Order Summary -->
+      <div class="order-summary">
+        <h2 class="section-title">Order Summary</h2>
+        @if (cart) {
+          <div class="summary-items">
+            @for (item of cart.items; track item.productId) {
+              <div class="summary-item">
+                <div class="summary-item-info">
+                  <span class="summary-item-name">{{ item.productName }}</span>
+                  <span class="summary-item-qty">x{{ item.quantity }}</span>
+                </div>
+                <span class="summary-item-total">{{ item.lineTotal | number:'1.2-2' }}</span>
+              </div>
+            }
+          </div>
+          <div class="summary-total">
+            <span>Total</span>
+            <span>{{ cart.totalAmount | number:'1.2-2' }}</span>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>

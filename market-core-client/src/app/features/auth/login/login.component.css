@@ -1,0 +1,110 @@
+.auth-page {
+  min-height: 100vh;
+  background: var(--dark-950);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Background glow */
+.auth-page::before {
+  content: '';
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(192,0,58,0.1) 0%, transparent 70%);
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.auth-card {
+  background: var(--dark-800);
+  border: 1px solid var(--color-border);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 420px;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+}
+
+/* ── Card header ───────────────────────────────────────────── */
+.auth-header {
+  padding: 2.25rem 2rem 2rem;
+  text-align: center;
+  border-bottom: 1px solid var(--color-border);
+  position: relative;
+}
+.auth-header::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--red-600), transparent);
+}
+
+.auth-logo {
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, var(--red-700), var(--red-500));
+  color: #fff;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 900;
+  margin: 0 auto 1.1rem;
+  box-shadow: 0 4px 18px var(--red-glow-soft);
+}
+
+.auth-header h1 {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 400;
+  color: var(--neutral-50);
+  margin: 0 0 0.3rem;
+}
+
+.auth-header p {
+  margin: 0;
+  color: var(--neutral-500);
+  font-size: 0.88rem;
+}
+
+/* ── Form ──────────────────────────────────────────────────── */
+.auth-form {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.btn-block {
+  width: 100%;
+  justify-content: center;
+  margin-top: 0.25rem;
+  border-radius: 3rem;
+  padding: 0.9rem;
+}
+
+/* ── Switch link ───────────────────────────────────────────── */
+.auth-switch {
+  text-align: center;
+  padding: 0 2rem 1.75rem;
+  font-size: 0.88rem;
+  color: var(--neutral-600);
+  margin: 0;
+}
+.auth-switch a {
+  color: var(--red-400);
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.auth-switch a:hover { color: var(--red-300); }

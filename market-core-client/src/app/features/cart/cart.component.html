@@ -1,0 +1,73 @@
+<div class="page-container">
+  <h1 class="page-title">Shopping Cart</h1>
+
+  @if (loading) {
+    <app-loading-spinner />
+  } @else if (!cart || !cart.items || cart.items.length === 0) {
+    <div class="empty-cart">
+      <div class="empty-icon">&#128722;</div>
+      <h2>Your cart is empty</h2>
+      <p>Looks like you haven't added anything to your cart yet.</p>
+      <a routerLink="/products" class="btn-primary">Browse Products</a>
+    </div>
+  } @else {
+    <div class="cart-layout">
+      <div class="cart-items">
+        <div class="cart-table-header">
+          <span>Product</span>
+          <span>Price</span>
+          <span>Qty</span>
+          <span>Total</span>
+          <span></span>
+        </div>
+
+        @for (item of cart.items; track item.productId) {
+          <div class="cart-row">
+            <div class="item-name">
+              <div class="item-avatar">
+                @if (item.imageUrl) {
+                  <img [src]="item.imageUrl" [alt]="item.productName">
+                } @else {
+                  {{ item.productName[0] }}
+                }
+              </div>
+              <span>{{ item.productName }}</span>
+            </div>
+            <div class="item-price">{{ item.unitPrice | number:'1.2-2' }}</div>
+            <div class="item-qty">{{ item.quantity }}</div>
+            <div class="item-total">{{ item.lineTotal | number:'1.2-2' }}</div>
+            <button
+              class="btn-remove"
+              (click)="removeItem(item.productId, item.productName)"
+              title="Remove item"
+            >&times;</button>
+          </div>
+        }
+
+        <div class="cart-actions">
+          <button class="btn-secondary btn-sm" (click)="clearCart()" [disabled]="clearing">
+            {{ clearing ? 'Clearing...' : 'Clear Cart' }}
+          </button>
+          <a routerLink="/products" class="btn-secondary btn-sm">Continue Shopping</a>
+        </div>
+      </div>
+
+      <div class="cart-summary">
+        <h2 class="summary-title">Order Summary</h2>
+        <div class="summary-row">
+          <span>Items ({{ cart.items.length }})</span>
+          <span>{{ cart.totalAmount | number:'1.2-2' }}</span>
+        </div>
+        <div class="summary-row">
+          <span>Shipping</span>
+          <span class="text-muted">Calculated at checkout</span>
+        </div>
+        <div class="summary-total">
+          <span>Total</span>
+          <span>{{ cart.totalAmount | number:'1.2-2' }}</span>
+        </div>
+        <a routerLink="/checkout" class="btn-primary btn-block">Proceed to Checkout</a>
+      </div>
+    </div>
+  }
+</div>

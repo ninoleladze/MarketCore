@@ -1,0 +1,71 @@
+<div class="page-container">
+  <h1 class="page-title">Manage Categories</h1>
+
+  <div class="categories-layout">
+    <!-- Form -->
+    <div class="form-card">
+      <h2 class="form-title">{{ editingId ? 'Edit Category' : 'New Category' }}</h2>
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <div class="form-group">
+          <label for="catName">Name *</label>
+          <input
+            id="catName"
+            type="text"
+            formControlName="name"
+            placeholder="Category name"
+            [class.error]="f['name'].invalid && f['name'].touched"
+          />
+          @if (f['name'].invalid && f['name'].touched) {
+            <span class="field-error">Name is required (min 2 chars).</span>
+          }
+        </div>
+        <div class="form-group">
+          <label for="catDesc">Description *</label>
+          <textarea
+            id="catDesc"
+            formControlName="description"
+            rows="3"
+            placeholder="Category description"
+            [class.error]="f['description'].invalid && f['description'].touched"
+          ></textarea>
+          @if (f['description'].invalid && f['description'].touched) {
+            <span class="field-error">Description is required.</span>
+          }
+        </div>
+        <div class="form-actions">
+          @if (editingId) {
+            <button type="button" class="btn-secondary btn-sm" (click)="cancelEdit()">Cancel</button>
+          }
+          <button type="submit" class="btn-primary btn-sm" [disabled]="saving">
+            {{ saving ? 'Saving...' : (editingId ? 'Update' : 'Create') }}
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- List -->
+    <div class="categories-list-section">
+      <h2 class="list-title">All Categories ({{ categories.length }})</h2>
+      @if (loading) {
+        <app-loading-spinner />
+      } @else if (categories.length === 0) {
+        <div class="empty-state">No categories yet. Create the first one!</div>
+      } @else {
+        <div class="categories-list">
+          @for (cat of categories; track cat.id) {
+            <div class="category-row" [class.editing]="editingId === cat.id">
+              <div class="cat-info">
+                <strong class="cat-name">{{ cat.name }}</strong>
+                <p class="cat-desc">{{ cat.description }}</p>
+              </div>
+              <div class="cat-actions">
+                <button class="btn-secondary btn-xs" (click)="startEdit(cat)">Edit</button>
+                <button class="btn-danger btn-xs" (click)="deleteCategory(cat)">Delete</button>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </div>
+</div>

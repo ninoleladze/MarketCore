@@ -1,0 +1,28 @@
+# .NET
+bin/
+obj/
+*.user
+*.suo
+.vs/
+*.log
+logs/
+
+# EF Core
+*.db
+*.db-shm
+*.db-wal
+
+# Secrets — never commit these
+appsettings.Development.json
+appsettings.Production.json
+*.pfx
+*.key
+
+# Angular
+market-core-client/node_modules/
+market-core-client/dist/
+market-core-client/.angular/
+
+# OS
+.DS_Store
+Thumbs.db

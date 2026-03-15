@@ -1,0 +1,43 @@
+<div class="page-container">
+  <div class="page-header">
+    <h1 class="page-title">My Orders</h1>
+    <a routerLink="/products" class="btn-secondary btn-sm">Continue Shopping</a>
+  </div>
+
+  @if (loading) {
+    <app-loading-spinner />
+  } @else if (orders.length === 0) {
+    <div class="empty-state">
+      <div class="empty-icon">&#128230;</div>
+      <h2>No orders yet</h2>
+      <p>Once you place an order it will appear here.</p>
+      <a routerLink="/products" class="btn-primary">Shop Now</a>
+    </div>
+  } @else {
+    <div class="orders-table-wrap">
+      <div class="orders-header">
+        <span>Order ID</span>
+        <span>Date</span>
+        <span>Items</span>
+        <span>Total</span>
+        <span>Status</span>
+        <span></span>
+      </div>
+
+      @for (order of orders; track order.id) {
+        <div class="order-row">
+          <div class="order-id">#{{ order.id.slice(0, 8).toUpperCase() }}</div>
+          <div class="order-date">{{ order.placedAt | date:'mediumDate' }}</div>
+          <div class="order-items">{{ order.items ? order.items.length : 0 }} item(s)</div>
+          <div class="order-total">{{ order.totalAmount | number:'1.2-2' }}</div>
+          <div>
+            <span class="status-badge {{ statusClass(order.status) }}">{{ order.status }}</span>
+          </div>
+          <div>
+            <a [routerLink]="['/orders', order.id]" class="btn-secondary btn-sm">View</a>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>
