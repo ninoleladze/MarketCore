@@ -103,11 +103,14 @@ try
         opts.AddPolicy("AuthenticatedUser", policy => policy.RequireAuthenticatedUser());
     });
 
+    var allowedOrigins = builder.Configuration["AllowedOrigins"]?.Split(',')
+        ?? ["http://localhost:4200", "http://localhost:3000"];
+
     builder.Services.AddCors(opts =>
     {
         opts.AddPolicy("AllowedOrigins", policy =>
         {
-            policy.WithOrigins("http://localhost:4200", "http://localhost:3000")
+            policy.WithOrigins(allowedOrigins)
                   .AllowAnyHeader()
                   .AllowAnyMethod()
                   .AllowCredentials();
@@ -188,6 +191,15 @@ try
 
     var app = builder.Build();
 
+    using (var scope = app.Services.CreateScope())
+    {
+        var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        await db.Database.MigrateAsync();
+
+        var seeder = scope.ServiceProvider.GetRequiredService<DataSeeder>();
+        await seeder.SeedAsync();
+    }
+
     app.UseMiddleware<GlobalExceptionMiddleware>();
     app.UseMiddleware<RequestLoggingMiddleware>();
 
@@ -197,19 +209,12 @@ try
     app.UseAuthentication();
     app.UseAuthorization();
 
-    if (app.Environment.IsDevelopment())
+    app.UseSwagger();
+    app.UseSwaggerUI(opts =>
     {
-        app.UseSwagger();
-        app.UseSwaggerUI(opts =>
-        {
-            opts.SwaggerEndpoint("/swagger/v1/swagger.json", "MarketCore API v1");
-            opts.RoutePrefix = "swagger";
-        });
-
-        using var seedScope = app.Services.CreateScope();
-        var seeder = seedScope.ServiceProvider.GetRequiredService<DataSeeder>();
-        await seeder.SeedAsync();
-    }
+        opts.SwaggerEndpoint("/swagger/v1/swagger.json", "MarketCore API v1");
+        opts.RoutePrefix = "swagger";
+    });
 
     app.MapHealthChecks("/health");
     app.MapControllers();
