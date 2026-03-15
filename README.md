@@ -12,19 +12,7 @@
 
 ---
 
-## Screenshots
 
-> Start the app locally (`docker-compose up --build` + `npm start`) to see it in action.
-
-| Home — Hero & Products | Admin Dashboard |
-|---|---|
-| ![home](docs/screenshots/home.png) | ![admin](docs/screenshots/admin.png) |
-
-| Order Detail — Live Status | Cart |
-|---|---|
-| ![order](docs/screenshots/order-detail.png) | ![cart](docs/screenshots/cart.png) |
-
----
 
 ## Key Features
 
