@@ -195,7 +195,9 @@ try
     using (var scope = app.Services.CreateScope())
     {
         var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        await db.Database.MigrateAsync();
+
+        if (Environment.GetEnvironmentVariable("DATABASE_URL") is not null)
+            await db.Database.MigrateAsync();
 
         var seeder = scope.ServiceProvider.GetRequiredService<DataSeeder>();
         await seeder.SeedAsync();
