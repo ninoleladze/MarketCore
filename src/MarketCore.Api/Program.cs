@@ -198,7 +198,8 @@ try
 
         var isMySql = Environment.GetEnvironmentVariable("DATABASE_URL")
                    ?? Environment.GetEnvironmentVariable("MYSQL_URL")
-                   ?? Environment.GetEnvironmentVariable("MYSQL_PRIVATE_URL");
+                   ?? Environment.GetEnvironmentVariable("MYSQL_PRIVATE_URL")
+                   ?? Environment.GetEnvironmentVariable("MYSQLHOST");
 
         if (isMySql is not null)
             await db.Database.MigrateAsync();

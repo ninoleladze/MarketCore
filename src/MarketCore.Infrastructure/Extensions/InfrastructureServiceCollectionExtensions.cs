@@ -33,9 +33,23 @@ public static class InfrastructureServiceCollectionExtensions
                         ?? Environment.GetEnvironmentVariable("MYSQL_URL")
                         ?? Environment.GetEnvironmentVariable("MYSQL_PRIVATE_URL");
 
+            var mysqlHost = Environment.GetEnvironmentVariable("MYSQLHOST");
+
             if (mysqlUrl is not null)
             {
                 var connectionString = ParseMySqlUrl(mysqlUrl);
+                options.UseMySql(
+                    connectionString,
+                    new MySqlServerVersion(new Version(8, 0, 36)),
+                    o => o.CommandTimeout(30));
+            }
+            else if (mysqlHost is not null)
+            {
+                var port = Environment.GetEnvironmentVariable("MYSQLPORT") ?? "3306";
+                var db = Environment.GetEnvironmentVariable("MYSQLDATABASE") ?? "railway";
+                var user = Environment.GetEnvironmentVariable("MYSQLUSER") ?? "root";
+                var pass = Environment.GetEnvironmentVariable("MYSQLPASSWORD") ?? string.Empty;
+                var connectionString = $"Server={mysqlHost};Port={port};Database={db};User={user};Password={pass};";
                 options.UseMySql(
                     connectionString,
                     new MySqlServerVersion(new Version(8, 0, 36)),
