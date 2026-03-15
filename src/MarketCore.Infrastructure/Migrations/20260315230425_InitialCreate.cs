@@ -138,7 +138,7 @@ namespace MarketCore.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Products", x => x.Id);
-                    table.CheckConstraint("CK_Products_StockQuantity", "[StockQuantity] >= 0");
+                    table.CheckConstraint("CK_Products_StockQuantity", "`StockQuantity` >= 0");
                     table.ForeignKey(
                         name: "FK_Products_Categories_CategoryId",
                         column: x => x.CategoryId,
@@ -169,7 +169,7 @@ namespace MarketCore.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_OrderItems", x => x.Id);
-                    table.CheckConstraint("CK_OrderItems_Quantity", "[Quantity] >= 1");
+                    table.CheckConstraint("CK_OrderItems_Quantity", "`Quantity` >= 1");
                     table.ForeignKey(
                         name: "FK_OrderItems_Orders_OrderId",
                         column: x => x.OrderId,
@@ -220,7 +220,7 @@ namespace MarketCore.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Reviews", x => x.Id);
-                    table.CheckConstraint("CK_Reviews_Rating", "[Rating] >= 1 AND [Rating] <= 5");
+                    table.CheckConstraint("CK_Reviews_Rating", "`Rating` >= 1 AND `Rating` <= 5");
                     table.ForeignKey(
                         name: "FK_Reviews_Products_ProductId",
                         column: x => x.ProductId,
@@ -249,7 +249,7 @@ namespace MarketCore.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CartItems", x => x.Id);
-                    table.CheckConstraint("CK_CartItems_Quantity", "[Quantity] >= 1");
+                    table.CheckConstraint("CK_CartItems_Quantity", "`Quantity` >= 1");
                     table.ForeignKey(
                         name: "FK_CartItems_Carts_CartId",
                         column: x => x.CartId,
