@@ -196,7 +196,11 @@ try
     {
         var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-        if (Environment.GetEnvironmentVariable("DATABASE_URL") is not null)
+        var isMySql = Environment.GetEnvironmentVariable("DATABASE_URL")
+                   ?? Environment.GetEnvironmentVariable("MYSQL_URL")
+                   ?? Environment.GetEnvironmentVariable("MYSQL_PRIVATE_URL");
+
+        if (isMySql is not null)
             await db.Database.MigrateAsync();
 
         var seeder = scope.ServiceProvider.GetRequiredService<DataSeeder>();

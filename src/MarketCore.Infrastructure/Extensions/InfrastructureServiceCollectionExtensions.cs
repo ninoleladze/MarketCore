@@ -29,11 +29,13 @@ public static class InfrastructureServiceCollectionExtensions
 
         services.AddDbContext<ApplicationDbContext>((serviceProvider, options) =>
         {
-            var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+            var mysqlUrl = Environment.GetEnvironmentVariable("DATABASE_URL")
+                        ?? Environment.GetEnvironmentVariable("MYSQL_URL")
+                        ?? Environment.GetEnvironmentVariable("MYSQL_PRIVATE_URL");
 
-            if (databaseUrl is not null)
+            if (mysqlUrl is not null)
             {
-                var connectionString = ParseMySqlUrl(databaseUrl);
+                var connectionString = ParseMySqlUrl(mysqlUrl);
                 options.UseMySql(
                     connectionString,
                     new MySqlServerVersion(new Version(8, 0, 36)),
