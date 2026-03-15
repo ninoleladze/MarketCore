@@ -26,8 +26,6 @@ public sealed class DataSeeder
     public async Task SeedAsync(CancellationToken ct = default)
     {
 
-        await _context.Database.MigrateAsync(ct);
-
         if (await _context.Users.AnyAsync(ct))
         {
             _logger.LogInformation("Database already seeded — skipping.");
