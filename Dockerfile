@@ -17,15 +17,13 @@ COPY . .
 
 RUN dotnet build "src/MarketCore.Api/MarketCore.Api.csproj" \
     -c Release \
-    -o /app/build \
-    --no-restore
+    -o /app/build
 
 # ── Stage 2: Publish ──────────────────────────────────────────────────────────
 FROM build AS publish
 RUN dotnet publish "src/MarketCore.Api/MarketCore.Api.csproj" \
     -c Release \
     -o /app/publish \
-    --no-restore \
     /p:UseAppHost=false
 
 # ── Stage 3: Runtime ──────────────────────────────────────────────────────────
