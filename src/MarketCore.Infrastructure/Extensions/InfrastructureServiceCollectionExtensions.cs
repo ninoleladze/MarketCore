@@ -30,10 +30,10 @@ public static class InfrastructureServiceCollectionExtensions
         services.AddDbContext<ApplicationDbContext>((serviceProvider, options) =>
         {
             var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
-            var connectionString = databaseUrl ?? configuration.GetConnectionString("DefaultConnection");
 
             if (databaseUrl is not null)
             {
+                var connectionString = ParseMySqlUrl(databaseUrl);
                 options.UseMySql(
                     connectionString,
                     new MySqlServerVersion(new Version(8, 0, 36)),
@@ -41,6 +41,7 @@ public static class InfrastructureServiceCollectionExtensions
             }
             else
             {
+                var connectionString = configuration.GetConnectionString("DefaultConnection");
                 options.UseSqlServer(
                     connectionString,
                     o => o.CommandTimeout(30));
@@ -110,6 +111,18 @@ public static class InfrastructureServiceCollectionExtensions
         services.AddScoped<IOrderHubService, OrderHubService>();
 
         return services;
+    }
+
+    private static string ParseMySqlUrl(string url)
+    {
+        var uri = new Uri(url);
+        var userInfo = uri.UserInfo.Split(':');
+        var user = userInfo[0];
+        var password = userInfo.Length > 1 ? userInfo[1] : string.Empty;
+        var host = uri.Host;
+        var port = uri.Port > 0 ? uri.Port : 3306;
+        var database = uri.AbsolutePath.TrimStart('/');
+        return $"Server={host};Port={port};Database={database};User={user};Password={password};";
     }
 
     private static bool TryConnectRedis(string connectionString, IServiceCollection services)
