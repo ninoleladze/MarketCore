@@ -65,16 +65,18 @@ export class CategoriesComponent implements OnInit {
     const command = this.form.value as { name: string; description: string };
 
     if (this.editingId) {
-      this.categoryService.updateCategory(this.editingId, command).subscribe({
-        next: updated => {
-          const idx = this.categories.findIndex(c => c.id === this.editingId);
-          if (idx > -1) this.categories[idx] = updated;
+      const editingId = this.editingId;
+      this.categoryService.updateCategory(editingId, command).subscribe({
+        next: () => {
+          const idx = this.categories.findIndex(c => c.id === editingId);
+          if (idx > -1) this.categories[idx] = { ...this.categories[idx], ...command };
           this.toast.success('Category updated.');
           this.cancelEdit();
           this.saving = false;
         },
-        error: () => {
-          this.toast.error('Failed to update category.');
+        error: (err) => {
+          const msg = err.error?.error ?? err.error?.message ?? 'Failed to update category.';
+          this.toast.error(msg);
           this.saving = false;
         }
       });
@@ -101,7 +103,10 @@ export class CategoriesComponent implements OnInit {
         this.categories = this.categories.filter(c => c.id !== cat.id);
         this.toast.success('Category deleted.');
       },
-      error: () => this.toast.error('Failed to delete category.')
+      error: (err) => {
+        const msg = err.error?.error ?? err.error?.message ?? 'Failed to delete category.';
+        this.toast.error(msg);
+      }
     });
   }
 }

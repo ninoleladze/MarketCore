@@ -18,8 +18,8 @@ export class CategoryService {
     return this.http.post<Category>(this.apiUrl, command);
   }
 
-  updateCategory(id: string, command: CreateCategoryCommand): Observable<Category> {
-    return this.http.put<Category>(`${this.apiUrl}/${id}`, command);
+  updateCategory(id: string, command: CreateCategoryCommand): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/${id}`, command);
   }
 
   deleteCategory(id: string): Observable<void> {
