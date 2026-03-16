@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiUrl: 'https://localhost:49187/api/v1'
+  apiUrl: 'https://marketcore-production.up.railway.app/api/v1'
 };
