@@ -1,4 +1,4 @@
-import { Component, signal, inject, HostListener } from '@angular/core';
+import { Component, signal, inject, HostListener, computed } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
@@ -18,6 +18,11 @@ export class NavbarComponent {
 
   mobileMenuOpen = signal(false);
   scrolled       = signal(false);
+
+  initials = computed(() => {
+    const parts = this.auth.fullName().trim().split(' ');
+    return ((parts[0]?.[0] ?? '') + (parts[1]?.[0] ?? '')).toUpperCase();
+  });
 
   @HostListener('window:scroll')
   onScroll(): void {

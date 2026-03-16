@@ -123,20 +123,27 @@
   border-left: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.user-name {
-  color: var(--neutral-400);
-  font-size: 0.82rem;
-  max-width: 110px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.user-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--orange-700), var(--orange-500));
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
   text-decoration: none;
-  transition: color 0.2s;
+  flex-shrink: 0;
+  transition: opacity 0.2s, box-shadow 0.2s;
 }
 
-.user-name:hover,
-.user-name.active {
-  color: var(--orange-400);
+.user-avatar:hover,
+.user-avatar.active {
+  opacity: 0.85;
+  box-shadow: 0 0 0 2px var(--orange-400);
 }
 
 .btn-logout {
