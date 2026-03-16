@@ -33,8 +33,8 @@ export class ProductService {
     return this.http.get<Product>(`${this.apiUrl}/${id}`);
   }
 
-  createProduct(command: CreateProductCommand): Observable<Product> {
-    return this.http.post<Product>(this.apiUrl, command);
+  createProduct(command: CreateProductCommand): Observable<string> {
+    return this.http.post<string>(this.apiUrl, command);
   }
 
   updateProduct(id: string, request: UpdateProductRequest): Observable<Product> {

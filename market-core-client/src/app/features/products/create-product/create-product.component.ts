@@ -49,9 +49,9 @@ export class CreateProductComponent implements OnInit {
     }
     this.loading = true;
     this.productService.createProduct(this.form.value as any).subscribe({
-      next: product => {
+      next: productId => {
         this.toast.success('Product created successfully!');
-        this.router.navigate(['/products', product.id]);
+        this.router.navigate(['/products', productId]);
       },
       error: (err) => {
         const msg = err.error?.message ?? err.error?.title ?? 'Failed to create product.';
