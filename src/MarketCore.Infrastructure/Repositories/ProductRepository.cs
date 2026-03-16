@@ -53,4 +53,9 @@ public sealed class ProductRepository : Repository<Product>, IProductRepository
             .Include(p => p.Category)
             .FirstOrDefaultAsync(p => p.Id == id && p.IsActive, ct);
     }
+
+    public async Task<int> CountByCategoryAsync(Guid categoryId, CancellationToken ct = default)
+    {
+        return await Context.Products.CountAsync(p => p.CategoryId == categoryId, ct);
+    }
 }

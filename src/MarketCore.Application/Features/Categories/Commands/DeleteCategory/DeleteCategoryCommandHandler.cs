@@ -26,9 +26,10 @@ public sealed class DeleteCategoryCommandHandler : IRequestHandler<DeleteCategor
         if (category is null)
             return Result.Failure($"Category '{request.Id}' not found.");
 
-        if (category.Products.Count > 0)
+        var productCount = await _uow.Products.CountByCategoryAsync(request.Id, cancellationToken);
+        if (productCount > 0)
             return Result.Failure(
-                $"Cannot delete category '{category.Name}' — {category.Products.Count} product(s) are assigned to it. " +
+                $"Cannot delete category '{category.Name}' — {productCount} product(s) are assigned to it. " +
                 "Reassign or delete the products first.");
 
         _uow.Categories.Delete(category);

@@ -13,4 +13,6 @@ public interface IProductRepository : IRepository<Product>
         CancellationToken ct = default);
 
     Task<Product?> GetByIdWithReviewsAsync(Guid id, CancellationToken ct = default);
+
+    Task<int> CountByCategoryAsync(Guid categoryId, CancellationToken ct = default);
 }
