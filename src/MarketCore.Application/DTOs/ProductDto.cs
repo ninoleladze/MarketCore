@@ -20,6 +20,7 @@ public sealed record ProductSummaryDto(
     decimal Price,
     string Currency,
     int StockQuantity,
+    bool IsActive,
     Guid CategoryId,
     string CategoryName,
     string? ImageUrl,

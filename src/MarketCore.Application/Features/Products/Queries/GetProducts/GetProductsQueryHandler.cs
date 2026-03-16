@@ -32,6 +32,7 @@ public sealed class GetProductsQueryHandler
             Price: p.Price.Amount,
             Currency: p.Price.Currency,
             StockQuantity: p.StockQuantity,
+            IsActive: p.IsActive,
             CategoryId: p.CategoryId,
             CategoryName: p.Category?.Name ?? string.Empty,
             ImageUrl: p.ImageUrl,
