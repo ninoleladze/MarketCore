@@ -149,7 +149,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
           const d = Math.hypot(dx, dy);
           if (d < 105) {
             ctx.beginPath();
-            ctx.strokeStyle = `rgba(224,0,71,${0.055 * (1 - d / 105)})`;
+            ctx.strokeStyle = `rgba(232,119,34,${0.055 * (1 - d / 105)})`;
             ctx.lineWidth = 0.6;
             ctx.moveTo(pts[i].x, pts[i].y);
             ctx.lineTo(pts[j].x, pts[j].y);
@@ -161,7 +161,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       pts.forEach(p => {
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${195 + p.h * 1.2},${p.h},35,${p.a})`;
+        ctx.fillStyle = `rgba(${232},${119 + p.h * 0.5},${34 + p.h * 0.4},${p.a})`;
         ctx.fill();
 
         const dx = p.x - mx, dy = p.y - my;

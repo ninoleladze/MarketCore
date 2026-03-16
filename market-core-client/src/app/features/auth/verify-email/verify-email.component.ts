@@ -53,7 +53,7 @@ type State = 'verifying' | 'success' | 'error';
   styles: [`
     .verify-page {
       min-height: 100vh;
-      background: var(--dark-950, #0d0d0f);
+      background: var(--navy-950, #071428);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -61,7 +61,7 @@ type State = 'verifying' | 'success' | 'error';
     }
 
     .verify-card {
-      background: var(--dark-800, #1a1a1e);
+      background: var(--navy-800, #132b52);
       border: 1px solid var(--color-border, #2a2a2e);
       border-radius: 20px;
       padding: 3rem 2.5rem;
@@ -73,7 +73,7 @@ type State = 'verifying' | 'success' | 'error';
     .verify-logo {
       width: 56px;
       height: 56px;
-      background: linear-gradient(135deg, var(--red-700, #b00032), var(--red-500, #e00047));
+      background: linear-gradient(135deg, var(--orange-700, #c45c00), var(--orange-500, #e87722));
       border-radius: 14px;
       display: flex;
       align-items: center;
@@ -103,8 +103,8 @@ type State = 'verifying' | 'success' | 'error';
     .spinner-ring {
       width: 52px;
       height: 52px;
-      border: 3px solid rgba(224,0,71,0.15);
-      border-top-color: var(--red-500, #e00047);
+      border: 3px solid rgba(232,119,34,0.15);
+      border-top-color: var(--orange-500, #e87722);
       border-radius: 50%;
       animation: spin 0.8s linear infinite;
       margin: 0 auto 1.5rem;
@@ -129,9 +129,9 @@ type State = 'verifying' | 'success' | 'error';
       border: 2px solid rgba(34,197,94,0.25);
     }
     .icon-error {
-      background: rgba(224,0,71,0.12);
-      color: var(--red-400, #ff4d76);
-      border: 2px solid rgba(224,0,71,0.25);
+      background: rgba(232,119,34,0.12);
+      color: var(--orange-400, #ffb870);
+      border: 2px solid rgba(232,119,34,0.25);
     }
 
     .btn-block { display: block; width: 100%; text-align: center; }
@@ -145,7 +145,7 @@ type State = 'verifying' | 'success' | 'error';
       font-size: 0.9rem;
       transition: all 0.2s;
     }
-    .btn-ghost:hover { border-color: var(--red-600); color: var(--red-400); }
+    .btn-ghost:hover { border-color: var(--orange-600); color: var(--orange-400); }
   `]
 })
 export class VerifyEmailComponent implements OnInit {

@@ -3,8 +3,8 @@
   <rect width="64" height="64" rx="14" fill="url(#bg)"/>
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#b8003a"/>
-      <stop offset="100%" stop-color="#e00047"/>
+      <stop offset="0%" stop-color="#c45c00"/>
+      <stop offset="100%" stop-color="#ff9a3c"/>
     </linearGradient>
   </defs>
   <!-- Market trend / M shape -->

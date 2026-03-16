@@ -21,7 +21,7 @@
 
 /* ── Form card ─────────────────────────────────────────────── */
 .form-card {
-  background: var(--dark-800);
+  background: var(--navy-800);
   border: 1px solid var(--color-border);
   border-radius: 12px;
   padding: 1.5rem;
@@ -60,7 +60,7 @@
 .categories-list {
   display: flex;
   flex-direction: column;
-  background: var(--dark-800);
+  background: var(--navy-800);
   border: 1px solid var(--color-border);
   border-radius: 12px;
   overflow: hidden;
@@ -76,10 +76,10 @@
   transition: background 0.2s;
 }
 .category-row:last-child { border-bottom: none; }
-.category-row:hover { background: var(--dark-700); }
+.category-row:hover { background: var(--navy-700); }
 .category-row.editing {
-  background: rgba(224,0,71,0.06);
-  border-left: 2px solid var(--red-600);
+  background: rgba(232,119,34,0.06);
+  border-left: 2px solid var(--orange-600);
 }
 
 .cat-info { flex: 1; overflow: hidden; }
@@ -110,7 +110,7 @@
   padding: 2rem;
   text-align: center;
   color: var(--neutral-600);
-  background: var(--dark-800);
+  background: var(--navy-800);
   border: 1px solid var(--color-border);
   border-radius: 12px;
   font-size: 0.9rem;

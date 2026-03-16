@@ -1,5 +1,5 @@
 .footer {
-  background: var(--dark-900);
+  background: var(--navy-900);
   border-top: 1px solid rgba(255,255,255,0.05);
   padding: 3.5rem 2rem 2rem;
   position: relative;
@@ -35,7 +35,7 @@
 
 .brand-icon {
   width: 32px; height: 32px;
-  background: linear-gradient(135deg, var(--red-700), var(--red-500));
+  background: linear-gradient(135deg, var(--orange-700), var(--orange-500));
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -65,7 +65,7 @@
   text-decoration: none;
   transition: color var(--transition);
 }
-.footer-links a:hover { color: var(--red-400); }
+.footer-links a:hover { color: var(--orange-400); }
 
 .footer-copy {
   text-align: center;

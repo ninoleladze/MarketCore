@@ -344,7 +344,7 @@ type OrderStatus = (typeof ORDER_STATUSES)[number];
   styles: [`
     .admin-page {
       min-height: 100vh;
-      background: var(--dark-950);
+      background: var(--navy-950);
       padding-top: 7rem;
       padding-bottom: 5rem;
     }
@@ -384,7 +384,7 @@ type OrderStatus = (typeof ORDER_STATUSES)[number];
     }
 
     .stat-card {
-      background: var(--dark-800);
+      background: var(--navy-800);
       border: 1px solid var(--color-border);
       border-radius: 14px;
       padding: 1.6rem 1.5rem 1.4rem;
@@ -402,22 +402,22 @@ type OrderStatus = (typeof ORDER_STATUSES)[number];
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(135deg, rgba(224,0,71,0.04) 0%, transparent 60%);
+      background: linear-gradient(135deg, rgba(232,119,34,0.04) 0%, transparent 60%);
       pointer-events: none;
     }
 
     .stat-card:hover {
-      border-color: rgba(224, 0, 71, 0.35);
-      box-shadow: 0 0 0 1px rgba(224,0,71,0.1), 0 8px 32px rgba(0,0,0,0.4), 0 0 20px rgba(224,0,71,0.06);
+      border-color: rgba(232, 119, 34, 0.35);
+      box-shadow: 0 0 0 1px rgba(232,119,34,0.1), 0 8px 32px rgba(0,0,0,0.4), 0 0 20px rgba(232,119,34,0.06);
       transform: translateY(-2px);
     }
 
     .stat-card--revenue {
-      border-color: rgba(224,0,71,0.2);
+      border-color: rgba(232,119,34,0.2);
     }
     .stat-card--revenue:hover {
-      border-color: rgba(224,0,71,0.5);
-      box-shadow: 0 0 0 1px rgba(224,0,71,0.15), 0 8px 32px rgba(0,0,0,0.4), 0 0 28px rgba(224,0,71,0.1);
+      border-color: rgba(232,119,34,0.5);
+      box-shadow: 0 0 0 1px rgba(232,119,34,0.15), 0 8px 32px rgba(0,0,0,0.4), 0 0 28px rgba(232,119,34,0.1);
     }
 
     .stat-icon {
@@ -438,7 +438,7 @@ type OrderStatus = (typeof ORDER_STATUSES)[number];
     .stat-icon--products { background: rgba(21, 101, 192, 0.15); color: #64b5f6; }
     .stat-icon--users    { background: rgba(106, 27, 154, 0.15); color: #ce93d8; }
     .stat-icon--orders   { background: rgba(230, 81, 0, 0.15);   color: #ffb74d; }
-    .stat-icon--revenue  { background: rgba(224, 0, 71, 0.15);   color: var(--red-400); }
+    .stat-icon--revenue  { background: rgba(232, 119, 34, 0.15);   color: var(--orange-400); }
 
     .stat-number {
       font-size: clamp(1.6rem, 3vw, 2.1rem);
@@ -462,9 +462,9 @@ type OrderStatus = (typeof ORDER_STATUSES)[number];
       animation: pulse 1.6s ease-in-out infinite;
     }
 
-    .skeleton-icon  { width: 42px;  height: 42px; border-radius: 10px; background: var(--dark-700); }
-    .skeleton-number{ width: 80px;  height: 28px; border-radius: 6px;  background: var(--dark-700); }
-    .skeleton-label { width: 60px;  height: 12px; border-radius: 4px;  background: var(--dark-700); }
+    .skeleton-icon  { width: 42px;  height: 42px; border-radius: 10px; background: var(--navy-700); }
+    .skeleton-number{ width: 80px;  height: 28px; border-radius: 6px;  background: var(--navy-700); }
+    .skeleton-label { width: 60px;  height: 12px; border-radius: 4px;  background: var(--navy-700); }
 
     @keyframes pulse {
       0%, 100% { opacity: 1; }
@@ -501,7 +501,7 @@ type OrderStatus = (typeof ORDER_STATUSES)[number];
 
     .tab-btn--active {
       color: var(--neutral-50);
-      border-bottom-color: var(--red-500);
+      border-bottom-color: var(--orange-500);
     }
 
     .badge-count {
@@ -512,7 +512,7 @@ type OrderStatus = (typeof ORDER_STATUSES)[number];
       height: 18px;
       padding: 0 4px;
       border-radius: 999px;
-      background: var(--red-600);
+      background: var(--orange-600);
       color: var(--neutral-50);
       font-size: 0.68rem;
       font-weight: 800;
@@ -520,7 +520,7 @@ type OrderStatus = (typeof ORDER_STATUSES)[number];
 
     /* ── Tab sections ────────────────────────────────── */
     .tab-section {
-      background: var(--dark-800);
+      background: var(--navy-800);
       border: 1px solid var(--color-border);
       border-top: none;
       border-radius: 0 0 14px 14px;
@@ -557,7 +557,7 @@ type OrderStatus = (typeof ORDER_STATUSES)[number];
     }
 
     .products-table thead tr {
-      background: var(--dark-700);
+      background: var(--navy-700);
     }
 
     .products-table th {
@@ -610,7 +610,7 @@ type OrderStatus = (typeof ORDER_STATUSES)[number];
     }
 
     .product-thumb--placeholder {
-      background: var(--dark-700);
+      background: var(--navy-700);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -635,7 +635,7 @@ type OrderStatus = (typeof ORDER_STATUSES)[number];
     .text-center { text-align: center; }
 
     .stock-low {
-      color: var(--red-300);
+      color: var(--orange-300);
       font-weight: 700;
     }
 
@@ -644,7 +644,7 @@ type OrderStatus = (typeof ORDER_STATUSES)[number];
       font-family: monospace;
       font-size: 0.82rem;
       font-weight: 700;
-      color: var(--red-300);
+      color: var(--orange-300);
     }
 
     /* ── Status pill (product) ───────────────────────── */
@@ -707,14 +707,14 @@ type OrderStatus = (typeof ORDER_STATUSES)[number];
     }
 
     .order-status-pill--cancelled {
-      background: rgba(224, 0, 71, 0.15);
-      color: var(--red-400);
-      border: 1px solid rgba(224, 0, 71, 0.3);
+      background: rgba(232, 119, 34, 0.15);
+      color: var(--orange-400);
+      border: 1px solid rgba(232, 119, 34, 0.3);
     }
 
     /* ── Status select ───────────────────────────────── */
     .status-select {
-      background: var(--dark-700);
+      background: var(--navy-700);
       border: 1px solid var(--color-border);
       color: var(--neutral-300);
       font-size: 0.78rem;
@@ -727,11 +727,11 @@ type OrderStatus = (typeof ORDER_STATUSES)[number];
     }
 
     .status-select:hover:not(:disabled) {
-      border-color: rgba(224,0,71,0.4);
+      border-color: rgba(232,119,34,0.4);
     }
 
     .status-select:focus {
-      border-color: var(--red-500);
+      border-color: var(--orange-500);
     }
 
     .status-select:disabled {
@@ -771,9 +771,9 @@ type OrderStatus = (typeof ORDER_STATUSES)[number];
     }
 
     .action-btn--delete:hover:not(:disabled) {
-      background: rgba(224, 0, 71, 0.15);
-      border-color: rgba(224, 0, 71, 0.4);
-      color: var(--red-400);
+      background: rgba(232, 119, 34, 0.15);
+      border-color: rgba(232, 119, 34, 0.4);
+      color: var(--orange-400);
     }
 
     .action-btn:disabled {
@@ -792,7 +792,7 @@ type OrderStatus = (typeof ORDER_STATUSES)[number];
       height: 56px;
       margin: 0 1.25rem;
       border-radius: 6px;
-      background: var(--dark-700);
+      background: var(--navy-700);
       margin-bottom: 4px;
       animation: pulse 1.6s ease-in-out infinite;
     }
@@ -843,7 +843,7 @@ type OrderStatus = (typeof ORDER_STATUSES)[number];
     .modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(6, 4, 8, 0.75);
+      background: rgba(5, 12, 26, 0.75);
       backdrop-filter: blur(6px);
       -webkit-backdrop-filter: blur(6px);
       z-index: 2000;
@@ -854,13 +854,13 @@ type OrderStatus = (typeof ORDER_STATUSES)[number];
     }
 
     .modal {
-      background: var(--dark-800);
-      border: 1px solid rgba(224, 0, 71, 0.2);
+      background: var(--navy-800);
+      border: 1px solid rgba(232, 119, 34, 0.2);
       border-radius: 16px;
       padding: 2rem;
       max-width: 420px;
       width: 100%;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 40px rgba(224,0,71,0.06);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 40px rgba(232,119,34,0.06);
       animation: modalIn 0.2s var(--ease-bounce) both;
     }
 

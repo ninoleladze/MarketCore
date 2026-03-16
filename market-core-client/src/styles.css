@@ -1,53 +1,61 @@
 /* ================================================================
-   MarketCore Global Styles — Dark Crimson Edition
+   MarketCore Global Styles — Navy Marketplace Edition
    ================================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
+  --orange-900:  #1f0d00;
+  --orange-800:  #4a2000;
+  --orange-700:  #7c3b00;
+  --orange-600:  #c45c00;
+  --orange-500:  #e87722;
+  --orange-400:  #ff9a3c;
+  --orange-300:  #ffb870;
+  --orange-200:  #ffd9b0;
+  --orange-glow: rgba(232, 119, 34, 0.4);
+  --orange-glow-soft: rgba(232, 119, 34, 0.15);
+
+  /* Keep --red-* aliases for btn-danger and error states */
   --red-900:  #4a0010;
   --red-800:  #7b0020;
-  --red-700:  #a80028;
   --red-600:  #c0003a;
   --red-500:  #e00047;
-  --red-400:  #ff1a5e;
-  --red-300:  #ff6b9d;
-  --red-200:  #ffb3cc;
   --red-glow: rgba(224, 0, 71, 0.35);
   --red-glow-soft: rgba(224, 0, 71, 0.12);
 
-  --dark-950: #060408;
-  --dark-900: #0d0710;
-  --dark-800: #150d1a;
-  --dark-700: #1e1225;
-  --dark-600: #2a1835;
+  --navy-950: #050c1a;
+  --navy-900: #071428;
+  --navy-800: #0d1f3c;
+  --navy-700: #132b52;
+  --navy-600: #1c3868;
 
-  --neutral-50:  #faf5fb;
-  --neutral-200: #e8dced;
-  --neutral-400: #9b8aa8;
-  --neutral-500: #7a6b87;
-  --neutral-600: #5c4e69;
+  --neutral-50:  #f0f4ff;
+  --neutral-200: #c4d0e8;
+  --neutral-400: #7a94b8;
+  --neutral-500: #5a7498;
+  --neutral-600: #3a5478;
 
   /* Semantic aliases used by all feature components */
-  --color-primary:       var(--red-600);
-  --color-primary-dark:  var(--red-800);
-  --color-primary-light: var(--red-400);
-  --color-accent:        var(--red-300);
-  --color-accent-light:  var(--red-200);
-  --color-bg:            var(--dark-950);
-  --color-surface:       var(--dark-800);
-  --color-surface-2:     var(--dark-700);
+  --color-primary:       var(--orange-500);
+  --color-primary-dark:  var(--orange-700);
+  --color-primary-light: var(--orange-400);
+  --color-accent:        var(--orange-300);
+  --color-accent-light:  var(--orange-200);
+  --color-bg:            var(--navy-950);
+  --color-surface:       var(--navy-800);
+  --color-surface-2:     var(--navy-700);
   --color-text:          var(--neutral-50);
   --color-text-muted:    var(--neutral-400);
   --color-border:        rgba(255, 255, 255, 0.07);
-  --color-border-red:    rgba(224, 0, 71, 0.3);
+  --color-border-red:    rgba(232, 119, 34, 0.3);
   --color-success:       #4caf50;
   --color-warning:       #ff9800;
   --color-error:         #ef5350;
 
   --radius:     10px;
   --shadow:     0 4px 24px rgba(0, 0, 0, 0.5);
-  --shadow-red: 0 4px 24px var(--red-glow);
+  --shadow-red: 0 4px 24px var(--orange-glow);
   --transition: 0.22s ease;
 
   --font-display: 'Playfair Display', Georgia, serif;
@@ -78,7 +86,7 @@ body {
 input, textarea, select { cursor: text; }
 button { cursor: none; }
 
-::selection { background: var(--red-600); color: #fff; }
+::selection { background: var(--orange-600); color: #fff; }
 
 h1, h2, h3, h4, h5, h6 { margin: 0; line-height: 1.25; font-weight: 700; }
 p { margin: 0 0 1rem; }
@@ -87,9 +95,9 @@ a { color: var(--color-accent); text-decoration: none; }
 
 /* ── Scrollbar ────────────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 4px; height: 4px; }
-::-webkit-scrollbar-track { background: var(--dark-900); }
+::-webkit-scrollbar-track { background: var(--navy-900); }
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(to bottom, var(--red-700), var(--red-500));
+  background: linear-gradient(to bottom, var(--orange-700), var(--orange-500));
   border-radius: 2px;
 }
 
@@ -97,7 +105,7 @@ a { color: var(--color-accent); text-decoration: none; }
 #cursor-dot {
   position: fixed;
   width: 8px; height: 8px;
-  background: var(--red-400);
+  background: var(--orange-400);
   border-radius: 50%;
   pointer-events: none;
   z-index: 9999;
@@ -109,7 +117,7 @@ a { color: var(--color-accent); text-decoration: none; }
 #cursor-ring {
   position: fixed;
   width: 36px; height: 36px;
-  border: 1.5px solid rgba(255, 26, 94, 0.55);
+  border: 1.5px solid rgba(255, 154, 60, 0.55);
   border-radius: 50%;
   pointer-events: none;
   z-index: 9998;
@@ -121,7 +129,7 @@ a { color: var(--color-accent); text-decoration: none; }
 
 body.cursor-hover #cursor-ring {
   width: 60px; height: 60px;
-  border-color: rgba(255, 107, 157, 0.35);
+  border-color: rgba(255, 184, 112, 0.35);
   opacity: 0.38;
 }
 body.cursor-hover #cursor-dot { transform: translate(-50%, -50%) scale(1.9); }
@@ -153,10 +161,10 @@ body.cursor-hover #cursor-dot { transform: translate(-50%, -50%) scale(1.9); }
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, var(--red-600), var(--red-400));
+  background: linear-gradient(135deg, var(--orange-600), var(--orange-400));
   color: #fff;
   border-color: transparent;
-  box-shadow: 0 4px 20px var(--red-glow-soft);
+  box-shadow: 0 4px 20px var(--orange-glow-soft);
 }
 .btn-primary::after {
   content: '';
@@ -170,20 +178,20 @@ body.cursor-hover #cursor-dot { transform: translate(-50%, -50%) scale(1.9); }
   transform: translateX(100%);
 }
 .btn-primary:hover:not(:disabled) {
-  box-shadow: 0 6px 28px var(--red-glow);
+  box-shadow: 0 6px 28px var(--orange-glow);
   transform: translateY(-2px);
 }
 .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
 
 .btn-secondary {
   background: transparent;
-  color: var(--red-300);
-  border-color: rgba(255, 26, 94, 0.35);
+  color: var(--orange-300);
+  border-color: rgba(232, 119, 34, 0.35);
 }
 .btn-secondary:hover:not(:disabled) {
-  background: rgba(224, 0, 71, 0.1);
-  border-color: var(--red-400);
-  color: var(--red-200);
+  background: rgba(232, 119, 34, 0.1);
+  border-color: var(--orange-400);
+  color: var(--orange-200);
   transform: translateY(-1px);
 }
 .btn-secondary:disabled { opacity: 0.5; pointer-events: none; }
@@ -206,9 +214,9 @@ body.cursor-hover #cursor-dot { transform: translate(-50%, -50%) scale(1.9); }
   border-color: rgba(255, 255, 255, 0.1);
 }
 .btn-ghost:hover:not(:disabled) {
-  background: rgba(224, 0, 71, 0.08);
-  border-color: rgba(224, 0, 71, 0.3);
-  color: var(--red-300);
+  background: rgba(232, 119, 34, 0.08);
+  border-color: rgba(232, 119, 34, 0.3);
+  color: var(--orange-300);
   transform: translateY(-1px);
 }
 .btn-ghost:disabled { opacity: 0.5; pointer-events: none; }
@@ -241,21 +249,21 @@ textarea {
   border-radius: var(--radius);
   font-size: 0.95rem;
   color: var(--color-text);
-  background: var(--dark-800);
+  background: var(--navy-800);
   transition: border-color var(--transition), box-shadow var(--transition);
   outline: none;
   font-family: inherit;
 }
 
 input:focus, select:focus, textarea:focus {
-  border-color: var(--red-500);
-  box-shadow: 0 0 0 3px rgba(224, 0, 71, 0.12);
+  border-color: var(--orange-500);
+  box-shadow: 0 0 0 3px rgba(232, 119, 34, 0.15);
 }
 
 input.error, select.error, textarea.error { border-color: var(--color-error); }
 input.error:focus { box-shadow: 0 0 0 3px rgba(239, 83, 80, 0.15); }
 input::placeholder, textarea::placeholder { color: var(--neutral-600); }
-select option { background: var(--dark-800); color: var(--color-text); }
+select option { background: var(--navy-800); color: var(--color-text); }
 textarea { resize: vertical; min-height: 80px; }
 
 .field-error { font-size: 0.78rem; color: var(--color-error); font-weight: 500; }
@@ -282,19 +290,19 @@ textarea { resize: vertical; min-height: 80px; }
 
 .page-wrapper {
   min-height: calc(100vh - 70px);
-  background: var(--dark-950);
+  background: var(--navy-950);
   padding: 5rem 2rem 4rem;
 }
 
 .card {
-  background: var(--dark-800);
+  background: var(--navy-800);
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
   padding: 1.5rem;
   transition: border-color var(--transition), box-shadow var(--transition);
 }
 .card:hover {
-  border-color: var(--color-border-red);
+  border-color: rgba(232, 119, 34, 0.3);
   box-shadow: 0 8px 32px rgba(0,0,0,0.4);
 }
 
@@ -318,7 +326,7 @@ textarea { resize: vertical; min-height: 80px; }
   font-size: 0.7rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--red-400);
+  color: var(--orange-400);
   margin-bottom: 0.75rem;
 }
 .section-tag::before { content: ''; width: 18px; height: 1px; background: currentColor; }
@@ -331,7 +339,7 @@ textarea { resize: vertical; min-height: 80px; }
   font-size: 0.7rem;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--red-400);
+  color: var(--orange-400);
   margin-bottom: 0.75rem;
   font-family: var(--font-body);
   font-weight: 500;

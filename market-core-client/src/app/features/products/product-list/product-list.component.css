@@ -55,7 +55,7 @@
 
 /* ── Card ──────────────────────────────────────────────────── */
 .product-card {
-  background: var(--dark-800);
+  background: var(--navy-800);
   border: 1px solid var(--color-border);
   border-radius: 14px;
   overflow: hidden;
@@ -65,9 +65,9 @@
   transition: background 0.3s, transform 0.3s var(--ease-bounce), border-color 0.3s, box-shadow 0.3s;
 }
 .product-card:hover {
-  background: var(--dark-700);
+  background: var(--navy-700);
   transform: translateY(-4px);
-  border-color: rgba(224,0,71,0.25);
+  border-color: rgba(232,119,34,0.25);
   box-shadow: 0 8px 32px rgba(0,0,0,0.4);
   z-index: 1;
 }
@@ -77,7 +77,7 @@
 .product-image {
   position: relative;
   height: 220px;
-  background: var(--dark-700);
+  background: var(--navy-700);
   flex-shrink: 0;
   overflow: hidden;
 }
@@ -97,7 +97,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, var(--dark-700), var(--dark-600));
+  background: linear-gradient(135deg, var(--navy-700), var(--navy-600));
 }
 .image-placeholder span {
   font-family: var(--font-display);
@@ -135,7 +135,7 @@
 
 .product-category {
   font-size: 0.68rem;
-  color: var(--red-400);
+  color: var(--orange-400);
   text-transform: uppercase;
   letter-spacing: 0.1em;
   opacity: 0.8;
@@ -196,7 +196,7 @@
   margin-top: 0.1rem;
 }
 .card-stars { display: flex; gap: 1px; }
-.cstar { font-size: 0.78rem; color: var(--dark-600); }
+.cstar { font-size: 0.78rem; color: var(--navy-600); }
 .cstar.filled { color: #f59e0b; }
 .card-rating-text {
   font-size: 0.72rem;
@@ -220,9 +220,9 @@
   border-color: rgba(251,146,60,0.2);
 }
 .stock-badge.oos {
-  background: rgba(224,0,71,0.1);
-  color: var(--red-400);
-  border-color: rgba(224,0,71,0.2);
+  background: rgba(232,119,34,0.1);
+  color: var(--orange-400);
+  border-color: rgba(232,119,34,0.2);
 }
 
 .product-actions {
@@ -250,7 +250,7 @@
   min-width: 38px;
   height: 38px;
   border: 1px solid var(--color-border);
-  background: var(--dark-800);
+  background: var(--navy-800);
   color: var(--neutral-400);
   border-radius: 8px;
   cursor: pointer;
@@ -260,14 +260,14 @@
   transition: all 0.2s;
 }
 .page-btn:hover:not(:disabled) {
-  border-color: var(--red-600);
+  border-color: var(--orange-600);
   color: var(--neutral-50);
-  background: rgba(224,0,71,0.08);
+  background: rgba(232,119,34,0.08);
 }
 .page-btn.active {
-  background: var(--red-600);
+  background: var(--orange-600);
   color: #fff;
-  border-color: var(--red-600);
+  border-color: var(--orange-600);
   box-shadow: 0 2px 12px var(--red-glow-soft);
 }
 .page-btn:disabled { opacity: 0.3; cursor: not-allowed; }

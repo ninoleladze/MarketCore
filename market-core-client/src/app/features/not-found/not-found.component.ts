@@ -22,7 +22,7 @@ import { RouterLink } from '@angular/router';
   styles: [`
     .nf-page {
       min-height: 100vh;
-      background: var(--dark-950);
+      background: var(--navy-950);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -34,7 +34,7 @@ import { RouterLink } from '@angular/router';
     .nf-glow {
       position: absolute;
       width: 500px; height: 500px;
-      background: radial-gradient(circle, rgba(192,0,58,0.12) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(196,92,0,0.12) 0%, transparent 70%);
       top: 50%; left: 50%;
       transform: translate(-50%, -50%);
       pointer-events: none;
@@ -46,7 +46,7 @@ import { RouterLink } from '@angular/router';
       font-weight: 400;
       line-height: 1;
       color: transparent;
-      -webkit-text-stroke: 1px rgba(224,0,71,0.25);
+      -webkit-text-stroke: 1px rgba(232,119,34,0.25);
       letter-spacing: -0.04em;
       margin-bottom: 1.5rem;
       user-select: none;
@@ -74,7 +74,7 @@ import { RouterLink } from '@angular/router';
     }
     .btn-hero-primary {
       padding: 0.9rem 2rem;
-      background: linear-gradient(135deg, var(--red-600), var(--red-400));
+      background: linear-gradient(135deg, var(--orange-600), var(--orange-400));
       color: #fff;
       border-radius: 999px;
       font-weight: 600;
@@ -99,8 +99,8 @@ import { RouterLink } from '@angular/router';
       transition: background 0.2s, border-color 0.2s;
     }
     .btn-hero-ghost:hover {
-      background: rgba(224,0,71,0.1);
-      border-color: rgba(224,0,71,0.3);
+      background: rgba(232,119,34,0.1);
+      border-color: rgba(232,119,34,0.3);
       color: #fff;
     }
   `]

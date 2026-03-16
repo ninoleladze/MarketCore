@@ -15,7 +15,7 @@
   margin-bottom: 2rem;
   transition: color 0.2s;
 }
-.back-link:hover { color: var(--red-400); }
+.back-link:hover { color: var(--orange-400); }
 
 /* ── Order header ──────────────────────────────────────────── */
 .order-header {
@@ -55,9 +55,9 @@
   gap: 0.4rem;
   padding: 3px 10px;
   border-radius: 999px;
-  background: rgba(224, 0, 71, 0.12);
-  border: 1px solid rgba(224, 0, 71, 0.25);
-  color: var(--red-400);
+  background: rgba(232, 119, 34, 0.12);
+  border: 1px solid rgba(232, 119, 34, 0.25);
+  color: var(--orange-400);
   font-size: 0.68rem;
   font-weight: 800;
   letter-spacing: 0.12em;
@@ -68,7 +68,7 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--red-400);
+  background: var(--orange-400);
   animation: live-pulse 1.4s ease-in-out infinite;
   flex-shrink: 0;
 }
@@ -97,7 +97,7 @@
 
 /* ── Items table ───────────────────────────────────────────── */
 .items-table {
-  background: var(--dark-800);
+  background: var(--navy-800);
   border: 1px solid var(--color-border);
   border-radius: 12px;
   overflow: hidden;
@@ -108,7 +108,7 @@
   grid-template-columns: 3fr 1fr 0.5fr 1fr;
   gap: 1rem;
   padding: 0.75rem 1.4rem;
-  background: var(--dark-900);
+  background: var(--navy-900);
   font-size: 0.7rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -127,7 +127,7 @@
   transition: background 0.2s;
 }
 .item-row:last-child { border-bottom: none; }
-.item-row:hover { background: var(--dark-700); }
+.item-row:hover { background: var(--navy-700); }
 
 .item-name {
   display: flex;
@@ -140,8 +140,8 @@
 .item-avatar {
   width: 34px;
   height: 34px;
-  background: linear-gradient(135deg, var(--red-700), var(--dark-600));
-  color: var(--red-300);
+  background: linear-gradient(135deg, var(--orange-700), var(--navy-600));
+  color: var(--orange-300);
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -150,7 +150,7 @@
   font-size: 0.9rem;
   text-transform: uppercase;
   flex-shrink: 0;
-  border: 1px solid rgba(224,0,71,0.2);
+  border: 1px solid rgba(232,119,34,0.2);
 }
 
 .item-price,
@@ -165,7 +165,7 @@
   font-weight: 700;
   font-size: 1.05rem;
   color: var(--neutral-50);
-  background: var(--dark-900);
+  background: var(--navy-900);
   border-top: 1px solid var(--color-border);
 }
 
@@ -178,7 +178,7 @@
 
 .shipping-card,
 .status-card {
-  background: var(--dark-800);
+  background: var(--navy-800);
   border: 1px solid var(--color-border);
   border-radius: 12px;
   padding: 1.25rem;
@@ -235,7 +235,7 @@ address p { margin: 0; font-size: 0.88rem; }
   height: 16px;
   border-radius: 50%;
   border: 2px solid var(--color-border);
-  background: var(--dark-800);
+  background: var(--navy-800);
   flex-shrink: 0;
   z-index: 1;
 }
@@ -252,10 +252,10 @@ address p { margin: 0; font-size: 0.88rem; }
 .cancelled-note {
   margin-top: 0.75rem;
   padding: 0.6rem 0.9rem;
-  background: rgba(224,0,71,0.1);
-  color: var(--red-300);
+  background: rgba(232,119,34,0.1);
+  color: var(--orange-300);
   border-radius: 8px;
-  border: 1px solid rgba(224,0,71,0.2);
+  border: 1px solid rgba(232,119,34,0.2);
   font-size: 0.85rem;
   font-weight: 600;
 }

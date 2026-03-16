@@ -18,7 +18,7 @@
   letter-spacing: 0.05em;
   transition: color 0.2s;
 }
-.back-link:hover { color: var(--red-400); }
+.back-link:hover { color: var(--orange-400); }
 
 .page-header h1 {
   font-family: var(--font-display);
@@ -30,7 +30,7 @@
 
 /* ── Form card ─────────────────────────────────────────────── */
 .form-card {
-  background: var(--dark-800);
+  background: var(--navy-800);
   border: 1px solid var(--color-border);
   border-radius: 16px;
   padding: 2rem;
@@ -73,7 +73,7 @@
   border-radius: 10px;
   overflow: hidden;
   border: 1px solid var(--color-border);
-  background: var(--dark-700);
+  background: var(--navy-700);
 }
 .image-preview img {
   width: 100%;

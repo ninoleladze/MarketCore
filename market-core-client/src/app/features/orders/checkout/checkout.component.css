@@ -15,7 +15,7 @@
   margin-bottom: 2rem;
   transition: color 0.2s;
 }
-.back-link:hover { color: var(--red-400); }
+.back-link:hover { color: var(--orange-400); }
 
 .page-title {
   font-family: var(--font-display);
@@ -35,7 +35,7 @@
 
 /* ── Shipping form ─────────────────────────────────────────── */
 .shipping-section {
-  background: var(--dark-800);
+  background: var(--navy-800);
   border: 1px solid var(--color-border);
   border-radius: 16px;
   padding: 2rem;
@@ -73,7 +73,7 @@
 
 /* ── Order summary ─────────────────────────────────────────── */
 .order-summary {
-  background: var(--dark-800);
+  background: var(--navy-800);
   border: 1px solid var(--color-border);
   border-radius: 12px;
   padding: 1.5rem;
