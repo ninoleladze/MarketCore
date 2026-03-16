@@ -32,6 +32,7 @@ export class ProfileComponent implements OnInit {
   // ── State signals ─────────────────────────────────────────────────────────
   profile = signal<ProfileDto | null>(null);
   loading = signal(true);
+  loadError = signal('');
   saving = signal(false);
   pwSaving = signal(false);
   successMsg = signal('');
@@ -93,17 +94,29 @@ export class ProfileComponent implements OnInit {
   constructor(private profileService: ProfileService) {}
 
   ngOnInit(): void {
+    this.fetchProfile();
+  }
+
+  private fetchProfile(): void {
+    this.loading.set(true);
+    this.loadError.set('');
     this.profileService.getProfile().subscribe({
       next: (p) => {
         this.profile.set(p);
         this.loading.set(false);
         this.populateForm(p);
       },
-      error: () => {
+      error: (err) => {
         this.loading.set(false);
-        this.errorMsg.set('Failed to load profile.');
+        const msg = err?.error?.error ?? err?.error?.message ?? err?.message ?? '';
+        this.loadError.set(msg || 'Failed to load profile. Please try again.');
+        console.error('[Profile] load error', err);
       },
     });
+  }
+
+  retryLoad(): void {
+    this.fetchProfile();
   }
 
   // ── Helpers ───────────────────────────────────────────────────────────────

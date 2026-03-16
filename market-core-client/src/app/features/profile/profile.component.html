@@ -22,6 +22,16 @@
     </div>
   }
 
+  <!-- ── Error state (API failed, profile is null) ─────────────────────── -->
+  @if (!loading() && !profile()) {
+    <div class="error-state" role="alert">
+      <div class="error-icon" aria-hidden="true">&#9888;</div>
+      <h2 class="error-title">Could not load profile</h2>
+      <p class="error-desc">{{ loadError() || 'Failed to connect to the server.' }}</p>
+      <button class="btn-primary" (click)="retryLoad()">Try Again</button>
+    </div>
+  }
+
   <!-- ── Main profile content ──────────────────────────────────────────── -->
   @if (profile(); as p) {
 
