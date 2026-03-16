@@ -8,6 +8,7 @@ export interface Product {
   categoryId: string;
   categoryName: string;
   imageUrl?: string;
+  images?: string[];
   sellerId: string;
   isActive: boolean;
 }

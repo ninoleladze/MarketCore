@@ -10,11 +10,18 @@
     </div>
   } @else {
     <div class="product-layout">
-      <!-- Image Column -->
-      <div class="product-image-col">
-        <div class="product-image-box">
-          @if (product.imageUrl) {
-            <img [src]="product.imageUrl" [alt]="product.name" class="product-img-full">
+
+      <!-- Gallery Column -->
+      <div class="gallery-col">
+        <!-- Main Image -->
+        <div class="main-image-box">
+          @if (galleryImages.length > 0) {
+            <img
+              [src]="galleryImages[selectedImg]"
+              [alt]="product.name"
+              class="main-img"
+              loading="lazy"
+            >
           } @else {
             <div class="image-placeholder-lg">
               <span>{{ product.name[0] }}</span>
@@ -24,6 +31,22 @@
             <div class="out-of-stock-overlay">Out of Stock</div>
           }
         </div>
+
+        <!-- Thumbnails -->
+        @if (galleryImages.length > 1) {
+          <div class="thumbnails">
+            @for (img of galleryImages; track $index) {
+              <button
+                class="thumb-btn"
+                [class.active]="selectedImg === $index"
+                (click)="selectImg($index)"
+                type="button"
+              >
+                <img [src]="img" [alt]="product.name + ' photo ' + ($index + 1)" loading="lazy">
+              </button>
+            }
+          </div>
+        }
       </div>
 
       <!-- Info Column -->
@@ -34,7 +57,7 @@
 
         <div class="price-row">
           <span class="product-price">{{ product.price | number:'1.2-2' }} {{ product.currency }}</span>
-          @if (product.stockQuantity > 0) {
+          @if (product.stockQuantity > 0 && product.isActive) {
             <span class="stock-badge in-stock">In Stock ({{ product.stockQuantity }})</span>
           } @else {
             <span class="stock-badge out-stock">Out of Stock</span>
@@ -48,17 +71,17 @@
                 <span class="star" [class.filled]="star <= averageRating()">&#9733;</span>
               }
             </div>
-            <span class="rating-text">{{ averageRating() }} / 5 ({{ reviews.length }} reviews)</span>
+            <span class="rating-text">{{ averageRating() }} / 5 &nbsp;&bull;&nbsp; {{ reviews.length }} review{{ reviews.length === 1 ? '' : 's' }}</span>
           </div>
         }
 
         @if (product.isActive && product.stockQuantity > 0) {
           <div class="quantity-row">
-            <label for="quantity">Quantity:</label>
+            <label for="quantity">Quantity</label>
             <div class="quantity-control">
-              <button (click)="quantity = quantity > 1 ? quantity - 1 : 1">-</button>
+              <button type="button" (click)="quantity = quantity > 1 ? quantity - 1 : 1">&#8722;</button>
               <input id="quantity" type="number" [(ngModel)]="quantity" min="1" [max]="product.stockQuantity" />
-              <button (click)="quantity = quantity < product.stockQuantity ? quantity + 1 : quantity">+</button>
+              <button type="button" (click)="quantity = quantity < product.stockQuantity ? quantity + 1 : quantity">&#43;</button>
             </div>
           </div>
 

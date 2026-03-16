@@ -11,6 +11,7 @@ public sealed record ProductDto(
     Guid CategoryId,
     string CategoryName,
     string? ImageUrl,
+    IReadOnlyList<string> Images,
     IEnumerable<ReviewDto> Reviews,
     DateTime CreatedAt);
 

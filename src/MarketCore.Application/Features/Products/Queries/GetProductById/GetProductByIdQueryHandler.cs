@@ -31,6 +31,8 @@ public sealed class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQ
                 userNames[uid] = $"{user.FirstName} {user.LastName}";
         }
 
+        var images = BuildImages(product.Id, product.ImageUrl);
+
         var dto = new ProductDto(
             Id: product.Id,
             Name: product.Name,
@@ -42,6 +44,7 @@ public sealed class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQ
             CategoryId: product.CategoryId,
             CategoryName: product.Category?.Name ?? string.Empty,
             ImageUrl: product.ImageUrl,
+            Images: images,
             Reviews: product.Reviews.Select(r => new ReviewDto(
                 Id: r.Id,
                 UserId: r.UserId,
@@ -52,5 +55,16 @@ public sealed class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQ
             CreatedAt: product.CreatedAt);
 
         return Result<ProductDto>.Success(dto);
+    }
+
+    private static IReadOnlyList<string> BuildImages(Guid productId, string? imageUrl)
+    {
+        var seed = productId.ToString().Replace("-", "")[..8];
+        var images = Enumerable.Range(1, 5)
+            .Select(i => $"https://picsum.photos/seed/{seed}{i}/800/800")
+            .ToList<string>();
+        if (imageUrl is not null)
+            images[0] = imageUrl;
+        return images.AsReadOnly();
     }
 }

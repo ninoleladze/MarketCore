@@ -36,6 +36,7 @@ export class ProductDetailComponent implements OnInit {
   quantity = 1;
   addingToCart = false;
   submittingReview = false;
+  selectedImg = 0;
 
   reviewForm = this.fb.group({
     rating: [5, [Validators.required, Validators.min(1), Validators.max(5)]],
@@ -43,6 +44,17 @@ export class ProductDetailComponent implements OnInit {
   });
 
   get stars(): number[] { return [1, 2, 3, 4, 5]; }
+
+  get galleryImages(): string[] {
+    if (this.product?.images?.length) return this.product.images;
+    if (this.product?.imageUrl) return [this.product.imageUrl];
+    return [];
+  }
+
+  selectImg(i: number): void {
+    this.selectedImg = i;
+    this.cdr.markForCheck();
+  }
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id')!;

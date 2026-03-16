@@ -62,10 +62,22 @@
             <p class="product-category">{{ product.categoryName }}</p>
             <h3 class="product-name">{{ product.name }}</h3>
             <p class="product-desc">{{ product.description }}</p>
+
+            @if (product.reviewCount > 0) {
+              <div class="card-rating">
+                <div class="card-stars">
+                  @for (s of [1,2,3,4,5]; track s) {
+                    <span class="cstar" [class.filled]="s <= product.averageRating">&#9733;</span>
+                  }
+                </div>
+                <span class="card-rating-text">{{ product.averageRating | number:'1.1-1' }} ({{ product.reviewCount }})</span>
+              </div>
+            }
+
             <div class="product-footer">
-              <span class="product-price">{{ product.price | number:'1.2-2' }} {{ product.currency }}</span>
-              <span class="stock-badge" [class.low]="product.stockQuantity < 5">
-                {{ product.stockQuantity > 0 ? 'In Stock (' + product.stockQuantity + ')' : 'Out of Stock' }}
+              <span class="product-price">{{ product.price | number:'1.2-2' }} <small>{{ product.currency }}</small></span>
+              <span class="stock-badge" [class.low]="product.stockQuantity > 0 && product.stockQuantity < 5" [class.oos]="product.stockQuantity === 0">
+                {{ product.stockQuantity > 0 ? 'In Stock' : 'Out of Stock' }}
               </span>
             </div>
             <div class="product-actions">
