@@ -20,6 +20,7 @@ public sealed class ProductRepository : Repository<Product>, IProductRepository
             .Include(p => p.Category)
             .Include(p => p.Reviews)
             .AsNoTracking()
+            .Where(p => p.IsActive)
             .AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(term))
@@ -50,6 +51,6 @@ public sealed class ProductRepository : Repository<Product>, IProductRepository
         return await Context.Products
             .Include(p => p.Reviews)
             .Include(p => p.Category)
-            .FirstOrDefaultAsync(p => p.Id == id, ct);
+            .FirstOrDefaultAsync(p => p.Id == id && p.IsActive, ct);
     }
 }
