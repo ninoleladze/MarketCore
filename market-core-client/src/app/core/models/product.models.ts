@@ -11,6 +11,8 @@ export interface Product {
   images?: string[];
   sellerId: string;
   isActive: boolean;
+  reviewCount?: number;
+  averageRating?: number;
 }
 
 export interface CreateProductCommand {

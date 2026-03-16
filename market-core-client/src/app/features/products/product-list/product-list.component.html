@@ -63,14 +63,14 @@
             <h3 class="product-name">{{ product.name }}</h3>
             <p class="product-desc">{{ product.description }}</p>
 
-            @if (product.reviewCount > 0) {
+            @if ((product.reviewCount ?? 0) > 0) {
               <div class="card-rating">
                 <div class="card-stars">
                   @for (s of [1,2,3,4,5]; track s) {
-                    <span class="cstar" [class.filled]="s <= product.averageRating">&#9733;</span>
+                    <span class="cstar" [class.filled]="s <= (product.averageRating ?? 0)">&#9733;</span>
                   }
                 </div>
-                <span class="card-rating-text">{{ product.averageRating | number:'1.1-1' }} ({{ product.reviewCount }})</span>
+                <span class="card-rating-text">{{ product.averageRating ?? 0 | number:'1.1-1' }} ({{ product.reviewCount }})</span>
               </div>
             }
 
