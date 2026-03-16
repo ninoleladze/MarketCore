@@ -36,7 +36,7 @@ export class ProductListComponent implements OnInit {
   searchTerm = '';
   selectedCategoryId = '';
   page = 1;
-  pageSize = 20;
+  pageSize = 12;
   totalCount = 0;
 
   get totalPages(): number {

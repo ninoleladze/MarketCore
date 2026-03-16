@@ -85,11 +85,9 @@
     @if (totalPages > 1) {
       <div class="pagination">
         <button class="page-btn" [disabled]="page === 1" (click)="goToPage(page - 1)">
-          &lsaquo; Prev
+          &lsaquo; Previous
         </button>
-        @for (p of pageNumbers; track p) {
-          <button class="page-btn" [class.active]="p === page" (click)="goToPage(p)">{{ p }}</button>
-        }
+        <span class="page-info">Page {{ page }} of {{ totalPages }}</span>
         <button class="page-btn" [disabled]="page === totalPages" (click)="goToPage(page + 1)">
           Next &rsaquo;
         </button>

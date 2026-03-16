@@ -250,6 +250,16 @@
 }
 .page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 
+.page-info {
+  display: flex;
+  align-items: center;
+  padding: 0 0.75rem;
+  font-size: 0.85rem;
+  color: var(--neutral-400);
+  font-family: var(--font-body);
+  white-space: nowrap;
+}
+
 /* ── Empty state ───────────────────────────────────────────── */
 .empty-state {
   text-align: center;

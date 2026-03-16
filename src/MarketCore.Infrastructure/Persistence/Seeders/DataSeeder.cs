@@ -26,7 +26,7 @@ public sealed class DataSeeder
     public async Task SeedAsync(CancellationToken ct = default)
     {
 
-        if (await _context.Users.AnyAsync(ct))
+        if (await _context.Products.CountAsync(ct) >= 10)
         {
             _logger.LogInformation("Database already seeded — skipping.");
             return;
@@ -195,6 +195,136 @@ public sealed class DataSeeder
                 "Digital download — five essential architecture patterns for modern distributed systems.",
                 new Money(19.99m, "USD"), 999, digitalElectronics.Id, seller2.Id,
                 "https://images.unsplash.com/photo-1484417894907-623942c8ee29?auto=format&fit=crop&w=400&q=80"),
+
+            // --- Electronics ---
+            Product.Create(
+                "Portable Bluetooth Speaker",
+                "360-degree surround sound with 24-hour battery life and IPX7 waterproof rating.",
+                new Money(59.99m, "USD"), 120, electronics.Id, seller1.Id,
+                "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?auto=format&fit=crop&w=400&q=80"),
+
+            Product.Create(
+                "Wireless Ergonomic Mouse",
+                "Silent-click ergonomic design with adjustable 800–3200 DPI and 18-month battery life.",
+                new Money(44.99m, "USD"), 90, electronics.Id, seller1.Id,
+                "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?auto=format&fit=crop&w=400&q=80"),
+
+            Product.Create(
+                "27-inch 4K IPS Monitor",
+                "Factory-calibrated 4K display with 99% sRGB coverage and USB-C 65W power delivery.",
+                new Money(349.99m, "USD"), 25, electronics.Id, seller2.Id,
+                "https://images.unsplash.com/photo-1555617981-dac3880eac6e?auto=format&fit=crop&w=400&q=80"),
+
+            Product.Create(
+                "Smart LED Desk Lamp",
+                "Touch-controlled desk lamp with 5 colour temperatures, USB charging port and auto-dimming.",
+                new Money(29.99m, "USD"), 75, electronics.Id, seller2.Id,
+                "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=400&q=80"),
+
+            Product.Create(
+                "Noise-Isolating Earbuds",
+                "In-ear earbuds with passive noise isolation, 10mm dynamic drivers and braided cable.",
+                new Money(19.99m, "USD"), 200, electronics.Id, seller1.Id,
+                "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=400&q=80"),
+
+            Product.Create(
+                "Portable SSD 1TB",
+                "USB 3.2 Gen 2 external SSD with 1050 MB/s read speed in an aluminium enclosure.",
+                new Money(99.99m, "USD"), 55, electronics.Id, seller2.Id,
+                "https://images.unsplash.com/photo-1597848212624-a19eb35e2651?auto=format&fit=crop&w=400&q=80"),
+
+            // --- Clothing ---
+            Product.Create(
+                "Merino Wool Crew Sweater",
+                "Fine-gauge merino wool pullover, naturally temperature-regulating and machine washable.",
+                new Money(89.99m, "USD"), 60, clothing.Id, seller2.Id,
+                "https://images.unsplash.com/photo-1576566588028-4147f3842f27?auto=format&fit=crop&w=400&q=80"),
+
+            Product.Create(
+                "Canvas Sneakers Low-Top",
+                "Classic low-top canvas shoes with a vulcanised rubber sole and cushioned insole.",
+                new Money(39.99m, "USD"), 130, clothing.Id, seller2.Id,
+                "https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?auto=format&fit=crop&w=400&q=80"),
+
+            Product.Create(
+                "Leather Bifold Wallet",
+                "Full-grain vegetable-tanned leather wallet with 6 card slots and RFID blocking lining.",
+                new Money(34.99m, "USD"), 110, clothing.Id, seller1.Id,
+                "https://images.unsplash.com/photo-1627123424574-724758594e93?auto=format&fit=crop&w=400&q=80"),
+
+            Product.Create(
+                "Packable Down Vest",
+                "800-fill-power down vest that packs into its own pocket. Wind-resistant shell fabric.",
+                new Money(69.99m, "USD"), 45, clothing.Id, seller2.Id,
+                "https://images.unsplash.com/photo-1539533018447-63fcce2678e3?auto=format&fit=crop&w=400&q=80"),
+
+            Product.Create(
+                "Structured Baseball Cap",
+                "6-panel cotton twill cap with adjustable buckle closure and UV protection.",
+                new Money(22.99m, "USD"), 180, clothing.Id, seller1.Id,
+                "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?auto=format&fit=crop&w=400&q=80"),
+
+            Product.Create(
+                "Slim Leather Belt",
+                "Genuine cowhide leather belt with a brushed-nickel buckle. Available in 32–42 inches.",
+                new Money(27.99m, "USD"), 95, clothing.Id, seller2.Id,
+                "https://images.unsplash.com/photo-1624222247342-4bef59bf3f0c?auto=format&fit=crop&w=400&q=80"),
+
+            // --- Books ---
+            Product.Create(
+                "The Pragmatic Programmer",
+                "David Thomas & Andrew Hunt — 20th Anniversary Edition covering modern software craftsmanship.",
+                new Money(44.99m, "USD"), 85, books.Id, seller1.Id,
+                "https://images.unsplash.com/photo-1550399105-c4db5fb85c18?auto=format&fit=crop&w=400&q=80"),
+
+            Product.Create(
+                "Designing Data-Intensive Applications",
+                "Martin Kleppmann's guide to the principles behind reliable, scalable, and maintainable systems.",
+                new Money(59.99m, "USD"), 70, books.Id, seller1.Id,
+                "https://images.unsplash.com/photo-1519682337058-a94d519337bc?auto=format&fit=crop&w=400&q=80"),
+
+            Product.Create(
+                "You Don't Know JS Yet (Vol. 1)",
+                "Kyle Simpson's deep-dive into JavaScript's scope, closures, and the this keyword.",
+                new Money(29.99m, "USD"), 120, books.Id, seller2.Id,
+                "https://images.unsplash.com/photo-1516116216624-53e697fedbea?auto=format&fit=crop&w=400&q=80"),
+
+            Product.Create(
+                "Refactoring: Improving the Design of Existing Code",
+                "Martin Fowler — the definitive catalogue of refactoring techniques with worked examples.",
+                new Money(49.99m, "USD"), 65, books.Id, seller1.Id,
+                "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80"),
+
+            // --- Digital Electronics ---
+            Product.Create(
+                "Angular 21 Complete Course (eBook)",
+                "Digital download — comprehensive guide covering standalone components, signals, and SSR.",
+                new Money(24.99m, "USD"), 999, digitalElectronics.Id, seller1.Id,
+                "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=400&q=80"),
+
+            Product.Create(
+                ".NET 8 Microservices Handbook (eBook)",
+                "Digital download — practical guide to building production-grade microservices with .NET 8.",
+                new Money(29.99m, "USD"), 999, digitalElectronics.Id, seller2.Id,
+                "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=400&q=80"),
+
+            Product.Create(
+                "SQL Performance Explained (eBook)",
+                "Digital download — Markus Winand's essential guide to indexing and query optimisation.",
+                new Money(22.99m, "USD"), 999, digitalElectronics.Id, seller1.Id,
+                "https://images.unsplash.com/photo-1544383835-bda2bc66a55d?auto=format&fit=crop&w=400&q=80"),
+
+            Product.Create(
+                "Clean Architecture in Practice (Video Course)",
+                "Digital download — 8-hour video series implementing Clean Architecture with .NET and Angular.",
+                new Money(34.99m, "USD"), 999, digitalElectronics.Id, seller2.Id,
+                "https://images.unsplash.com/photo-1487017159836-4e23ece2e4cf?auto=format&fit=crop&w=400&q=80"),
+
+            Product.Create(
+                "Linux Command Line Mastery (eBook)",
+                "Digital download — comprehensive coverage of Bash scripting, tools, and system administration.",
+                new Money(17.99m, "USD"), 999, digitalElectronics.Id, seller1.Id,
+                "https://images.unsplash.com/photo-1518432031352-d6fc5c10da5a?auto=format&fit=crop&w=400&q=80"),
         };
     }
 
