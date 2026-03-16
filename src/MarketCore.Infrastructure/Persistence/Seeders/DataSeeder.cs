@@ -62,7 +62,7 @@ public sealed class DataSeeder
         var buyer3  = await _context.Users.FirstAsync(u => u.FirstName == "Carol", ct);
 
         // ── Products (additive — skip names that already exist) ───────────
-        var existingNames = await _context.Products.Select(p => p.Name).ToHashSetAsync(ct);
+        var existingNames = (await _context.Products.Select(p => p.Name).ToListAsync(ct)).ToHashSet();
 
         var allProducts = SeedProducts(electronics, clothing, books, digitalElectronics, seller1, seller2);
         var newProducts = allProducts.Where(p => !existingNames.Contains(p.Name)).ToList();
