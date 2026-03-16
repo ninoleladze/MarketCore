@@ -9,6 +9,7 @@ public sealed record ProfileDto(
     string Role,
     bool IsEmailVerified,
     AddressDto? Address,
+    string? GitHubUrl,
     DateTime CreatedAt,
     int TotalOrders,
     decimal TotalSpent);

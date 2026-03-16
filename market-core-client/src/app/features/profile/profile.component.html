@@ -139,6 +139,34 @@
             </div>
           </div>
 
+          <!-- GitHub URL -->
+          <div class="form-field github-field">
+            <label for="gitHubUrl" class="field-label">
+              <svg class="github-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577
+                  0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.757
+                  -1.333-1.757-1.09-.745.083-.729.083-.729 1.205.084 1.84 1.236 1.84 1.236 1.07
+                  1.835 2.807 1.305 3.492.998.108-.776.418-1.305.762-1.605-2.665-.3-5.466-1.332
+                  -5.466-5.93 0-1.31.468-2.38 1.235-3.22-.124-.303-.535-1.524.117-3.176 0 0
+                  1.008-.322 3.3 1.23A11.5 11.5 0 0 1 12 5.803c1.02.005 2.046.138 3.006.404
+                  2.29-1.552 3.296-1.23 3.296-1.23.654 1.652.243 2.873.12 3.176.77.84 1.233
+                  1.91 1.233 3.22 0 4.61-2.804 5.625-5.476 5.92.43.372.814 1.102.814 2.222
+                  0 1.606-.015 2.898-.015 3.293 0 .322.216.696.825.578C20.565 21.796 24 17.298
+                  24 12c0-6.63-5.37-12-12-12z"/>
+              </svg>
+              GitHub Profile
+            </label>
+            <input
+              id="gitHubUrl"
+              name="gitHubUrl"
+              type="url"
+              class="glass-input"
+              [(ngModel)]="gitHubUrl"
+              placeholder="https://github.com/yourusername"
+              autocomplete="url"
+            />
+          </div>
+
           <!-- Address section (collapsible) -->
           <div class="address-section">
             <button
@@ -397,6 +425,30 @@
               <span class="info-key">Joined</span>
               <span class="info-val">{{ p.createdAt | date:'mediumDate' }}</span>
             </li>
+            @if (p.gitHubUrl) {
+              <li class="info-row github-row" role="listitem">
+                <span class="info-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14" aria-hidden="true">
+                    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577
+                      0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.757
+                      -1.333-1.757-1.09-.745.083-.729.083-.729 1.205.084 1.84 1.236 1.84 1.236 1.07
+                      1.835 2.807 1.305 3.492.998.108-.776.418-1.305.762-1.605-2.665-.3-5.466-1.332
+                      -5.466-5.93 0-1.31.468-2.38 1.235-3.22-.124-.303-.535-1.524.117-3.176 0 0
+                      1.008-.322 3.3 1.23A11.5 11.5 0 0 1 12 5.803c1.02.005 2.046.138 3.006.404
+                      2.29-1.552 3.296-1.23 3.296-1.23.654 1.652.243 2.873.12 3.176.77.84 1.233
+                      1.91 1.233 3.22 0 4.61-2.804 5.625-5.476 5.92.43.372.814 1.102.814 2.222
+                      0 1.606-.015 2.898-.015 3.293 0 .322.216.696.825.578C20.565 21.796 24 17.298
+                      24 12c0-6.63-5.37-12-12-12z"/>
+                  </svg>
+                </span>
+                <span class="info-key">GitHub</span>
+                <span class="info-val">
+                  <a [href]="p.gitHubUrl" target="_blank" rel="noopener noreferrer" class="github-link">
+                    {{ p.gitHubUrl.replace('https://github.com/', '') }}
+                  </a>
+                </span>
+              </li>
+            }
           </ul>
         </section>
 

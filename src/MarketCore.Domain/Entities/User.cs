@@ -25,6 +25,8 @@ public sealed class User : AggregateRoot
 
     public Cart? Cart { get; private set; }
 
+    public string? GitHubUrl { get; private set; }
+
     private User() { }
 
     private User(Email email, string passwordHash, string firstName, string lastName, UserRole role) : base()
@@ -81,7 +83,7 @@ public sealed class User : AggregateRoot
         return Result.Success();
     }
 
-    public Result UpdateProfile(string firstName, string lastName)
+    public Result UpdateProfile(string firstName, string lastName, string? gitHubUrl = null)
     {
         if (string.IsNullOrWhiteSpace(firstName))
             return Result.Failure("First name cannot be empty.");
@@ -97,6 +99,7 @@ public sealed class User : AggregateRoot
 
         FirstName = firstName.Trim();
         LastName = lastName.Trim();
+        GitHubUrl = string.IsNullOrWhiteSpace(gitHubUrl) ? null : gitHubUrl.Trim();
         return Result.Success();
     }
 

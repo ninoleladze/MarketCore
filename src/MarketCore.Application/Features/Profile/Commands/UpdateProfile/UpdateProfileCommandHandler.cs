@@ -25,7 +25,7 @@ public sealed class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileC
             return Result<ProfileDto>.Failure("User not found.");
 
         // Update name fields — domain method enforces validation rules
-        var profileResult = user.UpdateProfile(request.FirstName, request.LastName);
+        var profileResult = user.UpdateProfile(request.FirstName, request.LastName, request.GitHubUrl);
         if (profileResult.IsFailure)
             return Result<ProfileDto>.Failure(profileResult.Error!);
 
@@ -73,6 +73,7 @@ public sealed class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileC
             Role: user.Role.ToString(),
             IsEmailVerified: user.IsEmailVerified,
             Address: addressDto,
+            GitHubUrl: user.GitHubUrl,
             CreatedAt: user.CreatedAt,
             TotalOrders: orderList.Count,
             TotalSpent: orderList.Sum(o => o.TotalAmount.Amount));

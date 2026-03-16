@@ -32,6 +32,7 @@ public sealed class ProfileController : BaseApiController
             CurrentUserId,
             request.FirstName,
             request.LastName,
+            request.GitHubUrl,
             request.Street,
             request.City,
             request.State,
@@ -52,6 +53,7 @@ public sealed class ProfileController : BaseApiController
 public sealed record UpdateProfileRequest(
     string FirstName,
     string LastName,
+    string? GitHubUrl,
     string? Street,
     string? City,
     string? State,

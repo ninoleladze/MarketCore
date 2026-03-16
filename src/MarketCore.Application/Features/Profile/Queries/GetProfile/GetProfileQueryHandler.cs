@@ -47,6 +47,7 @@ public sealed class GetProfileQueryHandler : IRequestHandler<GetProfileQuery, Re
             Role: user.Role.ToString(),
             IsEmailVerified: user.IsEmailVerified,
             Address: addressDto,
+            GitHubUrl: user.GitHubUrl,
             CreatedAt: user.CreatedAt,
             TotalOrders: totalOrders,
             TotalSpent: totalSpent);

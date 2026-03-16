@@ -8,6 +8,7 @@ public sealed record UpdateProfileCommand(
     Guid UserId,
     string FirstName,
     string LastName,
+    string? GitHubUrl,
     string? Street,
     string? City,
     string? State,

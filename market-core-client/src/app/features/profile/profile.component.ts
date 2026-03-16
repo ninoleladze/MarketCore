@@ -52,6 +52,7 @@ export class ProfileComponent implements OnInit {
   // ── Edit-form model (two-way bound) ───────────────────────────────────────
   firstName = '';
   lastName = '';
+  gitHubUrl = '';
   street = '';
   city = '';
   state = '';
@@ -110,6 +111,7 @@ export class ProfileComponent implements OnInit {
   private populateForm(p: ProfileDto): void {
     this.firstName = p.firstName;
     this.lastName = p.lastName;
+    this.gitHubUrl = p.gitHubUrl ?? '';
     this.street = p.address?.street ?? '';
     this.city = p.address?.city ?? '';
     this.state = p.address?.state ?? '';
@@ -164,6 +166,7 @@ export class ProfileComponent implements OnInit {
     const command: UpdateProfileCommand = {
       firstName: this.firstName.trim(),
       lastName: this.lastName.trim(),
+      gitHubUrl: this.gitHubUrl.trim() || undefined,
       ...(hasAddress && {
         street: this.street.trim() || undefined,
         city: this.city.trim() || undefined,

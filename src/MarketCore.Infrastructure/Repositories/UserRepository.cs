@@ -31,7 +31,7 @@ public sealed class UserRepository : Repository<User>, IUserRepository
             .FirstOrDefaultAsync(u => u.EmailVerificationToken == token, ct);
     }
 
-    public async Task<User?> GetByIdAsync(Guid id, CancellationToken ct = default)
+    public override async Task<User?> GetByIdAsync(Guid id, CancellationToken ct = default)
     {
         return await Context.Users
             .FirstOrDefaultAsync(u => u.Id == id, ct);

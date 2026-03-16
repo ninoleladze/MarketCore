@@ -15,6 +15,7 @@ export interface ProfileDto {
   role: string;
   isEmailVerified: boolean;
   address?: AddressDto;
+  gitHubUrl?: string;
   createdAt: string;
   totalOrders: number;
   totalSpent: number;
@@ -23,6 +24,7 @@ export interface ProfileDto {
 export interface UpdateProfileCommand {
   firstName: string;
   lastName: string;
+  gitHubUrl?: string;
   street?: string;
   city?: string;
   state?: string;
