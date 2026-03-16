@@ -36,7 +36,6 @@
           }
         </a>
         <a routerLink="/orders" routerLinkActive="active" (click)="closeMenu()">Orders</a>
-        <a routerLink="/profile" routerLinkActive="active" (click)="closeMenu()">Profile</a>
         @if (auth.isSeller()) {
           <a routerLink="/products/create" routerLinkActive="active" (click)="closeMenu()">Sell</a>
         }
@@ -45,7 +44,7 @@
           <a routerLink="/admin" routerLinkActive="active" class="admin-link" (click)="closeMenu()">Admin Panel</a>
         }
         <div class="user-menu">
-          <span class="user-name">{{ auth.fullName() }}</span>
+          <a routerLink="/profile" routerLinkActive="active" class="user-name" (click)="closeMenu()">{{ auth.fullName() }}</a>
           <button class="btn-logout" (click)="logout()">Logout</button>
         </div>
       } @else {

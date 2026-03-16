@@ -130,6 +130,13 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.user-name:hover,
+.user-name.active {
+  color: var(--orange-400);
 }
 
 .btn-logout {
