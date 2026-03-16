@@ -1,0 +1,408 @@
+<div class="profile-page">
+
+  <!-- ── Floating background orbs (pure CSS, no JS) ──────────────────── -->
+  <div class="orb orb-1" aria-hidden="true"></div>
+  <div class="orb orb-2" aria-hidden="true"></div>
+  <div class="orb orb-3" aria-hidden="true"></div>
+
+  <!-- ── Dot-grid mesh overlay ─────────────────────────────────────────── -->
+  <div class="mesh-grid" aria-hidden="true"></div>
+
+  <!-- ── Loading skeleton ──────────────────────────────────────────────── -->
+  @if (loading()) {
+    <div class="loading-state" role="status" aria-label="Loading profile">
+      <div class="skeleton-hero">
+        <div class="skeleton-avatar"></div>
+        <div class="skeleton-lines">
+          <div class="skeleton-line wide"></div>
+          <div class="skeleton-line medium"></div>
+          <div class="skeleton-line narrow"></div>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- ── Main profile content ──────────────────────────────────────────── -->
+  @if (profile(); as p) {
+
+    <!-- ═══ HERO HEADER ═══════════════════════════════════════════════════ -->
+    <header class="hero-section">
+
+      <!-- Avatar with spinning double-ring border -->
+      <div class="avatar-wrapper" aria-hidden="true">
+        <div class="avatar-ring-outer"></div>
+        <div class="avatar-ring-inner"></div>
+        <div class="avatar-circle">
+          <span class="avatar-initials">{{ initials() }}</span>
+        </div>
+      </div>
+
+      <!-- Identity block -->
+      <div class="hero-identity">
+        <h1 class="hero-name">{{ p.fullName }}</h1>
+        <div class="hero-meta">
+          <span class="role-badge">{{ p.role }}</span>
+
+          @if (p.isEmailVerified) {
+            <span class="email-verified" title="Email verified">
+              <span class="check-icon" aria-hidden="true">&#10003;</span>
+              {{ p.email }}
+            </span>
+          } @else {
+            <span class="email-unverified" title="Email not verified">
+              <span class="warn-icon" aria-hidden="true">&#9888;</span>
+              {{ p.email }}
+            </span>
+          }
+        </div>
+        <p class="hero-since">Member since {{ memberSince() }}</p>
+      </div>
+
+      <!-- ── Stat cards ──────────────────────────────────────────────── -->
+      <div class="stats-row" role="list">
+
+        <div class="stat-card" role="listitem">
+          <div class="stat-icon" aria-hidden="true">&#128230;</div>
+          <div class="stat-value">{{ p.totalOrders }}</div>
+          <div class="stat-label">Orders Placed</div>
+        </div>
+
+        <div class="stat-card" role="listitem">
+          <div class="stat-icon" aria-hidden="true">&#128176;</div>
+          <div class="stat-value">{{ formatCurrency(p.totalSpent) }}</div>
+          <div class="stat-label">Total Spent</div>
+        </div>
+
+        <div class="stat-card" role="listitem">
+          <div class="stat-icon" aria-hidden="true">&#128197;</div>
+          <div class="stat-value year-value">{{ p.createdAt | date:'yyyy' }}</div>
+          <div class="stat-label">Member Since</div>
+        </div>
+
+      </div>
+    </header>
+
+    <!-- ═══ MAIN CONTENT GRID ═════════════════════════════════════════════ -->
+    <main class="content-grid">
+
+      <!-- ── LEFT COLUMN: Edit Profile ───────────────────────────────── -->
+      <section class="glass-card edit-card" aria-label="Edit profile">
+        <div class="card-top-border" aria-hidden="true"></div>
+        <h2 class="card-title">
+          <span class="card-title-icon" aria-hidden="true">&#9998;</span>
+          Edit Profile
+        </h2>
+
+        <!-- Success / error toasts -->
+        @if (successMsg()) {
+          <div class="toast toast-success" role="alert" aria-live="polite">
+            <span aria-hidden="true">&#10003;</span> {{ successMsg() }}
+          </div>
+        }
+        @if (errorMsg()) {
+          <div class="toast toast-error" role="alert" aria-live="polite">
+            <span aria-hidden="true">&#9888;</span> {{ errorMsg() }}
+          </div>
+        }
+
+        <form (ngSubmit)="saveProfile()" #profileForm="ngForm" novalidate>
+
+          <!-- Name row -->
+          <div class="form-row">
+            <div class="form-field">
+              <label for="firstName" class="field-label">First Name</label>
+              <input
+                id="firstName"
+                name="firstName"
+                type="text"
+                class="glass-input"
+                [(ngModel)]="firstName"
+                required
+                maxlength="100"
+                autocomplete="given-name"
+                [attr.aria-required]="true"
+              />
+            </div>
+            <div class="form-field">
+              <label for="lastName" class="field-label">Last Name</label>
+              <input
+                id="lastName"
+                name="lastName"
+                type="text"
+                class="glass-input"
+                [(ngModel)]="lastName"
+                required
+                maxlength="100"
+                autocomplete="family-name"
+                [attr.aria-required]="true"
+              />
+            </div>
+          </div>
+
+          <!-- Address section (collapsible) -->
+          <div class="address-section">
+            <button
+              type="button"
+              class="address-toggle"
+              (click)="toggleAddress()"
+              [attr.aria-expanded]="addressExpanded()"
+              aria-controls="address-panel"
+            >
+              <span class="address-toggle-icon" aria-hidden="true">
+                {{ addressExpanded() ? '&#9650;' : '&#9660;' }}
+              </span>
+              Shipping Address
+              <span class="address-badge">
+                {{ p.address ? 'Saved' : 'Not set' }}
+              </span>
+            </button>
+
+            <div
+              id="address-panel"
+              class="address-panel"
+              [class.expanded]="addressExpanded()"
+            >
+              <div class="form-field">
+                <label for="street" class="field-label">Street</label>
+                <input
+                  id="street"
+                  name="street"
+                  type="text"
+                  class="glass-input"
+                  [(ngModel)]="street"
+                  autocomplete="street-address"
+                />
+              </div>
+              <div class="form-row">
+                <div class="form-field">
+                  <label for="city" class="field-label">City</label>
+                  <input
+                    id="city"
+                    name="city"
+                    type="text"
+                    class="glass-input"
+                    [(ngModel)]="city"
+                    autocomplete="address-level2"
+                  />
+                </div>
+                <div class="form-field">
+                  <label for="state" class="field-label">State</label>
+                  <input
+                    id="state"
+                    name="state"
+                    type="text"
+                    class="glass-input"
+                    [(ngModel)]="state"
+                    autocomplete="address-level1"
+                  />
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-field">
+                  <label for="zipCode" class="field-label">ZIP Code</label>
+                  <input
+                    id="zipCode"
+                    name="zipCode"
+                    type="text"
+                    class="glass-input"
+                    [(ngModel)]="zipCode"
+                    autocomplete="postal-code"
+                  />
+                </div>
+                <div class="form-field">
+                  <label for="country" class="field-label">Country</label>
+                  <input
+                    id="country"
+                    name="country"
+                    type="text"
+                    class="glass-input"
+                    [(ngModel)]="country"
+                    autocomplete="country-name"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            class="btn-primary"
+            [disabled]="saving() || profileForm.invalid"
+            [class.btn-loading]="saving()"
+            aria-label="Save profile changes"
+          >
+            @if (saving()) {
+              <span class="btn-spinner" aria-hidden="true"></span>
+              Saving…
+            } @else {
+              Save Changes
+            }
+          </button>
+
+        </form>
+      </section>
+
+      <!-- ── RIGHT COLUMN ─────────────────────────────────────────────── -->
+      <div class="right-column">
+
+        <!-- ── Change Password card ──────────────────────────────────── -->
+        <section class="glass-card pw-card" aria-label="Change password">
+          <div class="card-top-border" aria-hidden="true"></div>
+          <h2 class="card-title">
+            <span class="card-title-icon" aria-hidden="true">&#128274;</span>
+            Change Password
+          </h2>
+
+          @if (pwSuccessMsg()) {
+            <div class="toast toast-success" role="alert" aria-live="polite">
+              <span aria-hidden="true">&#10003;</span> {{ pwSuccessMsg() }}
+            </div>
+          }
+          @if (pwErrorMsg()) {
+            <div class="toast toast-error" role="alert" aria-live="polite">
+              <span aria-hidden="true">&#9888;</span> {{ pwErrorMsg() }}
+            </div>
+          }
+
+          <form (ngSubmit)="changePassword()" #pwForm="ngForm" novalidate>
+
+            <!-- Current password -->
+            <div class="form-field pw-field">
+              <label for="currentPw" class="field-label">Current Password</label>
+              <div class="pw-input-wrapper">
+                <input
+                  id="currentPw"
+                  name="currentPassword"
+                  [type]="showCurrentPw() ? 'text' : 'password'"
+                  class="glass-input"
+                  [(ngModel)]="currentPassword"
+                  required
+                  autocomplete="current-password"
+                  [attr.aria-required]="true"
+                />
+                <button
+                  type="button"
+                  class="pw-toggle-btn"
+                  (click)="showCurrentPw.update(v => !v)"
+                  [attr.aria-label]="showCurrentPw() ? 'Hide current password' : 'Show current password'"
+                >
+                  {{ showCurrentPw() ? '&#128065;&#65039;' : '&#128064;' }}
+                </button>
+              </div>
+            </div>
+
+            <!-- New password -->
+            <div class="form-field pw-field">
+              <label for="newPw" class="field-label">New Password</label>
+              <div class="pw-input-wrapper">
+                <input
+                  id="newPw"
+                  name="newPassword"
+                  [type]="showNewPw() ? 'text' : 'password'"
+                  class="glass-input"
+                  [ngModel]="newPassword"
+                  (ngModelChange)="onNewPasswordChange($event)"
+                  required
+                  minlength="8"
+                  autocomplete="new-password"
+                  [attr.aria-required]="true"
+                  [attr.aria-describedby]="'pw-strength-desc'"
+                />
+                <button
+                  type="button"
+                  class="pw-toggle-btn"
+                  (click)="showNewPw.update(v => !v)"
+                  [attr.aria-label]="showNewPw() ? 'Hide new password' : 'Show new password'"
+                >
+                  {{ showNewPw() ? '&#128065;&#65039;' : '&#128064;' }}
+                </button>
+              </div>
+
+              <!-- Strength bar -->
+              @if (newPassword.length > 0) {
+                <div
+                  class="strength-bar-track"
+                  role="meter"
+                  [attr.aria-valuenow]="pwStrength()"
+                  aria-valuemin="0"
+                  aria-valuemax="4"
+                  id="pw-strength-desc"
+                  [attr.aria-label]="'Password strength: ' + pwStrengthLabel()"
+                >
+                  <div
+                    class="strength-bar-fill"
+                    [ngClass]="'strength-' + pwStrengthClass()"
+                    [style.width.%]="pwStrength() * 25"
+                  ></div>
+                </div>
+                <span class="strength-label" [ngClass]="'strength-text-' + pwStrengthClass()">
+                  {{ pwStrengthLabel() }}
+                </span>
+              }
+            </div>
+
+            <button
+              type="submit"
+              class="btn-primary"
+              [disabled]="pwSaving() || pwForm.invalid"
+              [class.btn-loading]="pwSaving()"
+              aria-label="Change password"
+            >
+              @if (pwSaving()) {
+                <span class="btn-spinner" aria-hidden="true"></span>
+                Updating…
+              } @else {
+                Update Password
+              }
+            </button>
+
+          </form>
+        </section>
+
+        <!-- ── Account Info card ─────────────────────────────────────── -->
+        <section class="glass-card info-card" aria-label="Account information">
+          <div class="card-top-border" aria-hidden="true"></div>
+          <h2 class="card-title">
+            <span class="card-title-icon" aria-hidden="true">&#128196;</span>
+            Account Info
+          </h2>
+
+          <ul class="info-list" role="list">
+            <li class="info-row" role="listitem">
+              <span class="info-icon" aria-hidden="true">&#9993;</span>
+              <span class="info-key">Email</span>
+              <span class="info-val">{{ p.email }}</span>
+            </li>
+            <li class="info-row" role="listitem">
+              <span class="info-icon" aria-hidden="true">&#127891;</span>
+              <span class="info-key">Role</span>
+              <span class="info-val">
+                <span class="role-badge-sm">{{ p.role }}</span>
+              </span>
+            </li>
+            <li class="info-row" role="listitem">
+              <span class="info-icon" aria-hidden="true">&#9989;</span>
+              <span class="info-key">Verified</span>
+              <span class="info-val" [class.verified]="p.isEmailVerified" [class.unverified]="!p.isEmailVerified">
+                {{ p.isEmailVerified ? 'Yes' : 'No' }}
+              </span>
+            </li>
+            <li class="info-row" role="listitem">
+              <span class="info-icon" aria-hidden="true">&#128274;</span>
+              <span class="info-key">Account ID</span>
+              <span class="info-val mono">{{ truncateId(p.id) }}</span>
+            </li>
+            <li class="info-row" role="listitem">
+              <span class="info-icon" aria-hidden="true">&#128197;</span>
+              <span class="info-key">Joined</span>
+              <span class="info-val">{{ p.createdAt | date:'mediumDate' }}</span>
+            </li>
+          </ul>
+        </section>
+
+      </div><!-- /right-column -->
+    </main>
+
+  }<!-- /if profile -->
+
+</div><!-- /profile-page -->
