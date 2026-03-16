@@ -202,10 +202,7 @@ try
                    ?? Environment.GetEnvironmentVariable("MYSQLHOST");
 
         if (isMySql is not null)
-        {
-            await db.Database.EnsureDeletedAsync();
             await db.Database.MigrateAsync();
-        }
 
         var seeder = scope.ServiceProvider.GetRequiredService<DataSeeder>();
         await seeder.SeedAsync();
