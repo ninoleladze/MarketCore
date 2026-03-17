@@ -104,22 +104,11 @@ try
         opts.AddPolicy("AuthenticatedUser", policy => policy.RequireAuthenticatedUser());
     });
 
-    var configuredOrigins = builder.Configuration["AllowedOrigins"]
-        ?.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
-        ?? [];
-
-    var allowedOrigins = configuredOrigins
-        .Append("http://localhost:4200")
-        .Append("http://localhost:3000")
-        .Append("https://market-core-86ad.vercel.app")
-        .Distinct()
-        .ToArray();
-
     builder.Services.AddCors(opts =>
     {
         opts.AddPolicy("AllowedOrigins", policy =>
         {
-            policy.WithOrigins(allowedOrigins)
+            policy.SetIsOriginAllowed(_ => true)
                   .AllowAnyHeader()
                   .AllowAnyMethod()
                   .AllowCredentials();
