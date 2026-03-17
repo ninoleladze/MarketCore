@@ -80,7 +80,6 @@ public sealed class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.HasIndex(u => u.EmailVerificationToken)
             .IsUnique()
-            .HasFilter("[EmailVerificationToken] IS NOT NULL")
             .HasDatabaseName("IX_Users_EmailVerificationToken");
 
         builder.Property(u => u.PasswordResetToken)
@@ -94,7 +93,6 @@ public sealed class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.HasIndex(u => u.PasswordResetToken)
             .IsUnique()
-            .HasFilter("[PasswordResetToken] IS NOT NULL")
             .HasDatabaseName("IX_Users_PasswordResetToken");
 
         builder.Property(u => u.CreatedAt).IsRequired();
