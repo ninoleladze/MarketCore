@@ -104,8 +104,16 @@ try
         opts.AddPolicy("AuthenticatedUser", policy => policy.RequireAuthenticatedUser());
     });
 
-    var allowedOrigins = builder.Configuration["AllowedOrigins"]?.Split(',')
-        ?? ["http://localhost:4200", "http://localhost:3000"];
+    var configuredOrigins = builder.Configuration["AllowedOrigins"]
+        ?.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+        ?? [];
+
+    var allowedOrigins = configuredOrigins
+        .Append("http://localhost:4200")
+        .Append("http://localhost:3000")
+        .Append("https://market-core-86ad.vercel.app")
+        .Distinct()
+        .ToArray();
 
     builder.Services.AddCors(opts =>
     {
