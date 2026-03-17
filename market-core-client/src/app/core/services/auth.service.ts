@@ -2,7 +2,7 @@ import { Injectable, signal, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { AuthResponse, LoginCommand, RegisterCommand } from '../models/auth.models';
+import { AuthResponse, ForgotPasswordCommand, LoginCommand, RegisterCommand, ResetPasswordCommand } from '../models/auth.models';
 
 const TOKEN_KEY = 'marketcore_token';
 const USER_KEY  = 'marketcore_user';
@@ -55,6 +55,14 @@ export class AuthService {
         }
       })
     );
+  }
+
+  forgotPassword(command: ForgotPasswordCommand): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/forgot-password`, command);
+  }
+
+  resetPassword(command: ResetPasswordCommand): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/reset-password`, command);
   }
 
   logout(): void {

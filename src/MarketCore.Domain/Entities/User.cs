@@ -27,6 +27,10 @@ public sealed class User : AggregateRoot
 
     public string? GitHubUrl { get; private set; }
 
+    public string? PasswordResetToken { get; private set; }
+
+    public DateTime? PasswordResetTokenExpiresAt { get; private set; }
+
     private User() { }
 
     private User(Email email, string passwordHash, string firstName, string lastName, UserRole role) : base()
@@ -131,5 +135,29 @@ public sealed class User : AggregateRoot
     {
         IsEmailVerified = true;
         EmailVerificationToken = null;
+    }
+
+    public void SetPasswordResetToken(string token)
+    {
+        if (string.IsNullOrWhiteSpace(token))
+            throw new ArgumentException("Password reset token cannot be empty.", nameof(token));
+
+        PasswordResetToken = token;
+        PasswordResetTokenExpiresAt = DateTime.UtcNow.AddHours(1);
+    }
+
+    public Result ResetPassword(string token, string newPasswordHash)
+    {
+        if (PasswordResetToken is null || PasswordResetToken != token)
+            return Result.Failure("Invalid or expired password reset link.");
+
+        if (PasswordResetTokenExpiresAt < DateTime.UtcNow)
+            return Result.Failure("Password reset link has expired.");
+
+        PasswordHash = newPasswordHash;
+        PasswordResetToken = null;
+        PasswordResetTokenExpiresAt = null;
+        SetUpdatedAudit(DateTime.UtcNow);
+        return Result.Success();
     }
 }

@@ -24,3 +24,12 @@ export interface AuthResponse {
   expiresAt: string;
   user: AuthUserDto;
 }
+
+export interface ForgotPasswordCommand {
+  email: string;
+}
+
+export interface ResetPasswordCommand {
+  token: string;
+  newPassword: string;
+}

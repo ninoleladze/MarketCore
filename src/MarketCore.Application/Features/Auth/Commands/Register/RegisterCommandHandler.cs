@@ -2,9 +2,11 @@ using MediatR;
 using MarketCore.Application.DTOs;
 using MarketCore.Application.Exceptions;
 using MarketCore.Application.Interfaces;
+using MarketCore.Application.Options;
 using MarketCore.Domain.Common;
 using MarketCore.Domain.Entities;
 using MarketCore.Domain.ValueObjects;
+using Microsoft.Extensions.Options;
 using CartEntity = MarketCore.Domain.Entities.Cart;
 
 namespace MarketCore.Application.Features.Auth.Commands.Register;
@@ -15,17 +17,20 @@ public sealed class RegisterCommandHandler : IRequestHandler<RegisterCommand, Re
     private readonly IPasswordHasher _passwordHasher;
     private readonly ITokenProvider _tokenProvider;
     private readonly IEmailService _emailService;
+    private readonly JwtOptions _jwtOptions;
 
     public RegisterCommandHandler(
         IUnitOfWork uow,
         IPasswordHasher passwordHasher,
         ITokenProvider tokenProvider,
-        IEmailService emailService)
+        IEmailService emailService,
+        IOptions<JwtOptions> jwtOptions)
     {
         _uow = uow;
         _passwordHasher = passwordHasher;
         _tokenProvider = tokenProvider;
         _emailService = emailService;
+        _jwtOptions = jwtOptions.Value;
     }
 
     public async Task<Result<AuthResultDto>> Handle(
@@ -69,7 +74,7 @@ public sealed class RegisterCommandHandler : IRequestHandler<RegisterCommand, Re
         }
 
         var jwtToken  = _tokenProvider.GenerateToken(user);
-        var expiresAt = DateTime.UtcNow.AddDays(7);
+        var expiresAt = DateTime.UtcNow.AddDays(_jwtOptions.ExpiryDays);
 
         var verificationUrl =
             $"{request.ClientBaseUrl?.TrimEnd('/')}/auth/verify-email?token={verificationToken}";

@@ -1,4 +1,5 @@
 using MarketCore.Application.Interfaces;
+using MarketCore.Application.Options;
 using MarketCore.Domain.Repositories;
 using MarketCore.Infrastructure.Auth;
 using MarketCore.Infrastructure.Caching;
@@ -102,6 +103,10 @@ public static class InfrastructureServiceCollectionExtensions
                 "Jwt:Issuer is required.")
             .Validate(s => !string.IsNullOrWhiteSpace(s.Audience),
                 "Jwt:Audience is required.")
+            .ValidateOnStart();
+
+        services.AddOptions<JwtOptions>()
+            .Bind(configuration.GetSection("Jwt"))
             .ValidateOnStart();
 
         services.AddScoped<ITokenProvider, JwtTokenProvider>();

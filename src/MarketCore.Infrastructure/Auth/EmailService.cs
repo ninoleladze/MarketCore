@@ -40,4 +40,18 @@ public sealed class EmailService : IEmailService
 
         return Task.CompletedTask;
     }
+
+    public Task SendPasswordResetAsync(
+        string toEmail,
+        string firstName,
+        string resetUrl,
+        CancellationToken ct = default)
+    {
+        _logger.LogWarning(
+            "[EMAIL STUB] Password reset email would be sent to {Email}. URL: {Url}. " +
+            "Configure Email:Smtp settings to send real emails.",
+            toEmail, resetUrl);
+
+        return Task.CompletedTask;
+    }
 }

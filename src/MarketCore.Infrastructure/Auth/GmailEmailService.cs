@@ -43,6 +43,18 @@ public sealed class GmailEmailService : IEmailService
         await SendAsync(toEmail, subject, html, ct);
     }
 
+    public async Task SendPasswordResetAsync(
+        string toEmail,
+        string firstName,
+        string resetUrl,
+        CancellationToken ct = default)
+    {
+        var subject = "Reset your password";
+        var html    = BuildPasswordResetHtml(firstName, resetUrl);
+
+        await SendAsync(toEmail, subject, html, ct);
+    }
+
     private async Task SendAsync(string toEmail, string subject, string html, CancellationToken ct)
     {
         try
@@ -144,6 +156,90 @@ public sealed class GmailEmailService : IEmailService
                     <td style="background:#111113;padding:20px 40px;border-top:1px solid #2a2a2e;text-align:center;">
                       <p style="margin:0 0 4px;font-size:12px;color:#555560;">
                         If you didn't create a MarketCore account, you can safely ignore this email.
+                      </p>
+                      <p style="margin:0;font-size:12px;color:#555560;">
+                        © {DateTime.UtcNow.Year} MarketCore. All rights reserved.
+                      </p>
+                    </td>
+                  </tr>
+
+                </table>
+              </td>
+            </tr>
+          </table>
+        </body>
+        </html>
+        """;
+
+    private static string BuildPasswordResetHtml(string firstName, string resetUrl) => $"""
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta charset="UTF-8"/>
+          <meta name="viewport" content="width=device-width,initial-scale=1"/>
+          <title>Reset your password — MarketCore</title>
+        </head>
+        <body style="margin:0;padding:0;background:#0d0d0f;font-family:'Helvetica Neue',Arial,sans-serif;">
+          <table width="100%" cellpadding="0" cellspacing="0" style="background:#0d0d0f;padding:40px 0;">
+            <tr>
+              <td align="center">
+                <table width="600" cellpadding="0" cellspacing="0"
+                       style="background:#161618;border-radius:16px;overflow:hidden;border:1px solid #2a2a2e;">
+
+                  <!-- Header -->
+                  <tr>
+                    <td style="background:linear-gradient(135deg,#b00032,#e00047);padding:40px;text-align:center;">
+                      <h1 style="margin:0;font-size:28px;font-weight:700;color:#fff;letter-spacing:-0.5px;">
+                        MarketCore
+                      </h1>
+                      <p style="margin:8px 0 0;font-size:13px;color:rgba(255,255,255,0.75);letter-spacing:0.1em;text-transform:uppercase;">
+                        Password reset request
+                      </p>
+                    </td>
+                  </tr>
+
+                  <!-- Body -->
+                  <tr>
+                    <td style="padding:40px;">
+                      <h2 style="margin:0 0 12px;font-size:22px;color:#f5f5f5;font-weight:600;">
+                        Hi {firstName}, reset your password
+                      </h2>
+                      <p style="margin:0 0 28px;font-size:15px;line-height:1.7;color:#a0a0b0;">
+                        We received a request to reset the password for your MarketCore account.
+                        Click the button below to choose a new password. This link expires in 1 hour.
+                      </p>
+
+                      <!-- CTA button -->
+                      <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:32px;">
+                        <tr>
+                          <td align="center">
+                            <a href="{resetUrl}"
+                               style="display:inline-block;padding:16px 44px;
+                                      background:linear-gradient(135deg,#b00032,#e00047);
+                                      color:#fff;font-size:16px;font-weight:700;text-decoration:none;
+                                      border-radius:999px;letter-spacing:0.02em;
+                                      box-shadow:0 4px 20px rgba(224,0,71,0.35);">
+                              Reset Password
+                            </a>
+                          </td>
+                        </tr>
+                      </table>
+
+                      <!-- Fallback link -->
+                      <p style="margin:0 0 6px;font-size:12px;color:#555560;text-align:center;">
+                        Button not working? Copy and paste this URL into your browser:
+                      </p>
+                      <p style="margin:0;font-size:11px;color:#e00047;text-align:center;word-break:break-all;">
+                        {resetUrl}
+                      </p>
+                    </td>
+                  </tr>
+
+                  <!-- Footer -->
+                  <tr>
+                    <td style="background:#111113;padding:20px 40px;border-top:1px solid #2a2a2e;text-align:center;">
+                      <p style="margin:0 0 4px;font-size:12px;color:#555560;">
+                        If you did not request a password reset, you can safely ignore this email.
                       </p>
                       <p style="margin:0;font-size:12px;color:#555560;">
                         © {DateTime.UtcNow.Year} MarketCore. All rights reserved.

@@ -4,6 +4,7 @@ using MarketCore.Application.Interfaces;
 using MarketCore.Domain.Entities;
 using MarketCore.Domain.Repositories;
 using MarketCore.Domain.ValueObjects;
+using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Xunit;
 using CartEntity = MarketCore.Domain.Entities.Cart;
@@ -43,7 +44,10 @@ public sealed class CheckoutCommandHandlerTests
         _uow.Orders.Returns(_orderRepo);
         _uow.Products.Returns(_productRepo);
 
-        _handler = new CheckoutCommandHandler(_uow, _currentUser);
+        var orderHubService = Substitute.For<IOrderHubService>();
+        var logger = Substitute.For<ILogger<CheckoutCommandHandler>>();
+
+        _handler = new CheckoutCommandHandler(_uow, _currentUser, orderHubService, logger);
     }
 
     private static CheckoutCommand ValidCommand() => new(

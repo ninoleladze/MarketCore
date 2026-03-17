@@ -1,10 +1,12 @@
 using FluentAssertions;
 using MarketCore.Application.Features.Auth.Commands.Login;
 using MarketCore.Application.Interfaces;
+using MarketCore.Application.Options;
 using MarketCore.Domain.Entities;
 using MarketCore.Domain.Enums;
 using MarketCore.Domain.Repositories;
 using MarketCore.Domain.ValueObjects;
+using Microsoft.Extensions.Options;
 using NSubstitute;
 using Xunit;
 
@@ -14,7 +16,8 @@ namespace MarketCore.Tests.Application;
 /// Unit tests for LoginCommandHandler.
 /// Layer: MarketCore.Tests
 ///
-/// Tests the authentication flow: user lookup, password verification, token generation.
+/// Tests the authentication flow: user lookup, password verification,
+/// email verification gate, and token generation.
 /// All external dependencies are mocked via NSubstitute.
 /// </summary>
 public sealed class LoginCommandHandlerTests
@@ -38,10 +41,11 @@ public sealed class LoginCommandHandlerTests
 
         _uow.Users.Returns(_userRepo);
 
-        _handler = new LoginCommandHandler(_uow, _passwordHasher, _tokenProvider);
+        var jwtOptions = Options.Create(new JwtOptions { ExpiryDays = 7 });
+        _handler = new LoginCommandHandler(_uow, _passwordHasher, _tokenProvider, jwtOptions);
     }
 
-    private static User BuildUser()
+    private static User BuildUnverifiedUser()
     {
         return User.Create(
             new Email("user@example.com"),
@@ -49,6 +53,18 @@ public sealed class LoginCommandHandlerTests
             "Alice",
             "Example",
             UserRole.Customer);
+    }
+
+    private static User BuildVerifiedUser()
+    {
+        var user = User.Create(
+            new Email("user@example.com"),
+            FakeHash,
+            "Alice",
+            "Example",
+            UserRole.Customer);
+        user.MarkEmailVerified();
+        return user;
     }
 
     // ── User not found ────────────────────────────────────────────────────────
@@ -72,7 +88,7 @@ public sealed class LoginCommandHandlerTests
     [Fact]
     public async Task Handle_WrongPassword_ReturnsGenericFailure()
     {
-        var user = BuildUser();
+        var user = BuildVerifiedUser();
         _userRepo.GetByEmailAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(user);
 
@@ -88,12 +104,33 @@ public sealed class LoginCommandHandlerTests
         result.Error.Should().Be("Invalid email or password.");
     }
 
+    // ── Email not verified gate ───────────────────────────────────────────────
+
+    [Fact]
+    public async Task Handle_EmailNotVerified_ReturnsVerificationFailure()
+    {
+        var user = BuildUnverifiedUser();
+        _userRepo.GetByEmailAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
+            .Returns(user);
+
+        _passwordHasher.Verify(RawPassword, FakeHash).Returns(true);
+
+        var result = await _handler.Handle(
+            new LoginCommand("user@example.com", RawPassword),
+            CancellationToken.None);
+
+        result.IsFailure.Should().BeTrue();
+        result.Error.Should().Be("Please verify your email address before logging in.");
+
+        _tokenProvider.DidNotReceive().GenerateToken(Arg.Any<User>());
+    }
+
     // ── Successful login ──────────────────────────────────────────────────────
 
     [Fact]
     public async Task Handle_ValidCredentials_ReturnsSuccessWithToken()
     {
-        var user = BuildUser();
+        var user = BuildVerifiedUser();
         _userRepo.GetByEmailAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(user);
 
@@ -112,7 +149,7 @@ public sealed class LoginCommandHandlerTests
     [Fact]
     public async Task Handle_ValidCredentials_ReturnsCorrectUserProfile()
     {
-        var user = BuildUser();
+        var user = BuildVerifiedUser();
         _userRepo.GetByEmailAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(user);
 
@@ -151,18 +188,18 @@ public sealed class LoginCommandHandlerTests
     [Fact]
     public async Task Handle_AdminUser_ReturnsAdminRoleInDto()
     {
-        var adminHash = FakeHash;
         var admin = User.Create(
             new Email("admin@example.com"),
-            adminHash,
+            FakeHash,
             "Adam",
             "Admin",
             UserRole.Admin);
+        admin.MarkEmailVerified();
 
         _userRepo.GetByEmailAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(admin);
 
-        _passwordHasher.Verify(RawPassword, adminHash).Returns(true);
+        _passwordHasher.Verify(RawPassword, FakeHash).Returns(true);
         _tokenProvider.GenerateToken(admin).Returns(FakeToken);
 
         var result = await _handler.Handle(
