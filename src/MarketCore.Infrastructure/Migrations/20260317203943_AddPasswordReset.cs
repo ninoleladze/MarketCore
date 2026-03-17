@@ -11,58 +11,33 @@ namespace MarketCore.Infrastructure.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropIndex(
-                name: "IX_Users_EmailVerificationToken",
-                table: "Users");
+            // Idempotent MySQL SQL — safe to re-run if a previous attempt partially succeeded.
+            // ADD COLUMN IF NOT EXISTS: MySQL 8.0+
+            // CREATE UNIQUE INDEX IF NOT EXISTS: MySQL 8.0.29+
+            // The original DropIndex+CreateIndex for EmailVerificationToken is replaced by
+            // CREATE INDEX IF NOT EXISTS (no-op when it already exists, recreates when dropped).
 
-            migrationBuilder.AddColumn<string>(
-                name: "PasswordResetToken",
-                table: "Users",
-                maxLength: 128,
-                nullable: true);
+            migrationBuilder.Sql(
+                "ALTER TABLE `Users` " +
+                "ADD COLUMN IF NOT EXISTS `PasswordResetToken` VARCHAR(128) NULL, " +
+                "ADD COLUMN IF NOT EXISTS `PasswordResetTokenExpiresAt` DATETIME(6) NULL;");
 
-            migrationBuilder.AddColumn<DateTime>(
-                name: "PasswordResetTokenExpiresAt",
-                table: "Users",
-                nullable: true);
+            migrationBuilder.Sql(
+                "CREATE UNIQUE INDEX IF NOT EXISTS `IX_Users_EmailVerificationToken` " +
+                "ON `Users` (`EmailVerificationToken`);");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_EmailVerificationToken",
-                table: "Users",
-                column: "EmailVerificationToken",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_PasswordResetToken",
-                table: "Users",
-                column: "PasswordResetToken",
-                unique: true);
+            migrationBuilder.Sql(
+                "CREATE UNIQUE INDEX IF NOT EXISTS `IX_Users_PasswordResetToken` " +
+                "ON `Users` (`PasswordResetToken`);");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropIndex(
-                name: "IX_Users_EmailVerificationToken",
-                table: "Users");
-
-            migrationBuilder.DropIndex(
-                name: "IX_Users_PasswordResetToken",
-                table: "Users");
-
-            migrationBuilder.DropColumn(
-                name: "PasswordResetToken",
-                table: "Users");
-
-            migrationBuilder.DropColumn(
-                name: "PasswordResetTokenExpiresAt",
-                table: "Users");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_EmailVerificationToken",
-                table: "Users",
-                column: "EmailVerificationToken",
-                unique: true);
+            migrationBuilder.Sql(
+                "ALTER TABLE `Users` " +
+                "DROP COLUMN IF EXISTS `PasswordResetToken`, " +
+                "DROP COLUMN IF EXISTS `PasswordResetTokenExpiresAt`;");
         }
     }
 }
