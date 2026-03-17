@@ -371,13 +371,11 @@ namespace MarketCore.Infrastructure.Migrations
 
                     b.HasIndex("EmailVerificationToken")
                         .IsUnique()
-                        .HasDatabaseName("IX_Users_EmailVerificationToken")
-                        .HasFilter("[EmailVerificationToken] IS NOT NULL");
+                        .HasDatabaseName("IX_Users_EmailVerificationToken");
 
                     b.HasIndex("PasswordResetToken")
                         .IsUnique()
-                        .HasDatabaseName("IX_Users_PasswordResetToken")
-                        .HasFilter("[PasswordResetToken] IS NOT NULL");
+                        .HasDatabaseName("IX_Users_PasswordResetToken");
 
                     b.ToTable("Users", (string)null);
                 });

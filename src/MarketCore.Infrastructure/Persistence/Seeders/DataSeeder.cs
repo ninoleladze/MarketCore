@@ -50,16 +50,28 @@ public sealed class DataSeeder
         }
 
         // ── Load existing entities ────────────────────────────────────────
-        var electronics        = await _context.Categories.FirstAsync(c => c.Name == "Electronics", ct);
-        var clothing           = await _context.Categories.FirstAsync(c => c.Name == "Clothing", ct);
-        var books              = await _context.Categories.FirstAsync(c => c.Name == "Books", ct);
-        var digitalElectronics = await _context.Categories.FirstAsync(c => c.Name == "Digital Electronics", ct);
+        var electronics        = await _context.Categories.FirstOrDefaultAsync(c => c.Name == "Electronics", ct);
+        var clothing           = await _context.Categories.FirstOrDefaultAsync(c => c.Name == "Clothing", ct);
+        var books              = await _context.Categories.FirstOrDefaultAsync(c => c.Name == "Books", ct);
+        var digitalElectronics = await _context.Categories.FirstOrDefaultAsync(c => c.Name == "Digital Electronics", ct);
 
-        var seller1 = await _context.Users.FirstAsync(u => u.FirstName == "Sarah", ct);
-        var seller2 = await _context.Users.FirstAsync(u => u.FirstName == "Mark", ct);
-        var buyer1  = await _context.Users.FirstAsync(u => u.FirstName == "Alice", ct);
-        var buyer2  = await _context.Users.FirstAsync(u => u.FirstName == "Bob", ct);
-        var buyer3  = await _context.Users.FirstAsync(u => u.FirstName == "Carol", ct);
+        if (electronics is null || clothing is null || books is null || digitalElectronics is null)
+        {
+            _logger.LogWarning("Required seed categories not found, skipping product seeding.");
+            return;
+        }
+
+        var seller1 = await _context.Users.FirstOrDefaultAsync(u => u.FirstName == "Sarah", ct);
+        var seller2 = await _context.Users.FirstOrDefaultAsync(u => u.FirstName == "Mark", ct);
+        var buyer1  = await _context.Users.FirstOrDefaultAsync(u => u.FirstName == "Alice", ct);
+        var buyer2  = await _context.Users.FirstOrDefaultAsync(u => u.FirstName == "Bob", ct);
+        var buyer3  = await _context.Users.FirstOrDefaultAsync(u => u.FirstName == "Carol", ct);
+
+        if (seller1 is null || seller2 is null || buyer1 is null || buyer2 is null || buyer3 is null)
+        {
+            _logger.LogWarning("Required seed users not found, skipping product seeding.");
+            return;
+        }
 
         // ── Products (additive — skip names that already exist) ───────────
         var existingNames = (await _context.Products.Select(p => p.Name).ToListAsync(ct)).ToHashSet();

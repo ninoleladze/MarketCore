@@ -198,11 +198,18 @@ try
                    ?? Environment.GetEnvironmentVariable("MYSQL_PRIVATE_URL")
                    ?? Environment.GetEnvironmentVariable("MYSQLHOST");
 
-        if (isMySql is not null)
-            await db.Database.MigrateAsync();
+        try
+        {
+            if (isMySql is not null)
+                await db.Database.MigrateAsync();
 
-        var seeder = scope.ServiceProvider.GetRequiredService<DataSeeder>();
-        await seeder.SeedAsync();
+            var seeder = scope.ServiceProvider.GetRequiredService<DataSeeder>();
+            await seeder.SeedAsync();
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Database migration or seeding failed. App will continue but data may be incomplete.");
+        }
     }
 
     app.UseCors("AllowedOrigins");
