@@ -212,6 +212,28 @@ try
         }
     }
 
+    // Manual CORS — runs before everything, adds headers to every response
+    app.Use(async (context, next) =>
+    {
+        var origin = context.Request.Headers.Origin.FirstOrDefault();
+        if (!string.IsNullOrEmpty(origin))
+        {
+            context.Response.Headers["Access-Control-Allow-Origin"]      = origin;
+            context.Response.Headers["Access-Control-Allow-Credentials"] = "true";
+            context.Response.Headers["Access-Control-Allow-Methods"]     = "GET, POST, PUT, DELETE, PATCH, OPTIONS";
+            context.Response.Headers["Access-Control-Allow-Headers"]     = "Authorization, Content-Type, Accept, Origin, X-Requested-With";
+            context.Response.Headers["Access-Control-Max-Age"]           = "86400";
+        }
+
+        if (context.Request.Method == "OPTIONS")
+        {
+            context.Response.StatusCode = 204;
+            return;
+        }
+
+        await next();
+    });
+
     app.UseCors("AllowedOrigins");
 
     app.UseMiddleware<GlobalExceptionMiddleware>();
