@@ -205,11 +205,11 @@ try
         await seeder.SeedAsync();
     }
 
+    app.UseCors("AllowedOrigins");
+
     app.UseMiddleware<GlobalExceptionMiddleware>();
     app.UseMiddleware<RequestLoggingMiddleware>();
 
-    app.UseCors("AllowedOrigins");
-    app.UseHttpsRedirection();
     app.UseRateLimiter();
     app.UseAuthentication();
     app.UseAuthorization();
