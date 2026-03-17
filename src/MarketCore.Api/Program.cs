@@ -219,8 +219,8 @@ try
     app.UseMiddleware<GlobalExceptionMiddleware>();
     app.UseMiddleware<RequestLoggingMiddleware>();
 
-    app.UseHttpsRedirection();
     app.UseCors("AllowedOrigins");
+    app.UseHttpsRedirection();
     app.UseRateLimiter();
     app.UseAuthentication();
     app.UseAuthorization();
