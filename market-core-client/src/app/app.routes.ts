@@ -34,7 +34,7 @@ export const routes: Routes = [
   {
     path: 'products/create',
     loadComponent: () => import('./features/products/create-product/create-product.component').then(m => m.CreateProductComponent),
-    canActivate: [authGuard]
+    canActivate: [adminGuard]
   },
   {
     path: 'products/:id',

@@ -36,7 +36,7 @@
           }
         </a>
         <a routerLink="/orders" routerLinkActive="active" (click)="closeMenu()">Orders</a>
-        @if (auth.isSeller()) {
+        @if (auth.isAdmin()) {
           <a routerLink="/products/create" routerLinkActive="active" (click)="closeMenu()">Sell</a>
         }
         @if (auth.isAdmin()) {

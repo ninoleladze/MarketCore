@@ -4,6 +4,7 @@ import { Observable, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { AuthResponse, ForgotPasswordCommand, LoginCommand, RegisterCommand, ResetPasswordCommand } from '../models/auth.models';
 
+
 const TOKEN_KEY = 'marketcore_token';
 const USER_KEY  = 'marketcore_user';
 
@@ -16,10 +17,6 @@ export class AuthService {
   readonly currentUser     = this._session.asReadonly();
   readonly isLoggedIn      = computed(() => this._session() !== null);
   readonly isAdmin         = computed(() => this._session()?.user?.role === 'Admin');
-  readonly isSeller        = computed(() => {
-    const role = this._session()?.user?.role;
-    return role === 'Seller' || role === 'Admin';
-  });
   readonly isEmailVerified = computed(() => this._session()?.user?.isEmailVerified === true);
 
   readonly fullName = computed(() => {
@@ -35,10 +32,8 @@ export class AuthService {
     );
   }
 
-  register(command: RegisterCommand): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/register`, command).pipe(
-      tap(r => this.persist(r))
-    );
+  register(command: RegisterCommand): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/register`, command);
   }
 
   verifyEmail(token: string): Observable<void> {

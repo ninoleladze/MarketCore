@@ -61,7 +61,7 @@ export class OrderDetailComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.statusSub?.unsubscribe();
-    this.hub.leaveOrderGroup(this.orderId).then(() => this.hub.stopConnection());
+    this.hub.leaveOrderGroup(this.orderId);
   }
 
   cancelOrder(): void {
