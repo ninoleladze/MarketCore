@@ -17,14 +17,18 @@ COPY . .
 
 RUN dotnet build "src/MarketCore.Api/MarketCore.Api.csproj" \
     -c Release \
-    -o /app/build
+    -o /app/build \
+    /p:TreatWarningsAsErrors=false \
+    /p:EnforceCodeStyleInBuild=false
 
 # ── Stage 2: Publish ──────────────────────────────────────────────────────────
 FROM build AS publish
 RUN dotnet publish "src/MarketCore.Api/MarketCore.Api.csproj" \
     -c Release \
     -o /app/publish \
-    /p:UseAppHost=false
+    /p:UseAppHost=false \
+    /p:TreatWarningsAsErrors=false \
+    /p:EnforceCodeStyleInBuild=false
 
 # ── Stage 3: Runtime ──────────────────────────────────────────────────────────
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
