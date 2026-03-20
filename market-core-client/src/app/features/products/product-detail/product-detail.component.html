@@ -14,7 +14,11 @@
       <!-- Gallery Column -->
       <div class="gallery-col">
         <!-- Main Image -->
-        <div class="main-image-box">
+        <div
+          class="main-image-box"
+          (touchstart)="onTouchStart($event)"
+          (touchend)="onTouchEnd($event)"
+        >
           @if (galleryImages.length > 0) {
             <img
               [src]="galleryImages[selectedImg]"
@@ -27,8 +31,15 @@
               <span>{{ product.name[0] }}</span>
             </div>
           }
+
           @if (!product.isActive || product.stockQuantity === 0) {
             <div class="out-of-stock-overlay">Out of Stock</div>
+          }
+
+          @if (galleryImages.length > 1) {
+            <button class="gallery-arrow arrow-prev" type="button" (click)="prevImg()" aria-label="Previous image">&#8249;</button>
+            <button class="gallery-arrow arrow-next" type="button" (click)="nextImg()" aria-label="Next image">&#8250;</button>
+            <div class="img-counter">{{ selectedImg + 1 }} / {{ galleryImages.length }}</div>
           }
         </div>
 

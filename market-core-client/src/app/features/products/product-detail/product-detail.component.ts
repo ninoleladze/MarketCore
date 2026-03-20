@@ -37,6 +37,7 @@ export class ProductDetailComponent implements OnInit {
   addingToCart = false;
   submittingReview = false;
   selectedImg = 0;
+  private touchStartX = 0;
 
   reviewForm = this.fb.group({
     rating: [5, [Validators.required, Validators.min(1), Validators.max(5)]],
@@ -54,6 +55,29 @@ export class ProductDetailComponent implements OnInit {
   selectImg(i: number): void {
     this.selectedImg = i;
     this.cdr.markForCheck();
+  }
+
+  prevImg(): void {
+    const len = this.galleryImages.length;
+    this.selectedImg = (this.selectedImg - 1 + len) % len;
+    this.cdr.markForCheck();
+  }
+
+  nextImg(): void {
+    const len = this.galleryImages.length;
+    this.selectedImg = (this.selectedImg + 1) % len;
+    this.cdr.markForCheck();
+  }
+
+  onTouchStart(e: TouchEvent): void {
+    this.touchStartX = e.touches[0].clientX;
+  }
+
+  onTouchEnd(e: TouchEvent): void {
+    const delta = e.changedTouches[0].clientX - this.touchStartX;
+    if (Math.abs(delta) > 40) {
+      delta < 0 ? this.nextImg() : this.prevImg();
+    }
   }
 
   ngOnInit(): void {
