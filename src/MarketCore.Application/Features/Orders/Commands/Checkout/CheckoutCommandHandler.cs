@@ -65,12 +65,18 @@ public sealed class CheckoutCommandHandler : IRequestHandler<CheckoutCommand, Re
                 var product = await _uow.Products.GetByIdAsync(item.ProductId, cancellationToken)
                     .ConfigureAwait(false);
                 if (product is null)
+                {
+                    await _uow.RollbackAsync(cancellationToken).ConfigureAwait(false);
                     return Result<Guid>.Failure($"Product '{item.ProductId}' no longer exists.");
+                }
 
                 var stockResult = product.DecreaseStock(item.Quantity);
                 if (stockResult.IsFailure)
+                {
+                    await _uow.RollbackAsync(cancellationToken).ConfigureAwait(false);
                     return Result<Guid>.Failure(
                         $"Insufficient stock for '{product.Name}': {stockResult.Error}");
+                }
 
                 var addItemResult = order.AddItem(
                     product.Id,
@@ -79,14 +85,20 @@ public sealed class CheckoutCommandHandler : IRequestHandler<CheckoutCommand, Re
                     item.UnitPrice);
 
                 if (addItemResult.IsFailure)
+                {
+                    await _uow.RollbackAsync(cancellationToken).ConfigureAwait(false);
                     return Result<Guid>.Failure(addItemResult.Error!);
+                }
 
                 _uow.Products.Update(product);
             }
 
             var confirmResult = order.Confirm();
             if (confirmResult.IsFailure)
+            {
+                await _uow.RollbackAsync(cancellationToken).ConfigureAwait(false);
                 return Result<Guid>.Failure(confirmResult.Error!);
+            }
 
             cart.Clear();
 

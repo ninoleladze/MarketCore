@@ -49,16 +49,29 @@ public sealed class AddToCartCommandHandler : IRequestHandler<AddToCartCommand, 
         _uow.Carts.Update(cart);
         await _uow.SaveChangesAsync(cancellationToken);
 
+        var productIds = cart.Items.Select(i => i.ProductId).Distinct().ToList();
+        var productLookup = new Dictionary<Guid, Product>(productIds.Count);
+        foreach (var productId in productIds)
+        {
+            var p = await _uow.Products.GetByIdAsync(productId, cancellationToken);
+            if (p is not null)
+                productLookup[productId] = p;
+        }
+
         var total = cart.GetTotal();
-        var items = cart.Items.Select(i => new CartItemDto(
-            Id: i.Id,
-            ProductId: i.ProductId,
-            ProductName: i.ProductId == product.Id ? product.Name : string.Empty,
-            ImageUrl: i.ProductId == product.Id ? product.ImageUrl : null,
-            Quantity: i.Quantity,
-            UnitPrice: i.UnitPrice.Amount,
-            Currency: i.UnitPrice.Currency,
-            LineTotal: i.LineTotal().Amount)).ToList();
+        var items = cart.Items.Select(i =>
+        {
+            productLookup.TryGetValue(i.ProductId, out var p);
+            return new CartItemDto(
+                Id: i.Id,
+                ProductId: i.ProductId,
+                ProductName: p?.Name ?? string.Empty,
+                ImageUrl: p?.ImageUrl,
+                Quantity: i.Quantity,
+                UnitPrice: i.UnitPrice.Amount,
+                Currency: i.UnitPrice.Currency,
+                LineTotal: i.LineTotal().Amount);
+        }).ToList();
 
         var dto = new CartDto(
             Id: cart.Id,
