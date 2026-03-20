@@ -63,9 +63,12 @@ public sealed class ResendEmailService : IEmailService
         };
 
         var json    = JsonSerializer.Serialize(payload, Json);
-        var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-        var response = await _http.PostAsync("https://api.resend.com/emails", content, ct);
+        var request = new HttpRequestMessage(HttpMethod.Post, "https://api.resend.com/emails");
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _settings.ApiKey);
+        request.Content = new StringContent(json, Encoding.UTF8, "application/json");
+
+        var response = await _http.SendAsync(request, ct);
 
         if (response.IsSuccessStatusCode)
         {

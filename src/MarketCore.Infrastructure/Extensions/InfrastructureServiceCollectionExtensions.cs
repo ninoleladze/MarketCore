@@ -124,11 +124,7 @@ public static class InfrastructureServiceCollectionExtensions
                 ClientBaseUrl = configuration["Resend:ClientBaseUrl"] ?? "https://market-core-86ad.vercel.app"
             };
             services.AddSingleton(resendSettings);
-            services.AddHttpClient<ResendEmailService>(client =>
-            {
-                client.DefaultRequestHeaders.Authorization =
-                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", resendApiKey);
-            });
+            services.AddHttpClient<ResendEmailService>();
             services.AddScoped<IEmailService, ResendEmailService>();
         }
         else
