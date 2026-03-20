@@ -32,9 +32,33 @@ public sealed class RegisterCommandHandler : IRequestHandler<RegisterCommand, Re
         RegisterCommand request,
         CancellationToken cancellationToken)
     {
-        var alreadyExists = await _uow.Users.ExistsAsync(request.Email, cancellationToken);
-        if (alreadyExists)
-            return Result.Failure($"An account with email '{request.Email}' already exists.");
+        var existingUser = await _uow.Users.GetByEmailAsync(request.Email, cancellationToken);
+
+        if (existingUser is not null)
+        {
+            // Already verified — reject
+            if (existingUser.IsEmailVerified)
+                return Result.Failure($"An account with email '{request.Email}' already exists.");
+
+            // Unverified — refresh token and resend code
+            var freshToken = Random.Shared.Next(100_000, 999_999).ToString();
+            existingUser.SetVerificationToken(freshToken);
+            await _uow.SaveChangesAsync(cancellationToken);
+
+            try
+            {
+                await _emailService.SendEmailVerificationAsync(
+                    existingUser.Email.Value, existingUser.FirstName, freshToken, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex,
+                    "[REGISTER] Failed to resend verification email to {Email}.",
+                    existingUser.Email.Value);
+            }
+
+            return Result.Success();
+        }
 
         Email emailVo;
         try
