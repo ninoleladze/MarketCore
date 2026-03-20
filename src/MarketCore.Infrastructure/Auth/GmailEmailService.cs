@@ -87,7 +87,7 @@ public sealed class GmailEmailService : IEmailService
         }
     }
 
-    private static string BuildVerificationHtml(string firstName, string verificationUrl) => $"""
+    private static string BuildVerificationHtml(string firstName, string verificationToken) => $"""
         <!DOCTYPE html>
         <html lang="en">
         <head>
