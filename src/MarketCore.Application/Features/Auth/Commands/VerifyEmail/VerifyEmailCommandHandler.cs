@@ -15,7 +15,7 @@ public sealed class VerifyEmailCommandHandler : IRequestHandler<VerifyEmailComma
         var user = await _uow.Users.GetByVerificationTokenAsync(request.Token, cancellationToken);
 
         if (user is null)
-            return Result.Failure("Invalid or expired verification link.");
+            return Result.Failure("Invalid or expired verification code.");
 
         var result = user.ConfirmEmail(request.Token);
         if (result.IsFailure)

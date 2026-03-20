@@ -1,6 +1,7 @@
 using MediatR;
 using MarketCore.Application.Interfaces;
 using MarketCore.Domain.Common;
+using Microsoft.Extensions.Logging;
 
 namespace MarketCore.Application.Features.Auth.Commands.ForgotPassword;
 
@@ -8,11 +9,16 @@ public sealed class ForgotPasswordCommandHandler : IRequestHandler<ForgotPasswor
 {
     private readonly IUnitOfWork _uow;
     private readonly IEmailService _emailService;
+    private readonly ILogger<ForgotPasswordCommandHandler> _logger;
 
-    public ForgotPasswordCommandHandler(IUnitOfWork uow, IEmailService emailService)
+    public ForgotPasswordCommandHandler(
+        IUnitOfWork uow,
+        IEmailService emailService,
+        ILogger<ForgotPasswordCommandHandler> logger)
     {
         _uow = uow;
         _emailService = emailService;
+        _logger = logger;
     }
 
     public async Task<Result> Handle(ForgotPasswordCommand request, CancellationToken cancellationToken)
@@ -29,8 +35,17 @@ public sealed class ForgotPasswordCommandHandler : IRequestHandler<ForgotPasswor
 
         var resetUrl = $"{request.ClientBaseUrl?.TrimEnd('/')}/auth/reset-password?token={token}";
 
-        _ = _emailService.SendPasswordResetAsync(
-            user.Email.Value, user.FirstName, resetUrl, CancellationToken.None);
+        try
+        {
+            await _emailService.SendPasswordResetAsync(
+                user.Email.Value, user.FirstName, resetUrl, cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex,
+                "[FORGOT-PASSWORD] Failed to send reset email to {Email}.",
+                user.Email.Value);
+        }
 
         return Result.Success();
     }
