@@ -45,7 +45,7 @@ public sealed class RegisterCommandHandler : IRequestHandler<RegisterCommand, Re
         var passwordHash = _passwordHasher.Hash(request.Password);
         var user = User.Create(emailVo, passwordHash, request.FirstName, request.LastName);
 
-        var verificationToken = Guid.NewGuid().ToString("N");
+        var verificationToken = Random.Shared.Next(100_000, 999_999).ToString();
         user.SetVerificationToken(verificationToken);
 
         await _uow.Users.AddAsync(user, cancellationToken);
@@ -63,8 +63,8 @@ public sealed class RegisterCommandHandler : IRequestHandler<RegisterCommand, Re
                 $"An account with email '{request.Email}' already exists.");
         }
 
-        _ = _emailService.SendEmailVerificationAsync(
-            user.Email.Value, user.FirstName, verificationToken, CancellationToken.None);
+        await _emailService.SendEmailVerificationAsync(
+            user.Email.Value, user.FirstName, verificationToken, cancellationToken);
 
         return Result.Success();
     }

@@ -25,9 +25,8 @@ public sealed class GmailEmailService : IEmailService
         string verificationToken,
         CancellationToken ct = default)
     {
-        var verificationUrl = $"{_smtp.ClientBaseUrl}/auth/verify-email?token={verificationToken}";
         var subject = "Verify your MarketCore email address";
-        var html    = BuildVerificationHtml(firstName, verificationUrl);
+        var html    = BuildVerificationHtml(firstName, verificationToken);
 
         await SendAsync(toEmail, subject, html, ct);
     }
@@ -81,10 +80,10 @@ public sealed class GmailEmailService : IEmailService
         }
         catch (Exception ex)
         {
-
             _logger.LogError(ex,
-                "[EMAIL] Failed to send '{Subject}' to {Recipient}",
-                subject, toEmail);
+                "[EMAIL] Failed to send '{Subject}' to {Recipient}: {ErrorMessage}",
+                subject, toEmail, ex.Message);
+            throw;
         }
     }
 
@@ -119,36 +118,21 @@ public sealed class GmailEmailService : IEmailService
                   <tr>
                     <td style="padding:40px;text-align:center;">
                       <h2 style="margin:0 0 12px;font-size:22px;color:#f5f5f5;font-weight:600;">
-                        Hi {firstName}, confirm your email
+                        Hi {firstName}, here is your code
                       </h2>
                       <p style="margin:0 0 32px;font-size:15px;line-height:1.7;color:#a0a0b0;">
-                        Click the button below to verify your email address and activate your MarketCore account.
-                        This link expires in 24 hours.
+                        Enter this 6-digit code on the verification page to activate your MarketCore account.
+                        The code expires in 24 hours.
                       </p>
 
-                      <!-- CTA button -->
-                      <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:28px;">
-                        <tr>
-                          <td align="center">
-                            <a href="{verificationUrl}"
-                               style="display:inline-block;padding:16px 44px;
-                                      background:linear-gradient(135deg,#b00032,#e00047);
-                                      color:#fff;font-size:16px;font-weight:700;text-decoration:none;
-                                      border-radius:999px;letter-spacing:0.02em;
-                                      box-shadow:0 4px 20px rgba(224,0,71,0.35);">
-                              Verify Email Address
-                            </a>
-                          </td>
-                        </tr>
-                      </table>
-
-                      <!-- Fallback link -->
-                      <p style="margin:0 0 6px;font-size:12px;color:#555560;">
-                        Button not working? Copy and paste this URL into your browser:
-                      </p>
-                      <p style="margin:0 0 24px;font-size:11px;color:#e00047;word-break:break-all;">
-                        {verificationUrl}
-                      </p>
+                      <!-- Big code display -->
+                      <div style="display:inline-block;background:#0d0d0f;border:2px solid #e00047;
+                                  border-radius:16px;padding:24px 48px;margin-bottom:32px;">
+                        <span style="font-size:42px;font-weight:800;letter-spacing:12px;color:#e00047;
+                                     font-family:'Courier New',monospace;">
+                          {verificationToken}
+                        </span>
+                      </div>
 
                       <p style="margin:0;font-size:13px;color:#555560;">
                         If you didn't create a MarketCore account, you can safely ignore this email.

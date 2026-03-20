@@ -49,8 +49,7 @@ export class RegisterComponent {
     this.auth.register(this.form.value as any).subscribe({
       next: () => {
         this.loading = false;
-        this.toast.success('Registration successful! Check your email for a verification link.');
-        this.router.navigate(['/auth/login']);
+        this.router.navigate(['/auth/verify-email'], { queryParams: { email } });
       },
       error: (err) => {
         const msg = err.error?.error ?? err.error?.message ?? err.error?.title ?? 'Registration failed. Please try again.';
