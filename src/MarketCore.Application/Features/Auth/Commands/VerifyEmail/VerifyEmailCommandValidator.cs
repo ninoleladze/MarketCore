@@ -7,7 +7,7 @@ public sealed class VerifyEmailCommandValidator : AbstractValidator<VerifyEmailC
     public VerifyEmailCommandValidator()
     {
         RuleFor(x => x.Token)
-            .NotEmpty().WithMessage("Verification token is required.")
-            .Length(32).WithMessage("Invalid verification token format.");
+            .NotEmpty().WithMessage("Verification code is required.")
+            .Matches(@"^\d{6}$").WithMessage("Enter the 6-digit code from your email.");
     }
 }
