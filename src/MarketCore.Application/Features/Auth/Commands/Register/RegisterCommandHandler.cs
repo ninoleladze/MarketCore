@@ -84,7 +84,7 @@ public sealed class RegisterCommandHandler : IRequestHandler<RegisterCommand, Re
     // Sends with a 10-second cap so SMTP timeouts never block the registration response.
     private async Task TrySendAsync(string email, string firstName, string token)
     {
-        using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
+        using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(30));
         try
         {
             await _emailService.SendEmailVerificationAsync(email, firstName, token, cts.Token);

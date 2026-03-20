@@ -35,7 +35,7 @@ public sealed class ForgotPasswordCommandHandler : IRequestHandler<ForgotPasswor
 
         var resetUrl = $"{request.ClientBaseUrl?.TrimEnd('/')}/auth/reset-password?token={token}";
 
-        using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
+        using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(30));
         try
         {
             await _emailService.SendPasswordResetAsync(
