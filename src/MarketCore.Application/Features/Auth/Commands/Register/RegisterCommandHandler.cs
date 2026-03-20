@@ -45,7 +45,7 @@ public sealed class RegisterCommandHandler : IRequestHandler<RegisterCommand, Re
         var passwordHash = _passwordHasher.Hash(request.Password);
         var user = User.Create(emailVo, passwordHash, request.FirstName, request.LastName);
 
-        var verificationToken = Random.Shared.Next(100_000, 999_999).ToString();
+        var verificationToken = Guid.NewGuid().ToString("N");
         user.SetVerificationToken(verificationToken);
 
         await _uow.Users.AddAsync(user, cancellationToken);

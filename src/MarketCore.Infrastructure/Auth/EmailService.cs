@@ -16,13 +16,13 @@ public sealed class EmailService : IEmailService
     public Task SendEmailVerificationAsync(
         string toEmail,
         string firstName,
-        string verificationUrl,
+        string verificationToken,
         CancellationToken ct = default)
     {
         _logger.LogWarning(
-            "[EMAIL STUB] Verification email would be sent to {Email}. URL: {Url}. " +
+            "[EMAIL STUB] Verification email would be sent to {Email}. Token: {Token}. " +
             "Configure Email:Smtp settings to send real emails.",
-            toEmail, verificationUrl);
+            toEmail, verificationToken);
 
         return Task.CompletedTask;
     }
