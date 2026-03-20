@@ -38,7 +38,7 @@ public sealed class GmailEmailService : IEmailService
         CancellationToken ct = default)
     {
         var subject = $"Order confirmed — #{orderId.ToString()[..8].ToUpper()}";
-        var html    = BuildOrderConfirmationHtml(orderId, total);
+        var html    = BuildOrderConfirmationHtml(orderId, total, _smtp.ClientBaseUrl);
 
         await SendAsync(toEmail, subject, html, ct);
     }
@@ -241,7 +241,7 @@ public sealed class GmailEmailService : IEmailService
         </html>
         """;
 
-    private static string BuildOrderConfirmationHtml(Guid orderId, Money total) => $"""
+    private static string BuildOrderConfirmationHtml(Guid orderId, Money total, string clientBaseUrl) => $"""
         <!DOCTYPE html>
         <html lang="en">
         <head><meta charset="UTF-8"/><title>Order Confirmed</title></head>
@@ -286,7 +286,7 @@ public sealed class GmailEmailService : IEmailService
                       <table width="100%" cellpadding="0" cellspacing="0">
                         <tr>
                           <td align="center">
-                            <a href="{_smtp.ClientBaseUrl}/orders/{orderId}"
+                            <a href="{clientBaseUrl}/orders/{orderId}"
                                style="display:inline-block;padding:14px 36px;
                                       background:linear-gradient(135deg,#b00032,#e00047);
                                       color:#fff;font-size:15px;font-weight:600;text-decoration:none;
