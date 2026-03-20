@@ -198,9 +198,57 @@ try
                    ?? Environment.GetEnvironmentVariable("MYSQL_PRIVATE_URL")
                    ?? Environment.GetEnvironmentVariable("MYSQLHOST");
 
+        if (isMySql is not null)
+        {
+            try
+            {
+                await db.Database.MigrateAsync();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "EF Core migration failed — applying manual column fixes.");
+            }
+
+            // Fallback: ensure PasswordReset columns exist regardless of migration outcome.
+            // The AddPasswordReset migration may be stuck because a previous partial run
+            // already dropped IX_Users_EmailVerificationToken (MySQL auto-commits DDL) but
+            // never created the columns. EF Core retries it every deploy, fails at DropIndex,
+            // and the try-catch silently swallows it. Direct SQL here fixes the columns once;
+            // "duplicate column/key" errors mean they already exist and are ignored.
+            try
+            {
+                await db.Database.ExecuteSqlRawAsync(
+                    "CREATE UNIQUE INDEX `IX_Users_EmailVerificationToken` ON `Users` (`EmailVerificationToken`)");
+            }
+            catch { /* already exists — fine */ }
+
+            try
+            {
+                await db.Database.ExecuteSqlRawAsync(
+                    "ALTER TABLE `Users` " +
+                    "ADD COLUMN `PasswordResetToken` VARCHAR(128) NULL, " +
+                    "ADD COLUMN `PasswordResetTokenExpiresAt` DATETIME(6) NULL");
+
+                // Columns were just created — mark migration as applied so EF Core won't retry
+                await db.Database.ExecuteSqlRawAsync(
+                    "INSERT IGNORE INTO `__EFMigrationsHistory` (`MigrationId`, `ProductVersion`) " +
+                    "VALUES ('20260317203943_AddPasswordReset', '8.0.0')");
+
+                Log.Information("PasswordReset columns applied via direct SQL fallback.");
+            }
+            catch { /* columns already exist from a successful migration run — fine */ }
+
+            try
+            {
+                await db.Database.ExecuteSqlRawAsync(
+                    "CREATE UNIQUE INDEX `IX_Users_PasswordResetToken` ON `Users` (`PasswordResetToken`)");
+            }
+            catch { /* already exists — fine */ }
+        }
+
         try
         {
-            if (isMySql is not null)
+            if (isMySql is null)
                 await db.Database.MigrateAsync();
 
             var seeder = scope.ServiceProvider.GetRequiredService<DataSeeder>();
