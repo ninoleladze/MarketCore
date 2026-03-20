@@ -85,47 +85,79 @@ public sealed class BrevoEmailService : IEmailService
     private static string BuildVerificationHtml(string firstName, string verificationToken) => $"""
         <!DOCTYPE html>
         <html lang="en">
-        <head><meta charset="UTF-8"/><title>Verify your email — MarketCore</title></head>
-        <body style="margin:0;padding:0;background:#0d0d0f;font-family:'Helvetica Neue',Arial,sans-serif;">
-          <table width="100%" cellpadding="0" cellspacing="0" style="background:#0d0d0f;padding:40px 0;">
-            <tr><td align="center">
-              <table width="600" cellpadding="0" cellspacing="0"
-                     style="background:#161618;border-radius:16px;overflow:hidden;border:1px solid #2a2a2e;">
-                <tr>
-                  <td style="background:linear-gradient(135deg,#b00032,#e00047);padding:40px;text-align:center;">
-                    <h1 style="margin:0;font-size:28px;font-weight:700;color:#fff;">MarketCore</h1>
-                    <p style="margin:8px 0 0;font-size:13px;color:rgba(255,255,255,0.75);text-transform:uppercase;letter-spacing:0.1em;">
-                      Confirm your email address
-                    </p>
-                  </td>
-                </tr>
-                <tr>
-                  <td style="padding:40px;text-align:center;">
-                    <h2 style="margin:0 0 12px;font-size:22px;color:#f5f5f5;font-weight:600;">
-                      Hi {firstName}, here is your code
-                    </h2>
-                    <p style="margin:0 0 32px;font-size:15px;line-height:1.7;color:#a0a0b0;">
-                      Enter this 6-digit code to activate your MarketCore account. Expires in 24 hours.
-                    </p>
-                    <div style="display:inline-block;background:#0d0d0f;border:2px solid #e00047;
-                                border-radius:16px;padding:24px 48px;margin-bottom:32px;">
-                      <span style="font-size:42px;font-weight:800;letter-spacing:12px;color:#e00047;
-                                   font-family:'Courier New',monospace;">
-                        {verificationToken}
-                      </span>
-                    </div>
-                    <p style="margin:0;font-size:13px;color:#555560;">
-                      If you didn't create a MarketCore account, ignore this email.
-                    </p>
-                  </td>
-                </tr>
-                <tr>
-                  <td style="background:#111113;padding:20px 40px;border-top:1px solid #2a2a2e;text-align:center;">
-                    <p style="margin:0;font-size:12px;color:#555560;">© {DateTime.UtcNow.Year} MarketCore. All rights reserved.</p>
-                  </td>
-                </tr>
-              </table>
-            </td></tr>
+        <head>
+          <meta charset="UTF-8"/>
+          <meta name="viewport" content="width=device-width,initial-scale=1"/>
+          <title>Verify your email — MarketCore</title>
+        </head>
+        <body style="margin:0;padding:0;background:#050c1a;font-family:'Helvetica Neue',Arial,sans-serif;-webkit-font-smoothing:antialiased;">
+          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#050c1a;padding:48px 0;">
+            <tr>
+              <td align="center" style="padding:0 16px;">
+                <table cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px;background:#0d1f3c;border-radius:20px;overflow:hidden;border:1px solid #1c3868;">
+
+                  <!-- Header -->
+                  <tr>
+                    <td style="background:linear-gradient(135deg,#7c3b00 0%,#c45c00 55%,#e87722 100%);padding:36px 48px;text-align:center;">
+                      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                        <tr>
+                          <td align="center" style="padding-bottom:14px;">
+                            <table cellpadding="0" cellspacing="0" border="0">
+                              <tr>
+                                <td style="width:50px;height:50px;background:rgba(0,0,0,0.22);border-radius:12px;border:1px solid rgba(255,255,255,0.22);text-align:center;vertical-align:middle;">
+                                  <span style="font-size:22px;font-weight:800;color:#fff;font-family:Georgia,serif;line-height:50px;display:block;">M</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td align="center">
+                            <h1 style="margin:0 0 4px;font-size:26px;font-weight:700;color:#fff;letter-spacing:-0.4px;font-family:Georgia,'Times New Roman',serif;">MarketCore</h1>
+                            <p style="margin:0;font-size:11px;color:rgba(255,255,255,0.65);text-transform:uppercase;letter-spacing:0.2em;font-weight:500;">Premium Marketplace</p>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+
+                  <!-- Divider -->
+                  <tr>
+                    <td style="height:1px;font-size:0;line-height:0;background:linear-gradient(90deg,#071428 0%,#e87722 30%,#ff9a3c 50%,#e87722 70%,#071428 100%);">&nbsp;</td>
+                  </tr>
+
+                  <!-- Body -->
+                  <tr>
+                    <td style="padding:44px 48px 40px;text-align:center;">
+                      <p style="margin:0 0 14px;font-size:11px;font-weight:600;color:#ff9a3c;text-transform:uppercase;letter-spacing:0.2em;">— Email Verification —</p>
+                      <h2 style="margin:0 0 14px;font-size:24px;color:#f0f4ff;font-weight:700;font-family:Georgia,'Times New Roman',serif;letter-spacing:-0.3px;">Hi {firstName}, here's your code</h2>
+                      <p style="margin:0 0 36px;font-size:15px;line-height:1.75;color:#7a94b8;">Enter this 6-digit code to verify your MarketCore account.<br/>Valid for <span style="color:#c4d0e8;font-weight:600;">24 hours</span>.</p>
+
+                      <!-- Code box -->
+                      <table cellpadding="0" cellspacing="0" border="0" style="margin:0 auto 36px;">
+                        <tr>
+                          <td style="background:#071428;border:1px solid #1c3868;border-top:2px solid #e87722;border-radius:14px;padding:28px 52px;text-align:center;">
+                            <p style="margin:0 0 12px;font-size:10px;color:#3a5478;text-transform:uppercase;letter-spacing:0.2em;font-weight:600;">Verification Code</p>
+                            <p style="margin:0;font-size:46px;font-weight:800;letter-spacing:14px;color:#ff9a3c;font-family:'Courier New',Courier,monospace;line-height:1;padding-right:0;">{verificationToken}</p>
+                          </td>
+                        </tr>
+                      </table>
+
+                      <p style="margin:0;font-size:13px;color:#3a5478;line-height:1.6;">Didn't create a MarketCore account?<br/>You can safely ignore this email.</p>
+                    </td>
+                  </tr>
+
+                  <!-- Footer -->
+                  <tr>
+                    <td style="background:#071428;padding:22px 48px;border-top:1px solid #1c3868;text-align:center;">
+                      <p style="margin:0 0 4px;font-size:12px;color:#5a7498;">© {DateTime.UtcNow.Year} MarketCore. All rights reserved.</p>
+                      <p style="margin:0;font-size:11px;color:#3a5478;">This is an automated message — please do not reply.</p>
+                    </td>
+                  </tr>
+
+                </table>
+              </td>
+            </tr>
           </table>
         </body>
         </html>
@@ -134,43 +166,88 @@ public sealed class BrevoEmailService : IEmailService
     private static string BuildPasswordResetHtml(string firstName, string resetUrl) => $"""
         <!DOCTYPE html>
         <html lang="en">
-        <head><meta charset="UTF-8"/><title>Reset your password — MarketCore</title></head>
-        <body style="margin:0;padding:0;background:#0d0d0f;font-family:'Helvetica Neue',Arial,sans-serif;">
-          <table width="100%" cellpadding="0" cellspacing="0" style="background:#0d0d0f;padding:40px 0;">
-            <tr><td align="center">
-              <table width="600" cellpadding="0" cellspacing="0"
-                     style="background:#161618;border-radius:16px;overflow:hidden;border:1px solid #2a2a2e;">
-                <tr>
-                  <td style="background:linear-gradient(135deg,#b00032,#e00047);padding:40px;text-align:center;">
-                    <h1 style="margin:0;font-size:28px;font-weight:700;color:#fff;">MarketCore</h1>
-                    <p style="margin:8px 0 0;font-size:13px;color:rgba(255,255,255,0.75);text-transform:uppercase;">Password reset</p>
-                  </td>
-                </tr>
-                <tr>
-                  <td style="padding:40px;">
-                    <h2 style="margin:0 0 12px;font-size:22px;color:#f5f5f5;font-weight:600;">Hi {firstName}, reset your password</h2>
-                    <p style="margin:0 0 28px;font-size:15px;line-height:1.7;color:#a0a0b0;">
-                      Click the button below to choose a new password. Expires in 1 hour.
-                    </p>
-                    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px;">
-                      <tr><td align="center">
-                        <a href="{resetUrl}" style="display:inline-block;padding:16px 44px;
-                           background:linear-gradient(135deg,#b00032,#e00047);color:#fff;
-                           font-size:16px;font-weight:700;text-decoration:none;border-radius:999px;">
-                          Reset Password
-                        </a>
-                      </td></tr>
-                    </table>
-                    <p style="margin:0;font-size:11px;color:#e00047;text-align:center;word-break:break-all;">{resetUrl}</p>
-                  </td>
-                </tr>
-                <tr>
-                  <td style="background:#111113;padding:20px 40px;border-top:1px solid #2a2a2e;text-align:center;">
-                    <p style="margin:0;font-size:12px;color:#555560;">© {DateTime.UtcNow.Year} MarketCore. All rights reserved.</p>
-                  </td>
-                </tr>
-              </table>
-            </td></tr>
+        <head>
+          <meta charset="UTF-8"/>
+          <meta name="viewport" content="width=device-width,initial-scale=1"/>
+          <title>Reset your password — MarketCore</title>
+        </head>
+        <body style="margin:0;padding:0;background:#050c1a;font-family:'Helvetica Neue',Arial,sans-serif;-webkit-font-smoothing:antialiased;">
+          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#050c1a;padding:48px 0;">
+            <tr>
+              <td align="center" style="padding:0 16px;">
+                <table cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px;background:#0d1f3c;border-radius:20px;overflow:hidden;border:1px solid #1c3868;">
+
+                  <!-- Header -->
+                  <tr>
+                    <td style="background:linear-gradient(135deg,#7c3b00 0%,#c45c00 55%,#e87722 100%);padding:36px 48px;text-align:center;">
+                      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                        <tr>
+                          <td align="center" style="padding-bottom:14px;">
+                            <table cellpadding="0" cellspacing="0" border="0">
+                              <tr>
+                                <td style="width:50px;height:50px;background:rgba(0,0,0,0.22);border-radius:12px;border:1px solid rgba(255,255,255,0.22);text-align:center;vertical-align:middle;">
+                                  <span style="font-size:22px;font-weight:800;color:#fff;font-family:Georgia,serif;line-height:50px;display:block;">M</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td align="center">
+                            <h1 style="margin:0 0 4px;font-size:26px;font-weight:700;color:#fff;letter-spacing:-0.4px;font-family:Georgia,'Times New Roman',serif;">MarketCore</h1>
+                            <p style="margin:0;font-size:11px;color:rgba(255,255,255,0.65);text-transform:uppercase;letter-spacing:0.2em;font-weight:500;">Premium Marketplace</p>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+
+                  <!-- Divider -->
+                  <tr>
+                    <td style="height:1px;font-size:0;line-height:0;background:linear-gradient(90deg,#071428 0%,#e87722 30%,#ff9a3c 50%,#e87722 70%,#071428 100%);">&nbsp;</td>
+                  </tr>
+
+                  <!-- Body -->
+                  <tr>
+                    <td style="padding:44px 48px 40px;text-align:center;">
+                      <p style="margin:0 0 14px;font-size:11px;font-weight:600;color:#ff9a3c;text-transform:uppercase;letter-spacing:0.2em;">— Password Reset —</p>
+                      <h2 style="margin:0 0 14px;font-size:24px;color:#f0f4ff;font-weight:700;font-family:Georgia,'Times New Roman',serif;letter-spacing:-0.3px;">Hi {firstName}, let's reset your password</h2>
+                      <p style="margin:0 0 36px;font-size:15px;line-height:1.75;color:#7a94b8;">Click the button below to choose a new password.<br/>This link expires in <span style="color:#c4d0e8;font-weight:600;">1 hour</span>.</p>
+
+                      <!-- CTA Button -->
+                      <table cellpadding="0" cellspacing="0" border="0" style="margin:0 auto 28px;">
+                        <tr>
+                          <td style="background:linear-gradient(135deg,#c45c00,#e87722);border-radius:999px;padding:1px;">
+                            <a href="{resetUrl}" style="display:inline-block;padding:15px 44px;background:linear-gradient(135deg,#c45c00,#e87722);color:#fff;font-size:15px;font-weight:700;text-decoration:none;border-radius:999px;letter-spacing:0.02em;">Reset Password</a>
+                          </td>
+                        </tr>
+                      </table>
+
+                      <!-- Fallback URL -->
+                      <table cellpadding="0" cellspacing="0" border="0" style="margin:0 auto 32px;width:100%;max-width:460px;">
+                        <tr>
+                          <td style="background:#071428;border:1px solid #1c3868;border-radius:8px;padding:12px 16px;text-align:center;">
+                            <p style="margin:0 0 4px;font-size:10px;color:#3a5478;text-transform:uppercase;letter-spacing:0.15em;">Or copy this link</p>
+                            <p style="margin:0;font-size:11px;color:#7a94b8;word-break:break-all;line-height:1.5;">{resetUrl}</p>
+                          </td>
+                        </tr>
+                      </table>
+
+                      <p style="margin:0;font-size:13px;color:#3a5478;line-height:1.6;">Didn't request a password reset?<br/>Your account is safe — you can ignore this email.</p>
+                    </td>
+                  </tr>
+
+                  <!-- Footer -->
+                  <tr>
+                    <td style="background:#071428;padding:22px 48px;border-top:1px solid #1c3868;text-align:center;">
+                      <p style="margin:0 0 4px;font-size:12px;color:#5a7498;">© {DateTime.UtcNow.Year} MarketCore. All rights reserved.</p>
+                      <p style="margin:0;font-size:11px;color:#3a5478;">This is an automated message — please do not reply.</p>
+                    </td>
+                  </tr>
+
+                </table>
+              </td>
+            </tr>
           </table>
         </body>
         </html>
@@ -179,56 +256,112 @@ public sealed class BrevoEmailService : IEmailService
     private string BuildOrderConfirmationHtml(Guid orderId, Money total) => $"""
         <!DOCTYPE html>
         <html lang="en">
-        <head><meta charset="UTF-8"/><title>Order Confirmed — MarketCore</title></head>
-        <body style="margin:0;padding:0;background:#0d0d0f;font-family:'Helvetica Neue',Arial,sans-serif;">
-          <table width="100%" cellpadding="0" cellspacing="0" style="background:#0d0d0f;padding:40px 0;">
-            <tr><td align="center">
-              <table width="600" cellpadding="0" cellspacing="0"
-                     style="background:#161618;border-radius:16px;overflow:hidden;border:1px solid #2a2a2e;">
-                <tr>
-                  <td style="background:linear-gradient(135deg,#b00032,#e00047);padding:40px;text-align:center;">
-                    <h1 style="margin:0 0 4px;font-size:26px;color:#fff;font-weight:700;">Order Confirmed</h1>
-                    <p style="margin:0;font-size:13px;color:rgba(255,255,255,0.7);">#{orderId.ToString()[..8].ToUpper()}</p>
-                  </td>
-                </tr>
-                <tr>
-                  <td style="padding:40px;">
-                    <p style="margin:0 0 24px;font-size:15px;line-height:1.7;color:#a0a0b0;">
-                      Thank you for your purchase! Your order is being processed.
-                    </p>
-                    <table width="100%" cellpadding="0" cellspacing="0"
-                           style="background:#1e1e22;border-radius:10px;padding:20px;margin-bottom:28px;">
-                      <tr>
-                        <td style="font-size:13px;color:#808090;padding:6px 0;">Order ID</td>
-                        <td align="right" style="font-size:13px;color:#f0f0f5;">{orderId.ToString()[..8].ToUpper()}</td>
-                      </tr>
-                      <tr><td colspan="2" style="border-top:1px solid #2a2a2e;padding:0;"></td></tr>
-                      <tr>
-                        <td style="font-size:14px;font-weight:700;color:#f0f0f5;padding:10px 0 6px;">Total</td>
-                        <td align="right" style="font-size:16px;font-weight:700;color:#e00047;padding:10px 0 6px;">
-                          {total.Amount:F2} {total.Currency}
-                        </td>
-                      </tr>
-                    </table>
-                    <table width="100%" cellpadding="0" cellspacing="0">
-                      <tr><td align="center">
-                        <a href="{_clientBaseUrl}/orders/{orderId}"
-                           style="display:inline-block;padding:14px 36px;
-                                  background:linear-gradient(135deg,#b00032,#e00047);
-                                  color:#fff;font-size:15px;font-weight:600;text-decoration:none;border-radius:999px;">
-                          View Order
-                        </a>
-                      </td></tr>
-                    </table>
-                  </td>
-                </tr>
-                <tr>
-                  <td style="background:#111113;padding:24px 40px;border-top:1px solid #2a2a2e;text-align:center;">
-                    <p style="margin:0;font-size:12px;color:#555560;">© {DateTime.UtcNow.Year} MarketCore. All rights reserved.</p>
-                  </td>
-                </tr>
-              </table>
-            </td></tr>
+        <head>
+          <meta charset="UTF-8"/>
+          <meta name="viewport" content="width=device-width,initial-scale=1"/>
+          <title>Order Confirmed — MarketCore</title>
+        </head>
+        <body style="margin:0;padding:0;background:#050c1a;font-family:'Helvetica Neue',Arial,sans-serif;-webkit-font-smoothing:antialiased;">
+          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#050c1a;padding:48px 0;">
+            <tr>
+              <td align="center" style="padding:0 16px;">
+                <table cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px;background:#0d1f3c;border-radius:20px;overflow:hidden;border:1px solid #1c3868;">
+
+                  <!-- Header -->
+                  <tr>
+                    <td style="background:linear-gradient(135deg,#7c3b00 0%,#c45c00 55%,#e87722 100%);padding:36px 48px;text-align:center;">
+                      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                        <tr>
+                          <td align="center" style="padding-bottom:14px;">
+                            <table cellpadding="0" cellspacing="0" border="0">
+                              <tr>
+                                <td style="width:50px;height:50px;background:rgba(0,0,0,0.22);border-radius:12px;border:1px solid rgba(255,255,255,0.22);text-align:center;vertical-align:middle;">
+                                  <span style="font-size:22px;font-weight:800;color:#fff;font-family:Georgia,serif;line-height:50px;display:block;">M</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td align="center">
+                            <h1 style="margin:0 0 4px;font-size:26px;font-weight:700;color:#fff;letter-spacing:-0.4px;font-family:Georgia,'Times New Roman',serif;">MarketCore</h1>
+                            <p style="margin:0;font-size:11px;color:rgba(255,255,255,0.65);text-transform:uppercase;letter-spacing:0.2em;font-weight:500;">Premium Marketplace</p>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+
+                  <!-- Divider -->
+                  <tr>
+                    <td style="height:1px;font-size:0;line-height:0;background:linear-gradient(90deg,#071428 0%,#e87722 30%,#ff9a3c 50%,#e87722 70%,#071428 100%);">&nbsp;</td>
+                  </tr>
+
+                  <!-- Body -->
+                  <tr>
+                    <td style="padding:44px 48px 40px;text-align:center;">
+                      <p style="margin:0 0 14px;font-size:11px;font-weight:600;color:#ff9a3c;text-transform:uppercase;letter-spacing:0.2em;">— Order Confirmed —</p>
+                      <h2 style="margin:0 0 14px;font-size:24px;color:#f0f4ff;font-weight:700;font-family:Georgia,'Times New Roman',serif;letter-spacing:-0.3px;">Thank you for your purchase!</h2>
+                      <p style="margin:0 0 32px;font-size:15px;line-height:1.75;color:#7a94b8;">Your order has been received and is now being processed.<br/>We'll keep you updated on every step.</p>
+
+                      <!-- Order details card -->
+                      <table cellpadding="0" cellspacing="0" border="0" style="width:100%;margin-bottom:32px;background:#071428;border-radius:12px;border:1px solid #1c3868;overflow:hidden;">
+                        <tr>
+                          <td style="padding:16px 24px;border-bottom:1px solid #1c3868;">
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                              <tr>
+                                <td style="font-size:12px;color:#5a7498;text-transform:uppercase;letter-spacing:0.1em;font-weight:600;">Order ID</td>
+                                <td align="right" style="font-size:13px;color:#c4d0e8;font-weight:600;font-family:'Courier New',monospace;">#{orderId.ToString()[..8].ToUpper()}</td>
+                              </tr>
+                            </table>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="padding:16px 24px;border-bottom:1px solid #1c3868;">
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                              <tr>
+                                <td style="font-size:12px;color:#5a7498;text-transform:uppercase;letter-spacing:0.1em;font-weight:600;">Status</td>
+                                <td align="right">
+                                  <span style="display:inline-block;padding:3px 12px;background:rgba(232,119,34,0.15);border:1px solid rgba(232,119,34,0.3);border-radius:999px;font-size:12px;font-weight:700;color:#ff9a3c;text-transform:uppercase;letter-spacing:0.08em;">Processing</span>
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="padding:20px 24px;">
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                              <tr>
+                                <td style="font-size:14px;color:#c4d0e8;font-weight:600;">Order Total</td>
+                                <td align="right" style="font-size:22px;font-weight:800;color:#ff9a3c;letter-spacing:-0.3px;">{total.Amount:F2} <span style="font-size:14px;font-weight:600;color:#7a94b8;">{total.Currency}</span></td>
+                              </tr>
+                            </table>
+                          </td>
+                        </tr>
+                      </table>
+
+                      <!-- CTA -->
+                      <table cellpadding="0" cellspacing="0" border="0" style="margin:0 auto;">
+                        <tr>
+                          <td style="background:linear-gradient(135deg,#c45c00,#e87722);border-radius:999px;">
+                            <a href="{_clientBaseUrl}/orders/{orderId}" style="display:inline-block;padding:15px 44px;background:linear-gradient(135deg,#c45c00,#e87722);color:#fff;font-size:15px;font-weight:700;text-decoration:none;border-radius:999px;letter-spacing:0.02em;">View My Order</a>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+
+                  <!-- Footer -->
+                  <tr>
+                    <td style="background:#071428;padding:22px 48px;border-top:1px solid #1c3868;text-align:center;">
+                      <p style="margin:0 0 4px;font-size:12px;color:#5a7498;">© {DateTime.UtcNow.Year} MarketCore. All rights reserved.</p>
+                      <p style="margin:0;font-size:11px;color:#3a5478;">This is an automated message — please do not reply.</p>
+                    </td>
+                  </tr>
+
+                </table>
+              </td>
+            </tr>
           </table>
         </body>
         </html>
