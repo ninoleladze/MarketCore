@@ -11,20 +11,27 @@ namespace MarketCore.Infrastructure.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            // Idempotent MySQL SQL — safe to re-run if a previous attempt partially succeeded.
-            // ADD COLUMN IF NOT EXISTS: MySQL 8.0+
-            // CREATE UNIQUE INDEX IF NOT EXISTS: MySQL 8.0.29+
-            // The original DropIndex+CreateIndex for EmailVerificationToken is replaced by
-            // CREATE INDEX IF NOT EXISTS (no-op when it already exists, recreates when dropped).
-
-            migrationBuilder.Sql(
-                "ALTER TABLE `Users` " +
-                "ADD COLUMN IF NOT EXISTS `PasswordResetToken` VARCHAR(128) NULL, " +
-                "ADD COLUMN IF NOT EXISTS `PasswordResetTokenExpiresAt` DATETIME(6) NULL;");
+            // A previous failed deploy dropped IX_Users_EmailVerificationToken via DropIndex
+            // (MySQL auto-commits DDL) but never added the columns before crashing.
+            // The migration was therefore NOT recorded in __EFMigrationsHistory, so EF Core
+            // retries it every deploy — but DropIndex now fails because the index is gone.
+            //
+            // Fix:
+            //   1. Skip DropIndex entirely — use CREATE INDEX IF NOT EXISTS instead.
+            //      MySQL 8.0.29+ supports IF NOT EXISTS on CREATE INDEX: no-op if it exists,
+            //      recreates it if it was dropped by the earlier partial run.
+            //   2. Plain ADD COLUMN (no IF NOT EXISTS — MySQL 8.0 doesn't support that).
+            //      Safe because EF Core only runs this when it is NOT in __EFMigrationsHistory,
+            //      which guarantees these columns have never been added.
 
             migrationBuilder.Sql(
                 "CREATE UNIQUE INDEX IF NOT EXISTS `IX_Users_EmailVerificationToken` " +
                 "ON `Users` (`EmailVerificationToken`);");
+
+            migrationBuilder.Sql(
+                "ALTER TABLE `Users` " +
+                "ADD COLUMN `PasswordResetToken` VARCHAR(128) NULL, " +
+                "ADD COLUMN `PasswordResetTokenExpiresAt` DATETIME(6) NULL;");
 
             migrationBuilder.Sql(
                 "CREATE UNIQUE INDEX IF NOT EXISTS `IX_Users_PasswordResetToken` " +
@@ -34,10 +41,10 @@ namespace MarketCore.Infrastructure.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.Sql(
-                "ALTER TABLE `Users` " +
-                "DROP COLUMN IF EXISTS `PasswordResetToken`, " +
-                "DROP COLUMN IF EXISTS `PasswordResetTokenExpiresAt`;");
+            migrationBuilder.DropIndex(name: "IX_Users_PasswordResetToken", table: "Users");
+
+            migrationBuilder.DropColumn(name: "PasswordResetToken", table: "Users");
+            migrationBuilder.DropColumn(name: "PasswordResetTokenExpiresAt", table: "Users");
         }
     }
 }

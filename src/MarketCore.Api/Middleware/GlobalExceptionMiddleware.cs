@@ -65,9 +65,7 @@ public sealed class GlobalExceptionMiddleware
             await WriteProblemAsync(context, ex,
                 statusCode: (int)HttpStatusCode.InternalServerError,
                 title: "An unexpected error occurred",
-                detail: _environment.IsDevelopment()
-                    ? ex.Message
-                    : "An internal server error has occurred. Please try again later.");
+                detail: ex.Message + (ex.InnerException != null ? " | Inner: " + ex.InnerException.Message : ""));
         }
     }
 
