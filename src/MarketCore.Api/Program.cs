@@ -210,40 +210,49 @@ try
             }
 
             // Fallback: ensure PasswordReset columns exist regardless of migration outcome.
-            // The AddPasswordReset migration may be stuck because a previous partial run
-            // already dropped IX_Users_EmailVerificationToken (MySQL auto-commits DDL) but
-            // never created the columns. EF Core retries it every deploy, fails at DropIndex,
-            // and the try-catch silently swallows it. Direct SQL here fixes the columns once;
-            // "duplicate column/key" errors mean they already exist and are ignored.
+            // Each operation is isolated in its own try/catch so one failure cannot block
+            // the rest. "Duplicate column/key" errors simply mean the object already exists.
+
             try
             {
                 await db.Database.ExecuteSqlRawAsync(
                     "CREATE UNIQUE INDEX `IX_Users_EmailVerificationToken` ON `Users` (`EmailVerificationToken`)");
+                Log.Information("[Fallback] Recreated IX_Users_EmailVerificationToken index.");
             }
-            catch { /* already exists — fine */ }
+            catch (Exception ex) { Log.Debug(ex, "[Fallback] EmailVerificationToken index already exists or skipped."); }
 
             try
             {
                 await db.Database.ExecuteSqlRawAsync(
-                    "ALTER TABLE `Users` " +
-                    "ADD COLUMN `PasswordResetToken` VARCHAR(128) NULL, " +
-                    "ADD COLUMN `PasswordResetTokenExpiresAt` DATETIME(6) NULL");
-
-                // Columns were just created — mark migration as applied so EF Core won't retry
-                await db.Database.ExecuteSqlRawAsync(
-                    "INSERT IGNORE INTO `__EFMigrationsHistory` (`MigrationId`, `ProductVersion`) " +
-                    "VALUES ('20260317203943_AddPasswordReset', '8.0.0')");
-
-                Log.Information("PasswordReset columns applied via direct SQL fallback.");
+                    "ALTER TABLE `Users` ADD COLUMN `PasswordResetToken` VARCHAR(128) NULL");
+                Log.Information("[Fallback] Added PasswordResetToken column.");
             }
-            catch { /* columns already exist from a successful migration run — fine */ }
+            catch (Exception ex) { Log.Debug(ex, "[Fallback] PasswordResetToken column already exists or skipped."); }
+
+            try
+            {
+                await db.Database.ExecuteSqlRawAsync(
+                    "ALTER TABLE `Users` ADD COLUMN `PasswordResetTokenExpiresAt` DATETIME(6) NULL");
+                Log.Information("[Fallback] Added PasswordResetTokenExpiresAt column.");
+            }
+            catch (Exception ex) { Log.Debug(ex, "[Fallback] PasswordResetTokenExpiresAt column already exists or skipped."); }
 
             try
             {
                 await db.Database.ExecuteSqlRawAsync(
                     "CREATE UNIQUE INDEX `IX_Users_PasswordResetToken` ON `Users` (`PasswordResetToken`)");
+                Log.Information("[Fallback] Created IX_Users_PasswordResetToken index.");
             }
-            catch { /* already exists — fine */ }
+            catch (Exception ex) { Log.Debug(ex, "[Fallback] PasswordResetToken index already exists or skipped."); }
+
+            try
+            {
+                await db.Database.ExecuteSqlRawAsync(
+                    "INSERT IGNORE INTO `__EFMigrationsHistory` (`MigrationId`, `ProductVersion`) " +
+                    "VALUES ('20260317203943_AddPasswordReset', '8.0.0')");
+                Log.Information("[Fallback] Migration history entry ensured for AddPasswordReset.");
+            }
+            catch (Exception ex) { Log.Warning(ex, "[Fallback] Could not insert migration history entry."); }
         }
 
         try
