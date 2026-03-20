@@ -50,10 +50,8 @@ export class RegisterComponent {
     const email = this.form.value.email as string;
     this.auth.register(this.form.value as any).subscribe({
       next: () => {
-        this.sentTo    = email;
-        this.emailSent = true;
-        this.loading   = false;
-        this.cdr.markForCheck();
+        this.loading = false;
+        this.router.navigate(['/auth/verify-email'], { queryParams: { email } });
       },
       error: (err) => {
         const msg = err.error?.error ?? err.error?.message ?? err.error?.title ?? 'Registration failed. Please try again.';
