@@ -1,22 +1,6 @@
 <div class="auth-page">
   <div class="auth-card">
 
-    @if (emailSent) {
-      <div class="auth-header">
-        <div class="auth-logo" style="background:linear-gradient(135deg,#0d6832,#16a34a);font-size:1.8rem;">✉</div>
-        <h1>Check your inbox</h1>
-        <p>We sent a verification link to</p>
-        <p style="color:var(--orange-400);font-weight:600;margin-top:.25rem;">{{ sentTo }}</p>
-      </div>
-      <div style="text-align:center;padding:0 0 1.5rem;">
-        <p style="color:var(--neutral-500);font-size:.9rem;line-height:1.7;margin:0 0 1.5rem;">
-          Click the link in the email to activate your account.<br>
-          The link expires in 24 hours.
-        </p>
-        <a routerLink="/auth/login" class="btn-primary btn-block">Go to Login</a>
-      </div>
-    } @else {
-
     <div class="auth-header">
       <div class="auth-logo">M</div>
       <h1>Create Account</h1>
@@ -103,6 +87,5 @@
       Already have an account? <a routerLink="/auth/login">Sign in</a>
     </p>
 
-    } <!-- end @else -->
   </div>
 </div>
