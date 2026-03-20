@@ -19,9 +19,7 @@ export class RegisterComponent {
   private readonly toast = inject(ToastService);
   private readonly cdr = inject(ChangeDetectorRef);
 
-  loading   = false;
-  emailSent = false;
-  sentTo    = '';
+  loading = false;
 
   form = this.fb.group({
     firstName: ['', [Validators.required, Validators.minLength(2)]],

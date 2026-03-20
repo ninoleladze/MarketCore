@@ -69,7 +69,7 @@ public sealed class GmailEmailService : IEmailService
 
             using var client = new SmtpClient();
 
-            await client.ConnectAsync(_smtp.Host, _smtp.Port, SecureSocketOptions.StartTls, ct);
+            await client.ConnectAsync(_smtp.Host, _smtp.Port, SecureSocketOptions.SslOnConnect, ct);
             await client.AuthenticateAsync(_smtp.Username, _smtp.Password, ct);
             await client.SendAsync(message, ct);
             await client.DisconnectAsync(quit: true, ct);
@@ -286,7 +286,7 @@ public sealed class GmailEmailService : IEmailService
                       <table width="100%" cellpadding="0" cellspacing="0">
                         <tr>
                           <td align="center">
-                            <a href="http://localhost:4200/orders/{orderId}"
+                            <a href="{_smtp.ClientBaseUrl}/orders/{orderId}"
                                style="display:inline-block;padding:14px 36px;
                                       background:linear-gradient(135deg,#b00032,#e00047);
                                       color:#fff;font-size:15px;font-weight:600;text-decoration:none;
