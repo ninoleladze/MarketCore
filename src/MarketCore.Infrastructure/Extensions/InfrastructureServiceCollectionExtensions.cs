@@ -113,20 +113,37 @@ public static class InfrastructureServiceCollectionExtensions
         services.AddScoped<IPasswordHasher, PasswordHasher>();
         services.AddScoped<ICurrentUserService, CurrentUserService>();
 
-        var smtpUsername = configuration["Email:Smtp:Username"];
-        if (!string.IsNullOrWhiteSpace(smtpUsername))
+        var resendApiKey = configuration["Resend:ApiKey"];
+        if (!string.IsNullOrWhiteSpace(resendApiKey))
         {
-            services.AddOptions<SmtpSettings>()
-                .Bind(configuration.GetSection("Email:Smtp"))
-                .Validate(s => !string.IsNullOrWhiteSpace(s.Username), "Email:Smtp:Username is required.")
-                .Validate(s => !string.IsNullOrWhiteSpace(s.Password), "Email:Smtp:Password is required.")
-                .ValidateOnStart();
-
-            services.AddScoped<IEmailService, GmailEmailService>();
+            var resendSettings = new ResendSettings
+            {
+                ApiKey        = resendApiKey,
+                FromAddress   = configuration["Resend:FromAddress"] ?? "onboarding@resend.dev",
+                FromName      = configuration["Resend:FromName"]    ?? "MarketCore",
+                ClientBaseUrl = configuration["Resend:ClientBaseUrl"] ?? "https://market-core-86ad.vercel.app"
+            };
+            services.AddSingleton(resendSettings);
+            services.AddHttpClient<ResendEmailService>();
+            services.AddScoped<IEmailService, ResendEmailService>();
         }
         else
         {
-            services.AddScoped<IEmailService, EmailService>();
+            var smtpUsername = configuration["Email:Smtp:Username"];
+            if (!string.IsNullOrWhiteSpace(smtpUsername))
+            {
+                services.AddOptions<SmtpSettings>()
+                    .Bind(configuration.GetSection("Email:Smtp"))
+                    .Validate(s => !string.IsNullOrWhiteSpace(s.Username), "Email:Smtp:Username is required.")
+                    .Validate(s => !string.IsNullOrWhiteSpace(s.Password), "Email:Smtp:Password is required.")
+                    .ValidateOnStart();
+
+                services.AddScoped<IEmailService, GmailEmailService>();
+            }
+            else
+            {
+                services.AddScoped<IEmailService, EmailService>();
+            }
         }
 
         services.AddScoped<IOrderHubService, OrderHubService>();
