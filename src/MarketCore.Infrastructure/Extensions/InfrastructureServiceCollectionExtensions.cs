@@ -113,36 +113,53 @@ public static class InfrastructureServiceCollectionExtensions
         services.AddScoped<IPasswordHasher, PasswordHasher>();
         services.AddScoped<ICurrentUserService, CurrentUserService>();
 
-        var resendApiKey = configuration["Resend:ApiKey"];
-        if (!string.IsNullOrWhiteSpace(resendApiKey))
+        var brevoApiKey = configuration["Brevo:ApiKey"];
+        if (!string.IsNullOrWhiteSpace(brevoApiKey))
         {
-            var resendSettings = new ResendSettings
+            services.AddHttpClient<BrevoEmailService>();
+            services.AddScoped<IEmailService>(sp =>
             {
-                ApiKey        = resendApiKey,
-                FromAddress   = configuration["Resend:FromAddress"] ?? "onboarding@resend.dev",
-                FromName      = configuration["Resend:FromName"]    ?? "MarketCore",
-                ClientBaseUrl = configuration["Resend:ClientBaseUrl"] ?? "https://market-core-86ad.vercel.app"
-            };
-            services.AddSingleton(resendSettings);
-            services.AddHttpClient<ResendEmailService>();
-            services.AddScoped<IEmailService, ResendEmailService>();
+                var http          = sp.GetRequiredService<IHttpClientFactory>().CreateClient(nameof(BrevoEmailService));
+                var fromEmail     = configuration["Brevo:FromEmail"]     ?? "noreply@marketcore.app";
+                var fromName      = configuration["Brevo:FromName"]      ?? "MarketCore";
+                var clientBaseUrl = configuration["Brevo:ClientBaseUrl"] ?? "https://market-core-86ad.vercel.app";
+                var logger        = sp.GetRequiredService<ILogger<BrevoEmailService>>();
+                return new BrevoEmailService(http, brevoApiKey, fromEmail, fromName, clientBaseUrl, logger);
+            });
         }
         else
         {
-            var smtpUsername = configuration["Email:Smtp:Username"];
-            if (!string.IsNullOrWhiteSpace(smtpUsername))
+            var resendApiKey = configuration["Resend:ApiKey"];
+            if (!string.IsNullOrWhiteSpace(resendApiKey))
             {
-                services.AddOptions<SmtpSettings>()
-                    .Bind(configuration.GetSection("Email:Smtp"))
-                    .Validate(s => !string.IsNullOrWhiteSpace(s.Username), "Email:Smtp:Username is required.")
-                    .Validate(s => !string.IsNullOrWhiteSpace(s.Password), "Email:Smtp:Password is required.")
-                    .ValidateOnStart();
-
-                services.AddScoped<IEmailService, GmailEmailService>();
+                var resendSettings = new ResendSettings
+                {
+                    ApiKey        = resendApiKey,
+                    FromAddress   = configuration["Resend:FromAddress"] ?? "onboarding@resend.dev",
+                    FromName      = configuration["Resend:FromName"]    ?? "MarketCore",
+                    ClientBaseUrl = configuration["Resend:ClientBaseUrl"] ?? "https://market-core-86ad.vercel.app"
+                };
+                services.AddSingleton(resendSettings);
+                services.AddHttpClient<ResendEmailService>();
+                services.AddScoped<IEmailService, ResendEmailService>();
             }
             else
             {
-                services.AddScoped<IEmailService, EmailService>();
+                var smtpUsername = configuration["Email:Smtp:Username"];
+                if (!string.IsNullOrWhiteSpace(smtpUsername))
+                {
+                    services.AddOptions<SmtpSettings>()
+                        .Bind(configuration.GetSection("Email:Smtp"))
+                        .Validate(s => !string.IsNullOrWhiteSpace(s.Username), "Email:Smtp:Username is required.")
+                        .Validate(s => !string.IsNullOrWhiteSpace(s.Password), "Email:Smtp:Password is required.")
+                        .ValidateOnStart();
+
+                    services.AddScoped<IEmailService, GmailEmailService>();
+                }
+                else
+                {
+                    services.AddScoped<IEmailService, EmailService>();
+                }
             }
         }
 
