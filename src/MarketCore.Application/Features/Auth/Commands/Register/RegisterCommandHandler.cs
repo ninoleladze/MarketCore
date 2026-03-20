@@ -36,7 +36,6 @@ public sealed class RegisterCommandHandler : IRequestHandler<RegisterCommand, Re
 
         if (existingUser is not null)
         {
-            // Already verified — reject
             if (existingUser.IsEmailVerified)
                 return Result.Failure($"An account with email '{request.Email}' already exists.");
 
@@ -44,19 +43,7 @@ public sealed class RegisterCommandHandler : IRequestHandler<RegisterCommand, Re
             var freshToken = Random.Shared.Next(100_000, 999_999).ToString();
             existingUser.SetVerificationToken(freshToken);
             await _uow.SaveChangesAsync(cancellationToken);
-
-            try
-            {
-                await _emailService.SendEmailVerificationAsync(
-                    existingUser.Email.Value, existingUser.FirstName, freshToken, cancellationToken);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex,
-                    "[REGISTER] Failed to resend verification email to {Email}.",
-                    existingUser.Email.Value);
-            }
-
+            await TrySendAsync(existingUser.Email.Value, existingUser.FirstName, freshToken);
             return Result.Success();
         }
 
@@ -87,22 +74,25 @@ public sealed class RegisterCommandHandler : IRequestHandler<RegisterCommand, Re
         }
         catch (DuplicateKeyException)
         {
-            return Result.Failure(
-                $"An account with email '{request.Email}' already exists.");
+            return Result.Failure($"An account with email '{request.Email}' already exists.");
         }
 
+        await TrySendAsync(user.Email.Value, user.FirstName, verificationToken);
+        return Result.Success();
+    }
+
+    // Sends with a 10-second cap so SMTP timeouts never block the registration response.
+    private async Task TrySendAsync(string email, string firstName, string token)
+    {
+        using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
         try
         {
-            await _emailService.SendEmailVerificationAsync(
-                user.Email.Value, user.FirstName, verificationToken, cancellationToken);
+            await _emailService.SendEmailVerificationAsync(email, firstName, token, cts.Token);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex,
-                "[REGISTER] Failed to send verification email to {Email}. User was created successfully.",
-                user.Email.Value);
+                "[REGISTER] Verification email to {Email} failed: {Error}", email, ex.Message);
         }
-
-        return Result.Success();
     }
 }

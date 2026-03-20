@@ -35,16 +35,17 @@ public sealed class ForgotPasswordCommandHandler : IRequestHandler<ForgotPasswor
 
         var resetUrl = $"{request.ClientBaseUrl?.TrimEnd('/')}/auth/reset-password?token={token}";
 
+        using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
         try
         {
             await _emailService.SendPasswordResetAsync(
-                user.Email.Value, user.FirstName, resetUrl, cancellationToken);
+                user.Email.Value, user.FirstName, resetUrl, cts.Token);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex,
-                "[FORGOT-PASSWORD] Failed to send reset email to {Email}.",
-                user.Email.Value);
+                "[FORGOT-PASSWORD] Failed to send reset email to {Email}: {Error}",
+                user.Email.Value, ex.Message);
         }
 
         return Result.Success();
