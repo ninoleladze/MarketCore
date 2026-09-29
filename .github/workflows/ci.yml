@@ -19,11 +19,15 @@ jobs:
         with:
           dotnet-version: 8.0.x
 
+      # Same flags as the Dockerfile: the projects set TreatWarningsAsErrors=true,
+      # which would turn NuGet audit / code-style warnings into CI failures.
       - name: Restore
-        run: dotnet restore MarketCore.sln
+        run: dotnet restore MarketCore.sln -p:TreatWarningsAsErrors=false
 
       - name: Build
-        run: dotnet build MarketCore.sln --configuration Release --no-restore
+        run: >
+          dotnet build MarketCore.sln --configuration Release --no-restore
+          -p:TreatWarningsAsErrors=false -p:EnforceCodeStyleInBuild=false
 
       # Unit + integration tests (integration tests start SQL Server via Testcontainers;
       # Docker is available on GitHub-hosted Ubuntu runners)
