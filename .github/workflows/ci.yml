@@ -37,6 +37,20 @@ jobs:
           --logger "trx;LogFileName=test-results.trx"
           --collect:"XPlat Code Coverage"
 
+      # Surface failed tests as GitHub annotations (visible on the PR "Checks" tab)
+      - name: Report failed tests
+        if: failure()
+        shell: python
+        run: |
+          import glob, xml.etree.ElementTree as ET
+          ns = {"t": "http://microsoft.com/schemas/VisualStudio/TeamTest/2010"}
+          for f in glob.glob("**/TestResults/*.trx", recursive=True):
+              for r in ET.parse(f).getroot().iterfind(".//t:UnitTestResult", ns):
+                  if r.get("outcome") == "Failed":
+                      msg = r.find(".//t:Message", ns)
+                      text = (msg.text if msg is not None else "").replace("\n", " ").replace("\r", " ")[:600]
+                      print(f"::error title={r.get('testName')}::{text}")
+
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v4
