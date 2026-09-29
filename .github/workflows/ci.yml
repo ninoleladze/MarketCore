@@ -29,7 +29,7 @@ jobs:
           dotnet build MarketCore.sln --configuration Release --no-restore
           -p:TreatWarningsAsErrors=false -p:EnforceCodeStyleInBuild=false
 
-      # Unit + integration tests (integration tests start SQL Server via Testcontainers;
+      # Unit + integration tests (integration tests start MySQL via Testcontainers;
       # Docker is available on GitHub-hosted Ubuntu runners)
       - name: Test
         run: >
