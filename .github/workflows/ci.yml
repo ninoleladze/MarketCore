@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      # Same flags as the Dockerfile: the projects set TreatWarningsAsErrors=true,
+      # which would turn NuGet audit / code-style warnings into CI failures.
+      - name: Restore
+        run: dotnet restore MarketCore.sln -p:TreatWarningsAsErrors=false
+
+      - name: Build
+        run: >
+          dotnet build MarketCore.sln --configuration Release --no-restore
+          -p:TreatWarningsAsErrors=false -p:EnforceCodeStyleInBuild=false
+
+      # Unit + integration tests (integration tests start MySQL via Testcontainers;
+      # Docker is available on GitHub-hosted Ubuntu runners)
+      - name: Test
+        run: >
+          dotnet test MarketCore.sln --configuration Release --no-build
+          --logger "trx;LogFileName=test-results.trx"
+          --collect:"XPlat Code Coverage"
+
+      # Surface failed tests as GitHub annotations (visible on the PR "Checks" tab)
+      - name: Report failed tests
+        if: failure()
+        shell: python
+        run: |
+          import glob, xml.etree.ElementTree as ET
+          ns = {"t": "http://microsoft.com/schemas/VisualStudio/TeamTest/2010"}
+          for f in glob.glob("**/TestResults/*.trx", recursive=True):
+              for r in ET.parse(f).getroot().iterfind(".//t:UnitTestResult", ns):
+                  if r.get("outcome") == "Failed":
+                      msg = r.find(".//t:Message", ns)
+                      text = (msg.text if msg is not None else "").replace("\n", " ").replace("\r", " ")[:600]
+                      print(f"::error title={r.get('testName')}::{text}")
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: "**/TestResults/**"
